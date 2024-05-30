@@ -13,7 +13,6 @@ import theme from "../../theme";
 import { LinearGradient } from "expo-linear-gradient";
 import { User } from "../../types";
 
-
 type HomeHeaderProps = {
   user: User;
 };
