@@ -47,11 +47,14 @@ const SignUn: React.FC = () => {
         name="name"
         rules={{ required: "Campo obrigatório" }}
         render={({ field: { onChange, value } }) => (
-          <Input placeholder="Nome" onChangeText={onChange} value={value} />
+          <Input
+            placeholder="Nome"
+            onChangeText={onChange}
+            value={value}
+            errorMessage={errors.name?.message}
+          />
         )}
       />
-
-      <Text>{errors.name?.message}</Text>
 
       <Controller
         control={control}
@@ -64,11 +67,14 @@ const SignUn: React.FC = () => {
           },
         }}
         render={({ field: { onChange, value } }) => (
-          <Input placeholder="E-mail" onChangeText={onChange} value={value} />
+          <Input
+            placeholder="E-mail"
+            onChangeText={onChange}
+            value={value}
+            errorMessage={errors.email?.message}
+          />
         )}
       />
-
-      <Text>{errors.email?.message}</Text>
 
       <Controller
         control={control}
@@ -80,11 +86,10 @@ const SignUn: React.FC = () => {
             onChangeText={onChange}
             value={value}
             secureTextEntry
+            errorMessage={errors.password?.message}
           />
         )}
       />
-
-      <Text>{errors.password?.message}</Text>
 
       <Controller
         control={control}
@@ -98,11 +103,10 @@ const SignUn: React.FC = () => {
             secureTextEntry
             onSubmitEditing={handleSubmit(handleSignUp)}
             returnKeyType="send"
+            errorMessage={errors.password_confirm?.message}
           />
         )}
       />
-
-      <Text>{errors.password_confirm?.message}</Text>
 
       <Button
         title="Acessar"
