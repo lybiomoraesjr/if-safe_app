@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "if-safe_app_test",
-    "slug": "if-safe_app_test",
+    "name": "if-safe",
+    "slug": "if-safe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
