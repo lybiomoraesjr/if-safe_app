@@ -9,6 +9,9 @@ type IconWithTooltipProps = {
   color?: string;
   size?: number;
   tooltipText?: string;
+  tooltipWidth?: number;
+  tooltipHeight?: number;
+  tooltipBackgroundColor?: string;
 };
 
 const IconWithTooltip: React.FC<IconWithTooltipProps> = ({
@@ -16,6 +19,9 @@ const IconWithTooltip: React.FC<IconWithTooltipProps> = ({
   size,
   color,
   tooltipText,
+  tooltipWidth,
+  tooltipHeight,
+  tooltipBackgroundColor,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -25,6 +31,9 @@ const IconWithTooltip: React.FC<IconWithTooltipProps> = ({
       onClose={() => setOpen(false)}
       visible={open}
       popover={<Text>{tooltipText}</Text>}
+      width={tooltipWidth}
+      height={tooltipHeight}
+      backgroundColor={tooltipBackgroundColor}
     >
       <Container>
         <IconComponent size={size} color={color} />
