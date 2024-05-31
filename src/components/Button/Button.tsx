@@ -22,7 +22,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
       containerStyle={{
         marginHorizontal: 50,
         height: 50,
-        width: 200,
+        width: 250,
         marginVertical: 10,
       }}
     />
