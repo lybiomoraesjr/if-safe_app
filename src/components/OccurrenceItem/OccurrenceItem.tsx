@@ -12,6 +12,7 @@ import {
   Title,
 } from "./OccurrenceItem.styles";
 import { formattedDate } from "../../utils/dateUtils";
+import IconWithTooltip from "../IconWithTooltip";
 
 interface OcurrenceItemProps {
   imageUri: string;
@@ -41,7 +42,14 @@ const OcurrenceItem: React.FC<OcurrenceItemProps> = ({
 
       <Info>
         <NotificationView>
-          <Warning size={16} color="#8D8D99" />
+          <IconWithTooltip
+            IconComponent={Warning}
+            size={16}
+            color="#8D8D99"
+            tooltipText="Alertas Aumentam a Relevância da Ocorrência"
+            tooltipWidth={180}
+            tooltipHeight={60}
+          />
           <NotifierCount>{notifiersNumber}</NotifierCount>
           <Text>{status}</Text>
         </NotificationView>
