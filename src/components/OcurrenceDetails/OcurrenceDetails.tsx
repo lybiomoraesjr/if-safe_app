@@ -1,5 +1,17 @@
 import React from "react";
-import { Container, Picture } from "./OcurrenceDetails.styles";
+import {
+  AuthorName,
+  Container,
+  Date,
+  Description,
+  DetailsSection,
+  Info,
+  NotificationView,
+  NotifierCount,
+  Picture,
+  Status,
+  Title,
+} from "./OcurrenceDetails.styles";
 import { Text, View } from "react-native";
 import { Warning } from "phosphor-react-native";
 import { formattedDate } from "../../utils/dateUtils";
@@ -18,39 +30,52 @@ const OcurrenceDetails: React.FC<OcurrenceDetailsProps> = ({
     status,
     author: { name: authorName },
     title,
-    description
-  }
+    description,
+  },
 }) => {
   const displayDate = formattedDate(date);
   return (
     <Container>
-      <View>
+      <View style={{ flexDirection: "row" }}>
         <Picture
           source={{ uri: imageUri }}
           placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
         />
 
-        <View>
-          <View>
+        <Info>
+          <NotificationView>
             <Warning size={16} color="#8D8D99" />
-            <Text>{notifiersIDs}</Text>
-          </View>
+            <NotifierCount>
+              {notifiersIDs.length}
+              {notifiersIDs.length === 1 ? " alerta" : " alertas"}
+            </NotifierCount>
+          </NotificationView>
 
-          <Text>Publicado em {displayDate}</Text>
+          <Date>Publicado em {displayDate}</Date>
 
-          <Text>{status}</Text>
+          <Status>{status}</Status>
 
-          <Text>Por {authorName}</Text>
+          <AuthorName>Por {authorName}</AuthorName>
 
-          <Button>Alertar</Button>
-        </View>
+          <Button
+            title="Alertar !"
+            containerStyle={{
+              height: 40,
+              width: 100,
+            }}
+            buttonStyle={{ backgroundColor: "#AB4D55", borderRadius: 5 }}
+            titleStyle={{
+              color: "white",
+            }}
+          />
+        </Info>
       </View>
 
-      <View>
-        <Text>{title}</Text>
+      <DetailsSection>
+        <Title>{title}</Title>
 
-        <Text>{description}</Text>
-      </View>
+        <Description>{description}</Description>
+      </DetailsSection>
     </Container>
   );
 };
