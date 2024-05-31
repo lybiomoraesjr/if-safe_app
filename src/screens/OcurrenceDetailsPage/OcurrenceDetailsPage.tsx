@@ -6,6 +6,7 @@ import { userMock } from "../../utils/userMock";
 import HomeHeader from "../../components/HomeHeader";
 import { Divider } from "@rneui/base";
 import { Title } from "./OcurrenceDetailsPage.styles";
+import OccurrenceDetailsFooter from "../../components/OccurrenceDetailsFooter";
 
 const OcurrenceDetailsPage: React.FC = () => {
   return (
@@ -16,6 +17,8 @@ const OcurrenceDetailsPage: React.FC = () => {
       <Divider style={{ margin: 18 }} />
 
       <OcurrenceDetails ocurrenceDetails={ocurrenceDetailsMock} />
+
+      <OccurrenceDetailsFooter />
     </View>
   );
 };
