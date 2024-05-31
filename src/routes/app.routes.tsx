@@ -10,10 +10,12 @@ import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 
 import theme from "../theme";
+import OcurrenceDetailsPage from "../screens/OcurrenceDetailsPage";
 
 type AppRoutes = {
   home: undefined;
   profile: undefined;
+  ocurrenceDetailsPage: undefined;
 };
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -53,6 +55,12 @@ export function AppRoutes() {
         options={{
           tabBarIcon: ({ color }) => <House color={color} size={iconSize} />,
         }}
+      />
+
+      <Screen
+        name="ocurrenceDetailsPage"
+        component={OcurrenceDetailsPage}
+        options={{ tabBarButton: () => null }}
       />
     </Navigator>
   );
