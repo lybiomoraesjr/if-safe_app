@@ -24,7 +24,11 @@ export const Name = styled.Text`
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `;
 
-export const Slogan = styled.Text``;
+export const Slogan = styled.Text`
+  color: ${({ theme }) => theme.COLORS.GRAY_100};
+  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
+  font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
+`;
 
 export const Picture = styled(Image)`
   width: 54px;
