@@ -11,8 +11,8 @@ import {
   Picture,
   Status,
   Title,
-} from "./OcurrenceDetails.styles";
-import { Text, View } from "react-native";
+} from "./OccurrenceDetails.styles";
+import { View } from "react-native";
 import { Warning } from "phosphor-react-native";
 import { formattedDate } from "../../utils/dateUtils";
 import { Button } from "@rneui/base";

@@ -1,25 +1,30 @@
 import React from "react";
-import { View } from "react-native";
-import OcurrenceDetails from "../../components/OcurrenceDetails";
+import { ScrollView, View } from "react-native";
+import OcurrenceDetails from "../../components/OccurrenceDetails";
 import { ocurrenceDetailsMock } from "../../utils/ocurrenceDetailsMock";
 import { userMock } from "../../utils/userMock";
 import HomeHeader from "../../components/HomeHeader";
 import { Divider } from "@rneui/base";
-import { Title } from "./OcurrenceDetailsPage.styles";
+import { Container, Title } from "./OcurrenceDetailsPage.styles";
 import OccurrenceDetailsFooter from "../../components/OccurrenceDetailsFooter";
 
 const OcurrenceDetailsPage: React.FC = () => {
   return (
-    <View>
+    <Container>
       <HomeHeader user={userMock} />
 
-      <Title>Ocorrência:</Title>
-      <Divider style={{ margin: 18 }} />
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Title>Ocorrência:</Title>
+        <Divider style={{ margin: 18 }} />
 
-      <OcurrenceDetails ocurrenceDetails={ocurrenceDetailsMock} />
+        <OcurrenceDetails ocurrenceDetails={ocurrenceDetailsMock} />
 
-      <OccurrenceDetailsFooter />
-    </View>
+        <OccurrenceDetailsFooter />
+      </ScrollView>
+    </Container>
   );
 };
 
