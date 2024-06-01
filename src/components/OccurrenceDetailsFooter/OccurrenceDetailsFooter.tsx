@@ -9,7 +9,7 @@ const OccurrenceDetailsFooter: React.FC<OccurrenceDetailsFooterProps> = () => {
     <View>
       <Divider style={{ margin: 18 }} />
 
-      <View>
+      <View style={{ flexDirection: "row" }}>
         <Warning size={16} />
         <ChatCircle size={16} />
       </View>
