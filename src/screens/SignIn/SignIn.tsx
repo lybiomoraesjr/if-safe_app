@@ -5,6 +5,7 @@ import { Image, Text, View } from "react-native";
 import { Button } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
+import ButtonComponent from "../../components/Button/Button";
 
 const SignIn: React.FC = () => {
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
@@ -59,6 +60,8 @@ const SignIn: React.FC = () => {
         }}
         onPress={handleNewAccount}
       />
+
+      <ButtonComponent />
     </Container>
   );
 };
