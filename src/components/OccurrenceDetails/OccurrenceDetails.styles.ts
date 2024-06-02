@@ -29,7 +29,7 @@ export const NotifierCount = styled.Text`
 
 export const Status = styled.Text``;
 
-export const AuthorName = styled.Text``;
+export const Name = styled.Text``;
 
 export const DetailsSection = styled.View``;
 
