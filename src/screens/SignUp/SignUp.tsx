@@ -1,8 +1,7 @@
 import React from "react";
 import { Container } from "./SignUp.styles";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { Image } from "react-native";
-import { Button, Input } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 import { Controller, useForm } from "react-hook-form";
