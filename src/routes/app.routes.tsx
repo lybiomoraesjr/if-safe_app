@@ -47,7 +47,7 @@ export function AppRoutes() {
     >
       <Screen
         name="home"
-        component={OcurrenceDetailsPage}
+        component={Home}
         options={{
           tabBarIcon: ({ color }) => <House color={color} size={iconSize} />,
         }}

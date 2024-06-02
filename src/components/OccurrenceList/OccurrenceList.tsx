@@ -1,12 +1,12 @@
 import React from "react";
 import { Container } from "./OccurrenceList.styles";
 import { FlatList } from "react-native";
-import { Occurrence } from "../../types";
+import { OccurrenceItem } from "../../types";
 import OcurrenceItem from "../OccurrenceItem";
 
 interface OccurrenceListProps {
   onInteract: () => void;
-  occurrences: Occurrence[];
+  occurrences: OccurrenceItem[];
 }
 
 const OccurrenceList: React.FC<OccurrenceListProps> = ({

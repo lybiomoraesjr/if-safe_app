@@ -1,11 +1,11 @@
 import React from "react";
 import {
-  AuthorName,
   Container,
   Date,
   Description,
   DetailsSection,
   Info,
+  Name,
   NotificationView,
   NotifierCount,
   Picture,
@@ -16,22 +16,26 @@ import { View } from "react-native";
 import { Warning } from "phosphor-react-native";
 import { formattedDate } from "../../utils/dateUtils";
 import { Button } from "@rneui/base";
-import { OccurrenceDetails } from "../../types";
+import { User } from "../../types";
 
 type OcurrenceDetailsProps = {
-  ocurrenceDetails: OccurrenceDetails;
+  date: Date;
+  imageUri: string;
+  notifiersIDs: string[];
+  status: string;
+  author: User;
+  title: string;
+  description: string;
 };
 
 const OcurrenceDetails: React.FC<OcurrenceDetailsProps> = ({
-  ocurrenceDetails: {
-    date,
-    imageUri,
-    notifiersIDs,
-    status,
-    author: { name: authorName },
-    title,
-    description,
-  },
+  date,
+  imageUri,
+  notifiersIDs,
+  status,
+  author: { name },
+  title,
+  description,
 }) => {
   const displayDate = formattedDate(date);
   return (
@@ -55,7 +59,7 @@ const OcurrenceDetails: React.FC<OcurrenceDetailsProps> = ({
 
           <Status>{status}</Status>
 
-          <AuthorName>Por {authorName}</AuthorName>
+          <Name>Por {name}</Name>
 
           <Button
             title="Alertar !"
