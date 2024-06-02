@@ -70,6 +70,7 @@ const SignIn: React.FC = () => {
             value={value}
             secureTextEntry
             errorMessage={errors.password?.message}
+            returnKeyType="send"
           />
         )}
       />
