@@ -6,18 +6,30 @@ import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import InputComponent from "../../components/InputComponent";
 import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 type FormDataProps = {
   email: string;
   password: string;
 };
 
+const signInSchema = yup.object({
+  email: yup.string().required("Informe o e-mail").email("E-mail inválido."),
+  password: yup
+    .string()
+    .required("Informe a senha")
+    .min(6, "A senha deve ter pelo menos 6 dígitos."),
+});
+
 const SignIn: React.FC = () => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormDataProps>();
+  } = useForm<FormDataProps>({
+    resolver: yupResolver(signInSchema),
+  });
 
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
 
@@ -38,13 +50,6 @@ const SignIn: React.FC = () => {
       <Controller
         control={control}
         name="email"
-        rules={{
-          required: "Campo obrigatório",
-          pattern: {
-            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: "E-mail inválido",
-          },
-        }}
         render={({ field: { onChange, value } }) => (
           <InputComponent
             placeholder="E-mail"
@@ -58,7 +63,6 @@ const SignIn: React.FC = () => {
       <Controller
         control={control}
         name="password"
-        rules={{ required: "Campo obrigatório" }}
         render={({ field: { onChange, value } }) => (
           <InputComponent
             placeholder="Senha"
