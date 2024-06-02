@@ -2,12 +2,13 @@ import React from "react";
 import { Container } from "./SignUp.styles";
 import { Text, View } from "react-native";
 import { Image } from "react-native";
-import { Button, Input } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 import { Controller, useForm } from "react-hook-form";
 import ButtonComponent from "../../components/ButtonComponent";
 import InputComponent from "../../components/InputComponent";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 type FormDataProps = {
   name: string;
@@ -16,12 +17,27 @@ type FormDataProps = {
   password_confirm: string;
 };
 
+const signUpSchema = yup.object({
+  name: yup.string().required("Informe o nome."),
+  email: yup.string().required("Informe o e-mail").email("E-mail inválido."),
+  password: yup
+    .string()
+    .required("Informe a senha")
+    .min(6, "A senha deve ter pelo menos 6 dígitos."),
+  password_confirm: yup
+    .string()
+    .required("Confirme a senha.")
+    .oneOf([yup.ref("password"), ""], "A confirmação da senha não confere."),
+});
+
 const SignUn: React.FC = () => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormDataProps>();
+  } = useForm<FormDataProps>({
+    resolver: yupResolver(signUpSchema),
+  });
 
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
 
@@ -44,10 +60,11 @@ const SignUn: React.FC = () => {
         <Image source={require("./../../assets/ifsafe-logo.png")} />
       </View>
 
+      <Text>Registre-se</Text>
+
       <Controller
         control={control}
         name="name"
-        rules={{ required: "Campo obrigatório" }}
         render={({ field: { onChange, value } }) => (
           <InputComponent
             placeholder="Nome"
@@ -61,13 +78,6 @@ const SignUn: React.FC = () => {
       <Controller
         control={control}
         name="email"
-        rules={{
-          required: "Campo obrigatório",
-          pattern: {
-            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: "E-mail inválido",
-          },
-        }}
         render={({ field: { onChange, value } }) => (
           <InputComponent
             placeholder="E-mail"
@@ -81,7 +91,6 @@ const SignUn: React.FC = () => {
       <Controller
         control={control}
         name="password"
-        rules={{ required: "Campo obrigatório" }}
         render={({ field: { onChange, value } }) => (
           <InputComponent
             placeholder="Senha"
@@ -96,7 +105,6 @@ const SignUn: React.FC = () => {
       <Controller
         control={control}
         name="password_confirm"
-        rules={{ required: "Campo obrigatório" }}
         render={({ field: { onChange, value } }) => (
           <InputComponent
             placeholder="Confirme a Senha"
