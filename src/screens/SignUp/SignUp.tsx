@@ -6,6 +6,8 @@ import { Button, Input } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 import { Controller, useForm } from "react-hook-form";
+import ButtonComponent from "../../components/ButtonComponent";
+import InputComponent from "../../components/InputComponent";
 
 type FormDataProps = {
   name: string;
@@ -47,7 +49,7 @@ const SignUn: React.FC = () => {
         name="name"
         rules={{ required: "Campo obrigatório" }}
         render={({ field: { onChange, value } }) => (
-          <Input
+          <InputComponent
             placeholder="Nome"
             onChangeText={onChange}
             value={value}
@@ -67,7 +69,7 @@ const SignUn: React.FC = () => {
           },
         }}
         render={({ field: { onChange, value } }) => (
-          <Input
+          <InputComponent
             placeholder="E-mail"
             onChangeText={onChange}
             value={value}
@@ -81,7 +83,7 @@ const SignUn: React.FC = () => {
         name="password"
         rules={{ required: "Campo obrigatório" }}
         render={({ field: { onChange, value } }) => (
-          <Input
+          <InputComponent
             placeholder="Senha"
             onChangeText={onChange}
             value={value}
@@ -96,7 +98,7 @@ const SignUn: React.FC = () => {
         name="password_confirm"
         rules={{ required: "Campo obrigatório" }}
         render={({ field: { onChange, value } }) => (
-          <Input
+          <InputComponent
             placeholder="Confirme a Senha"
             onChangeText={onChange}
             value={value}
@@ -108,39 +110,15 @@ const SignUn: React.FC = () => {
         )}
       />
 
-      <Button
+      <ButtonComponent
+        isLoading={false}
         title="Acessar"
-        loading={false}
-        loadingProps={{ size: "small", color: "white" }}
-        buttonStyle={{
-          backgroundColor: "rgba(111, 202, 186, 1)",
-          borderRadius: 5,
-        }}
-        titleStyle={{ fontWeight: "bold", fontSize: 23 }}
-        containerStyle={{
-          marginHorizontal: 50,
-          height: 50,
-          width: 200,
-          marginVertical: 10,
-        }}
         onPress={handleSubmit(handleSignUp)}
       />
 
-      <Button
+      <ButtonComponent
+        variant="outline"
         title="Voltar para o Login"
-        loading={false}
-        loadingProps={{ size: "small", color: "white" }}
-        buttonStyle={{
-          backgroundColor: "rgba(111, 202, 186, 1)",
-          borderRadius: 5,
-        }}
-        titleStyle={{ fontWeight: "bold", fontSize: 23 }}
-        containerStyle={{
-          marginHorizontal: 50,
-          height: 50,
-          width: 200,
-          marginVertical: 10,
-        }}
         onPress={handleGoBack}
       />
     </Container>

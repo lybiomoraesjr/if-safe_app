@@ -5,7 +5,8 @@ import { Image, Text, View } from "react-native";
 import { Button } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
-import ButtonComponent from "../../components/Button/Button";
+import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
+import InputComponent from "../../components/InputComponent";
 
 const SignIn: React.FC = () => {
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
@@ -19,49 +20,23 @@ const SignIn: React.FC = () => {
       <View>
         <Image source={require("./../../assets/ifsafe-logo.png")} />
       </View>
-      <Input placeholder="E-mail" />
+      <InputComponent placeholder="E-mail" />
 
-      <Input placeholder="Senha" />
+      <InputComponent placeholder="Senha" />
 
-      <Button
+      <ButtonComponent
         title="Acessar"
         loading={false}
-        loadingProps={{ size: "small", color: "white" }}
-        buttonStyle={{
-          backgroundColor: "rgba(111, 202, 186, 1)",
-          borderRadius: 5,
-        }}
-        titleStyle={{ fontWeight: "bold", fontSize: 23 }}
-        containerStyle={{
-          marginHorizontal: 50,
-          height: 50,
-          width: 200,
-          marginVertical: 10,
-        }}
         onPress={() => console.log("aye")}
       />
 
       <Text>Ainda não tem acesso?</Text>
 
-      <Button
+      <ButtonComponent
+        variant="outline"
         title="Criar Conta"
-        loading={false}
-        loadingProps={{ size: "small", color: "white" }}
-        buttonStyle={{
-          backgroundColor: "rgba(111, 202, 186, 1)",
-          borderRadius: 5,
-        }}
-        titleStyle={{ fontWeight: "bold", fontSize: 23 }}
-        containerStyle={{
-          marginHorizontal: 50,
-          height: 50,
-          width: 200,
-          marginVertical: 10,
-        }}
         onPress={handleNewAccount}
       />
-
-      <ButtonComponent />
     </Container>
   );
 };
