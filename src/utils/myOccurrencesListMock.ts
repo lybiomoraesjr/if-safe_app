@@ -1,6 +1,6 @@
 import { OccurrenceItem, OccurrenceStatus } from "../types";
 
-export const occurrencesListMock: OccurrenceItem[] = [
+export const myOccurrencesListMock: OccurrenceItem[] = [
   {
     uuid: "occurrenceId1",
     title: "Fio desencapado",

@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "./SignUp.styles";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
@@ -55,7 +55,7 @@ const SignUn: React.FC = () => {
   };
 
   return (
-    <Container>
+    <ScrollView>
       <View>
         <Image source={require("./../../assets/ifsafe-logo.png")} />
       </View>
@@ -129,7 +129,7 @@ const SignUn: React.FC = () => {
         title="Voltar para o Login"
         onPress={handleGoBack}
       />
-    </Container>
+    </ScrollView>
   );
 };
 

@@ -13,27 +13,24 @@ const OcurrenceDetailsPage: React.FC = () => {
     <Container>
       <HomeHeader user={userMock} />
 
+      <Title>Ocorrência:</Title>
+      <Divider style={{ margin: 18 }} />
 
-      
-        <Title>Ocorrência:</Title>
-        <Divider style={{ margin: 18 }} />
+      <OcurrenceDetails
+        title={ocurrenceDetailsMock.title}
+        description={ocurrenceDetailsMock.description}
+        imageUri={ocurrenceDetailsMock.imageUri}
+        author={ocurrenceDetailsMock.author}
+        date={ocurrenceDetailsMock.date}
+        notifiersIDs={ocurrenceDetailsMock.notifiersIDs}
+        status={ocurrenceDetailsMock.status}
+      />
 
-        <OcurrenceDetails
-          title={ocurrenceDetailsMock.title}
-          description={ocurrenceDetailsMock.description}
-          imageUri={ocurrenceDetailsMock.imageUri}
-          author={ocurrenceDetailsMock.author}
-          date={ocurrenceDetailsMock.date}
-          notifiersIDs={ocurrenceDetailsMock.notifiersIDs}
-          status={ocurrenceDetailsMock.status}
-        />
-
-        <OccurrenceFooter
-          notifiersNumber={ocurrenceDetailsMock.notifiersIDs.length}
-          commentsNumber={ocurrenceDetailsMock.comments.length}
-          comments={ocurrenceDetailsMock.comments}
-        />
-     
+      <OccurrenceFooter
+        notifiersNumber={ocurrenceDetailsMock.notifiersIDs.length}
+        commentsNumber={ocurrenceDetailsMock.comments.length}
+        comments={ocurrenceDetailsMock.comments}
+      />
     </Container>
   );
 };
