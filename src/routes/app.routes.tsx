@@ -47,7 +47,7 @@ export function AppRoutes() {
     >
       <Screen
         name="home"
-        component={Home}
+        component={Profile}
         options={{
           tabBarIcon: ({ color }) => <House color={color} size={iconSize} />,
         }}

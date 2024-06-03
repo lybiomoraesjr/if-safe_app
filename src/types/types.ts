@@ -8,6 +8,7 @@ export type User = {
   uuid: string;
   name: string;
   imageUri?: string;
+  email?: string;
 };
 
 export type OccurrenceItem = {
