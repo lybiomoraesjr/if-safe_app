@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Picture } from "./Profile.styles";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import InputComponent from "../../components/InputComponent";
 import ButtonComponent from "../../components/ButtonComponent";
 import * as ImagePicker from "expo-image-picker";
@@ -19,14 +19,12 @@ type FormDataProps = {
 };
 
 const Profile: React.FC = () => {
-  const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const [userPhoto, setUserPhoto] = useState(
     "https://github.com/lybiomoraesjr.png"
   );
 
   async function handleUserPhotoSelected() {
     try {
-      setPhotoIsLoading(true);
       const photoSelected = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
@@ -39,26 +37,26 @@ const Profile: React.FC = () => {
       }
 
       if (photoSelected.assets[0].uri) {
-        setUserPhoto(photoSelected.assets[0].uri);
+        const { uri, fileSize } = photoSelected.assets[0];
+
+        if (fileSize && fileSize / 1024 / 1024 > 2) {
+          return Alert.alert("Erro", "A imagem deve ter no máximo 2MB");
+        }
+
+        setUserPhoto(uri);
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setPhotoIsLoading(false);
     }
   }
   return (
-    <Container>
+    <Container style={{ justifyContent: "center" }}>
       <ScrollView>
         <View style={{ justifyContent: "center" }}>
-          {photoIsLoading ? (
-            <Loading />
-          ) : (
-            <Picture
-              source={{ uri: userPhoto }}
-              placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
-            />
-          )}
+          <Picture
+            source={{ uri: userPhoto }}
+            placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
+          />
 
           <TouchableOpacity onPress={handleUserPhotoSelected}>
             <Text style={{ color: "green", fontWeight: "bold" }}>
