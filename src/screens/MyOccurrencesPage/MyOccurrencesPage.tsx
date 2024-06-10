@@ -15,7 +15,7 @@ const MyOccurrencesPage = () => {
   };
   return (
     <Container>
-      <HomeHeader user={userMock} />
+      <HomeHeader />
       <Title>Minhas ocorrências:</Title>
 
       <Divider style={{ margin: 18 }} />

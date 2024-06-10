@@ -1,6 +1,5 @@
 import React from "react";
-import { Container } from "./SignUp.styles";
-import { ScrollView, Text, View } from "react-native";
+import { Alert, ScrollView, Text, View } from "react-native";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
@@ -9,6 +8,8 @@ import ButtonComponent from "../../components/ButtonComponent";
 import InputComponent from "../../components/InputComponent";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { api } from "../../services/api";
+import { AppError } from "../../utils/AppError";
 
 type FormDataProps = {
   name: string;
@@ -45,17 +46,21 @@ const SignUn: React.FC = () => {
     navigation.goBack();
   };
 
-  const handleSignUp = ({
-    name,
-    email,
-    password,
-    password_confirm,
-  }: FormDataProps) => {
-    console.log({ name, email, password, password_confirm });
+  const handleSignUp = async ({ name, email, password }: FormDataProps) => {
+    try {
+      const response = await api.post("/users", { name, email, password });
+
+      console.log(response.data);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : "Não foi possível criar a conta. Tente novamente mais tarde.";
+
+      Alert.alert(title)
+    }
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: "white" }}>
       <View>
         <Image source={require("./../../assets/ifsafe-logo.png")} />
       </View>

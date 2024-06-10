@@ -11,6 +11,7 @@ import Loading from "./src/components/Loading";
 import { StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Routes } from "./src/routes";
+import { AuthContextProvider } from "./src/contexts/AuthContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,9 +19,6 @@ export default function App() {
     Roboto_700Bold,
   });
 
-  if (!fontsLoaded) {
-    return <Loading />;
-  }
   return (
     <ThemeProvider theme={theme}>
       <SafeAreaProvider>
@@ -29,9 +27,10 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        <Routes />
+        <AuthContextProvider>
+          {fontsLoaded ? <Routes /> : <Loading />}
+        </AuthContextProvider>
       </SafeAreaProvider>
     </ThemeProvider>
   );
 }
-

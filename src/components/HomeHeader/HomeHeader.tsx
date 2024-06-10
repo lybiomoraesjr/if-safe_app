@@ -12,20 +12,18 @@ import {
 
 import theme from "../../theme";
 import { LinearGradient } from "expo-linear-gradient";
-import { User } from "../../types";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
+import { useAuth } from "../../hooks/useAuth";
 
-type HomeHeaderProps = {
-  user: User;
-};
+import defaulUserPhotoImg from "../../assets/userPhotoDefault.png";
 
-const HomeHeader: React.FC<HomeHeaderProps> = ({ user }) => {
+const HomeHeader: React.FC = () => {
+  const { user, signOut } = useAuth();
+
   const insets = useSafeAreaInsets();
 
   const paddingTop = insets.top + 32;
-
-  const firstName = user.name.split(" ")[0];
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
 
@@ -42,12 +40,12 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ user }) => {
     >
       <Container style={{ paddingTop }}>
         <Greeting>
-          <Name>Olá, {firstName}</Name>
+          <Name>Olá, {user.name}</Name>
           <Slogan>Segurança em primeiro lugar!</Slogan>
         </Greeting>
         <TouchableOpacity onPress={handleNavigateToProfile}>
           <Picture
-            source={{ uri: user.imageUri }}
+            source={user.avatar ? { uri: user.avatar } : defaulUserPhotoImg}
             placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
           />
         </TouchableOpacity>

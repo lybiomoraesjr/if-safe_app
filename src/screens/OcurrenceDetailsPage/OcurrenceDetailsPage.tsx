@@ -11,7 +11,7 @@ import OccurrenceFooter from "../../components/OccurrenceFooter";
 const OcurrenceDetailsPage: React.FC = () => {
   return (
     <Container>
-      <HomeHeader user={userMock} />
+      <HomeHeader />
 
       <Title>Ocorrência:</Title>
       <Divider style={{ margin: 18 }} />
