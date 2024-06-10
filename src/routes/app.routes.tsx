@@ -4,7 +4,7 @@ import {
   BottomTabNavigationProp,
 } from "@react-navigation/bottom-tabs";
 
-import { House, List, PlusSquare } from "phosphor-react-native";
+import { House, List, PlusSquare, UserCircle } from "phosphor-react-native";
 
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
@@ -18,7 +18,7 @@ type AppRoutes = {
   home: undefined;
   newOccurrencePage: undefined;
   myOccurrencesPage: undefined;
-  profile: undefined; 
+  profile: undefined;
   ocurrenceDetailsPage: undefined;
 };
 
@@ -57,22 +57,26 @@ export function AppRoutes() {
         name="newOccurrencePage"
         component={NewOccurrencePage}
         options={{
-          tabBarIcon: ({ color }) => <PlusSquare color={color} size={iconSize} />,
+          tabBarIcon: ({ color }) => (
+            <PlusSquare color={color} size={iconSize} />
+          ),
         }}
       />
 
-      <Screen
+      {/* <Screen
         name="myOccurrencesPage"
         component={MyOccurrencesPage}
         options={{
           tabBarIcon: ({ color }) => <List color={color} size={iconSize} />,
         }}
-      />
+      /> */}
 
       <Screen
         name="profile"
         component={Profile}
-        options={{ tabBarButton: () => null }}
+        options={{
+          tabBarIcon: ({ color }) => <UserCircle color={color} size={iconSize} />,
+        }}
       />
 
       <Screen

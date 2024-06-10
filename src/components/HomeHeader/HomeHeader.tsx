@@ -5,18 +5,17 @@ import { TouchableOpacity } from "react-native";
 import {
   Container,
   Greeting,
+  Message,
   Name,
   Picture,
-  Slogan,
 } from "./HomeHeader.styles";
 
 import theme from "../../theme";
 import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
-import { AppNavigatorRoutesProps } from "../../routes/app.routes";
 import { useAuth } from "../../hooks/useAuth";
 
 import defaulUserPhotoImg from "../../assets/userPhotoDefault.png";
+import { SignOut } from "phosphor-react-native";
 
 const HomeHeader: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -24,12 +23,6 @@ const HomeHeader: React.FC = () => {
   const insets = useSafeAreaInsets();
 
   const paddingTop = insets.top + 32;
-
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
-
-  const handleNavigateToProfile = () => {
-    navigation.navigate("profile");
-  };
 
   return (
     <LinearGradient
@@ -39,15 +32,16 @@ const HomeHeader: React.FC = () => {
       ]}
     >
       <Container style={{ paddingTop }}>
+        <Picture
+          source={user.avatar ? { uri: user.avatar } : defaulUserPhotoImg}
+          placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
+        />
         <Greeting>
-          <Name>Olá, {user.name}</Name>
-          <Slogan>Segurança em primeiro lugar!</Slogan>
+          <Message>Olá</Message>
+          <Name>{user.name}</Name>
         </Greeting>
-        <TouchableOpacity onPress={handleNavigateToProfile}>
-          <Picture
-            source={user.avatar ? { uri: user.avatar } : defaulUserPhotoImg}
-            placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
-          />
+        <TouchableOpacity onPress={signOut}>
+          <SignOut size={32} color={theme.COLORS.WHITE} />
         </TouchableOpacity>
       </Container>
     </LinearGradient>
