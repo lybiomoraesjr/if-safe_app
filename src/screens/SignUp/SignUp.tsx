@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, set, useForm } from "react-hook-form";
 import ButtonComponent from "../../components/ButtonComponent";
 import InputComponent from "../../components/InputComponent";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
 import { AppError } from "../../utils/AppError";
+import { useAuth } from "../../hooks/useAuth";
 
 type FormDataProps = {
   name: string;
@@ -32,6 +33,10 @@ const signUpSchema = yup.object({
 });
 
 const SignUn: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { signIn } = useAuth();
+
   const {
     control,
     handleSubmit,
@@ -48,14 +53,17 @@ const SignUn: React.FC = () => {
 
   const handleSignUp = async ({ name, email, password }: FormDataProps) => {
     try {
-      const response = await api.post("/users", { name, email, password });
-
-      console.log(response.data);
+      setIsLoading(true);
+      await api.post("/users", { name, email, password });
+      await signIn(email, password);
     } catch (error) {
+      setIsLoading(false);
       const isAppError = error instanceof AppError;
-      const title = isAppError ? error.message : "Não foi possível criar a conta. Tente novamente mais tarde.";
+      const title = isAppError
+        ? error.message
+        : "Não foi possível criar a conta. Tente novamente mais tarde.";
 
-      Alert.alert(title)
+      Alert.alert(title);
     }
   };
 
@@ -124,7 +132,8 @@ const SignUn: React.FC = () => {
       />
 
       <ButtonComponent
-        isLoading={false}
+        loading={isLoading}
+        disabled={isLoading}
         title="Acessar"
         onPress={handleSubmit(handleSignUp)}
       />

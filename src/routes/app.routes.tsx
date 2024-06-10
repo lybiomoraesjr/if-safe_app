@@ -11,13 +11,12 @@ import Profile from "../screens/Profile";
 
 import theme from "../theme";
 import OcurrenceDetailsPage from "../screens/OcurrenceDetailsPage";
-import MyOccurrencesPage from "../screens/MyOccurrencesPage";
+
 import NewOccurrencePage from "../screens/NewOccurrencePage";
 
 type AppRoutes = {
   home: undefined;
   newOccurrencePage: undefined;
-  myOccurrencesPage: undefined;
   profile: undefined;
   ocurrenceDetailsPage: undefined;
 };
@@ -63,19 +62,13 @@ export function AppRoutes() {
         }}
       />
 
-      {/* <Screen
-        name="myOccurrencesPage"
-        component={MyOccurrencesPage}
-        options={{
-          tabBarIcon: ({ color }) => <List color={color} size={iconSize} />,
-        }}
-      /> */}
-
       <Screen
         name="profile"
         component={Profile}
         options={{
-          tabBarIcon: ({ color }) => <UserCircle color={color} size={iconSize} />,
+          tabBarIcon: ({ color }) => (
+            <UserCircle color={color} size={iconSize} />
+          ),
         }}
       />
 
