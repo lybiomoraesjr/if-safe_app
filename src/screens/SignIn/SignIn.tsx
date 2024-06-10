@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container } from "./SignIn.styles";
-import { Image, Text, View } from "react-native";
+import { Alert, Image, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
@@ -8,6 +8,8 @@ import InputComponent from "../../components/InputComponent";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAuth } from "../../hooks/useAuth";
+import { AppError } from "../../utils/AppError";
 
 type FormDataProps = {
   email: string;
@@ -23,6 +25,10 @@ const signInSchema = yup.object({
 });
 
 const SignIn: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { signIn } = useAuth();
+
   const {
     control,
     handleSubmit,
@@ -37,8 +43,19 @@ const SignIn: React.FC = () => {
     navigation.navigate("signUp");
   };
 
-  const handleSignIn = ({ email, password }: FormDataProps) => {
-    console.log({ email, password });
+  const handleSignIn = async ({ email, password }: FormDataProps) => {
+    try {
+      setIsLoading(true);
+      await signIn(email, password);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível entrar. Tente novamente mais tarde.";
+
+      setIsLoading(false);
+      Alert.alert(title);
+    }
   };
 
   return (
@@ -77,7 +94,7 @@ const SignIn: React.FC = () => {
 
       <ButtonComponent
         title="Acessar"
-        loading={false}
+        loading={isLoading}
         onPress={handleSubmit(handleSignIn)}
       />
 
