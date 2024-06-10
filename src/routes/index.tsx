@@ -7,7 +7,7 @@ import { View } from "react-native";
 export function Routes() {
   return (
     <NavigationContainer>
-      <AppRoutes />
+      <AuthRoutes />
     </NavigationContainer>
   );
 }
