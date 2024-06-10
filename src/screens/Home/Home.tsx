@@ -17,7 +17,7 @@ const Home: React.FC = () => {
 
   return (
     <Container>
-      <HomeHeader user={userMock} />
+      <HomeHeader />
       <Title>Ocorrências:</Title>
 
       <Divider style={{ margin: 18 }} />
