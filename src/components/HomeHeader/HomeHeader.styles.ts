@@ -10,6 +10,7 @@ export const Container = styled.View`
 
 export const Greeting = styled.View`
   flex: 1;
+  margin-left: 12px;
 `;
 
 export const Message = styled.Text`
@@ -22,12 +23,6 @@ export const Name = styled.Text`
   color: ${({ theme }) => theme.COLORS.GRAY_100};
   font-size: ${({ theme }) => theme.FONT_SIZE.LG}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
-`;
-
-export const Slogan = styled.Text`
-  color: ${({ theme }) => theme.COLORS.GRAY_100};
-  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
-  font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
 `;
 
 export const Picture = styled(Image)`

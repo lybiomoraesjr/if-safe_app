@@ -21,7 +21,7 @@ const signInSchema = yup.object({
   password: yup
     .string()
     .required("Informe a senha")
-    .min(6, "A senha deve ter pelo menos 6 dígitos."),
+    .min(3, "A senha deve ter pelo menos 6 dígitos."),
 });
 
 const SignIn: React.FC = () => {
@@ -95,6 +95,7 @@ const SignIn: React.FC = () => {
       <ButtonComponent
         title="Acessar"
         loading={isLoading}
+        disabled={isLoading}
         onPress={handleSubmit(handleSignIn)}
       />
 

@@ -3,19 +3,15 @@ import { Button, ButtonProps } from "@rneui/base";
 import theme from "../../theme";
 
 type ButtonComponentProps = ButtonProps & {
-  isLoading?: boolean;
   variant?: "solid" | "outline";
 };
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
-  isLoading = false,
   variant,
   ...rest
 }) => {
   return (
     <Button
-      loading={isLoading}
-      disabled={isLoading}
       loadingProps={{ size: "small", color: theme.COLORS.WHITE }}
       buttonStyle={{
         backgroundColor:
