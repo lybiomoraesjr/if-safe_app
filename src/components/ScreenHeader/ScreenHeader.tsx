@@ -26,11 +26,17 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
     navigation.goBack();
   };
 
+  const containerStyle: ViewStyle = {
+    paddingTop,
+
+    alignItems: showBackButton ? "flex-start" : "center",
+  };
+
   return (
     <LinearGradient
       colors={[COLORS.GREEN_GRADIENT_START, COLORS.GREEN_GRADIENT_END]}
     >
-      <Container style={{ paddingTop }}>
+      <Container style={containerStyle}>
         {showBackButton && (
           <TouchableOpacity activeOpacity={0.7} onPress={handleGoBack}>
             <ArrowLeft size={24} weight="bold" color={COLORS.WHITE} />

@@ -41,6 +41,8 @@ const OcurrenceItem: React.FC<OcurrenceItemProps> = ({
       />
 
       <Info>
+        <Title>{title}</Title>
+        <Date>Publicado em {displayDate}</Date>
         <NotificationView>
           <IconWithTooltip
             IconComponent={Warning}
@@ -53,9 +55,6 @@ const OcurrenceItem: React.FC<OcurrenceItemProps> = ({
           <NotifierCount>{notifiersNumber}</NotifierCount>
           <Text>{status}</Text>
         </NotificationView>
-
-        <Title>{title}</Title>
-        <Date>Publicado em {displayDate}</Date>
       </Info>
 
       <InteractButton onPress={onInteract}>
