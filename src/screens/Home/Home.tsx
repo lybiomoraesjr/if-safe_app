@@ -22,8 +22,6 @@ const Home: React.FC = () => {
       <Status status="cancelado" />
       <Title>Ocorrências:</Title>
 
-      <Divider style={{ margin: 18 }} />
-
       <OccurrenceList
         occurrences={occurrencesListMock}
         onInteract={handleNavigateToOccurrenceDetail}

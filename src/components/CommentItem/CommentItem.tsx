@@ -5,24 +5,24 @@ import { Container, Picture } from "./CommentItem.styles";
 import { DotsThree } from "phosphor-react-native";
 
 type CommentItemProps = {
-  imageUri?: string;
+  avatar?: string;
   name: string;
   date: Date;
-  content: string;
+  text: string;
 };
 
 const CommentItem: React.FC<CommentItemProps> = ({
-  imageUri,
+  avatar,
   name,
   date,
-  content,
+  text,
 }) => {
   const displayDate = formattedDate(date);
   return (
     <Container>
       <Picture
         source={{
-          uri: imageUri,
+          uri: avatar,
         }}
         placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
       />
@@ -38,7 +38,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           </TouchableOpacity>
         </View>
 
-        <Text>{content}</Text>
+        <Text>{text}</Text>
       </View>
     </Container>
   );

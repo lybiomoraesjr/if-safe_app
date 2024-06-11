@@ -1,6 +1,6 @@
-import { OccurrenceDetails, OccurrenceStatus } from "../types/types";
+import { OccurrenceDetail, OccurrenceStatus } from "../types/types";
 
-export const ocurrenceDetailsMock: OccurrenceDetails = {
+export const ocurrenceDetailsMock: OccurrenceDetail = {
   uuid: "occurrenceId1",
   title: "Fio desencapado",
   imageUri:

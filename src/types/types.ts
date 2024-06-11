@@ -27,7 +27,7 @@ export type Comment = {
   author: User;
 };
 
-export type OccurrenceDetails = OccurrenceItem & {
+export type OccurrenceDetail = OccurrenceItem & {
   description: string;
   author: User;
   comments: Comment[];

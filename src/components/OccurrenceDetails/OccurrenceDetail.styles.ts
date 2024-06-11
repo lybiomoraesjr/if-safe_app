@@ -1,13 +1,18 @@
 import styled from "styled-components/native";
 import { Image } from "expo-image";
 
-export const Container = styled.View`
-  padding: 0px 20px;
+export const Container = styled.ScrollView`
 `;
 
-export const Picture = styled(Image)`
-  width: 150px;
-  height: 150px;
+export const UserImage = styled(Image)`
+  width: 54px;
+  height: 54px;
+  border-radius: 27px;
+`;
+
+export const OccurrenceImage = styled(Image)`
+  width: "full";
+  height: 300px;
   border-radius: 7px;
 `;
 

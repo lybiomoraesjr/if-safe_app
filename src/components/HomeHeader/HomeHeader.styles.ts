@@ -25,7 +25,7 @@ export const Name = styled.Text`
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `;
 
-export const Picture = styled(Image)`
+export const UserImage = styled(Image)`
   width: 54px;
   height: 54px;
   border-radius: 27px;
