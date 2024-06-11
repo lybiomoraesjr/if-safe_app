@@ -9,6 +9,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import Loading from "../../components/Loading";
+import ScreenHeader from "../../components/ScreenHeader";
 
 type FormDataProps = {
   name: string;
@@ -50,7 +51,8 @@ const Profile: React.FC = () => {
     }
   }
   return (
-    <Container style={{ justifyContent: "center" }}>
+    <Container>
+      <ScreenHeader title="Perfil" />
       <ScrollView>
         <View style={{ justifyContent: "center" }}>
           <Picture

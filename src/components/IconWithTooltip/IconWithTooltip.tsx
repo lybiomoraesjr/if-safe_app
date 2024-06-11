@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { ComponentType, useState } from "react";
 import { IconProps } from "phosphor-react-native";
 import { Container } from "./IconWithTooltip.styles";
 import { Tooltip } from "@rneui/base";
 import { Text } from "react-native";
 
 type IconWithTooltipProps = {
-  IconComponent: React.ComponentType<IconProps>;
+  IconComponent: ComponentType<IconProps>;
   color?: string;
   size?: number;
   tooltipText?: string;

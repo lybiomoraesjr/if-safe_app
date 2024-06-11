@@ -10,15 +10,16 @@ import {
   Picture,
 } from "./HomeHeader.styles";
 
-import theme from "../../theme";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../../hooks/useAuth";
 
 import defaulUserPhotoImg from "../../assets/userPhotoDefault.png";
 import { SignOut } from "phosphor-react-native";
+import { useTheme } from "styled-components";
 
 const HomeHeader: React.FC = () => {
   const { user, signOut } = useAuth();
+  const { COLORS } = useTheme();
 
   const insets = useSafeAreaInsets();
 
@@ -26,10 +27,7 @@ const HomeHeader: React.FC = () => {
 
   return (
     <LinearGradient
-      colors={[
-        theme.COLORS.GREEN_GRADIENT_START,
-        theme.COLORS.GREEN_GRADIENT_END,
-      ]}
+      colors={[COLORS.GREEN_GRADIENT_START, COLORS.GREEN_GRADIENT_END]}
     >
       <Container style={{ paddingTop }}>
         <Picture
@@ -41,7 +39,7 @@ const HomeHeader: React.FC = () => {
           <Name>{user.name}</Name>
         </Greeting>
         <TouchableOpacity onPress={signOut}>
-          <SignOut size={32} color={theme.COLORS.WHITE} />
+          <SignOut size={32} color={COLORS.WHITE} />
         </TouchableOpacity>
       </Container>
     </LinearGradient>
