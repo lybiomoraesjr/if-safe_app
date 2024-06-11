@@ -7,6 +7,8 @@ import { Divider } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
 import { occurrencesListMock } from "../../utils/occurrencesListMock";
+import Status from "../../components/Status";
+
 
 const Home: React.FC = () => {
   const navigation = useNavigation<AppNavigatorRoutesProps>();
@@ -18,6 +20,8 @@ const Home: React.FC = () => {
   return (
     <Container>
       <HomeHeader />
+
+      <Status status="cancelado"/>
       <Title>Ocorrências:</Title>
 
       <Divider style={{ margin: 18 }} />
