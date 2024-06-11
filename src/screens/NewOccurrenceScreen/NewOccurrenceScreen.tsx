@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-const NewOccurrencePage = () => {
+const NewOccurrenceScreen = () => {
   return (
     <View>
       <Text>New Occurrence Page</Text>
@@ -8,4 +8,4 @@ const NewOccurrencePage = () => {
   );
 };
 
-export default NewOccurrencePage;
+export default NewOccurrenceScreen;

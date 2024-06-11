@@ -1,14 +1,12 @@
 import React from "react";
-import { ScrollView } from "react-native";
 import OcurrenceDetails from "../../components/OccurrenceDetails";
 import { ocurrenceDetailsMock } from "../../utils/ocurrenceDetailsMock";
-import { userMock } from "../../utils/userMock";
 import HomeHeader from "../../components/HomeHeader";
 import { Divider } from "@rneui/base";
-import { Container, Title } from "./OcurrenceDetailsPage.styles";
+import { Container, Title } from "./OccurrenceDetailScreen.styles";
 import OccurrenceFooter from "../../components/OccurrenceFooter";
 
-const OcurrenceDetailsPage: React.FC = () => {
+const OccurrenceDetailScreen: React.FC = () => {
   return (
     <Container>
       <HomeHeader />
@@ -35,4 +33,4 @@ const OcurrenceDetailsPage: React.FC = () => {
   );
 };
 
-export default OcurrenceDetailsPage;
+export default OccurrenceDetailScreen;

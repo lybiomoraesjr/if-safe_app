@@ -4,21 +4,23 @@ import {
   BottomTabNavigationProp,
 } from "@react-navigation/bottom-tabs";
 
-import { House, List, PlusSquare, UserCircle } from "phosphor-react-native";
+import { House, PlusSquare, UserCircle } from "phosphor-react-native";
 
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 
 import theme from "../theme";
-import OcurrenceDetailsPage from "../screens/OcurrenceDetailsPage";
 
-import NewOccurrencePage from "../screens/NewOccurrencePage";
+import NewOccurrenceScreen from "../screens/NewOccurrenceScreen";
+import OccurrenceDetailScreen from "../screens/OccurrenceDetailScreen";
+import CommentsScreen from "../screens/CommentsScreen";
 
 type AppRoutes = {
   home: undefined;
-  newOccurrencePage: undefined;
+  newOccurrenceScreen: undefined;
   profile: undefined;
-  ocurrenceDetailsPage: undefined;
+  occurrenceDetailScreen: undefined;
+  commentsScreen: undefined;
 };
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -53,8 +55,8 @@ export function AppRoutes() {
       />
 
       <Screen
-        name="newOccurrencePage"
-        component={NewOccurrencePage}
+        name="newOccurrenceScreen"
+        component={NewOccurrenceScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <PlusSquare color={color} size={iconSize} />
@@ -73,8 +75,14 @@ export function AppRoutes() {
       />
 
       <Screen
-        name="ocurrenceDetailsPage"
-        component={OcurrenceDetailsPage}
+        name="occurrenceDetailScreen"
+        component={OccurrenceDetailScreen}
+        options={{ tabBarButton: () => null }}
+      />
+
+      <Screen
+        name="commentsScreen"
+        component={CommentsScreen}
         options={{ tabBarButton: () => null }}
       />
     </Navigator>
