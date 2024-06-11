@@ -22,8 +22,7 @@ export const ocurrenceDetailsMock: OccurrenceDetail = {
       author: {
         uuid: "userId2",
         name: "Thales Miranda dos Santos",
-        imageUri:
-          "https://www.save-free.com/cdn/https://instagram.fccm11-1.fna.fbcdn.net/v/t51.2885-19/274568729_917049325630882_5233696976206523807_n.jpg?_nc_ht=instagram.fccm11-1.fna.fbcdn.net&_nc_cat=110&_nc_ohc=my5EiGuM9JUQ7kNvgHexDaH&edm=AEF8tYYBAAAA&ccb=7-5&oh=00_AYBi-x7O6rGmNURCCowIMoL2-GsAnLlFpSTtjwQgsZJOOw&oe=66604DE3&_nc_sid=1e20d2",
+        imageUri: "https://github.com/lybiomoraesjr.png",
       },
     },
 
@@ -34,8 +33,7 @@ export const ocurrenceDetailsMock: OccurrenceDetail = {
       author: {
         uuid: "userId2",
         name: "Thales Miranda dos Santos",
-        imageUri:
-          "https://www.save-free.com/cdn/https://instagram.fccm11-1.fna.fbcdn.net/v/t51.2885-19/274568729_917049325630882_5233696976206523807_n.jpg?_nc_ht=instagram.fccm11-1.fna.fbcdn.net&_nc_cat=110&_nc_ohc=my5EiGuM9JUQ7kNvgHexDaH&edm=AEF8tYYBAAAA&ccb=7-5&oh=00_AYBi-x7O6rGmNURCCowIMoL2-GsAnLlFpSTtjwQgsZJOOw&oe=66604DE3&_nc_sid=1e20d2",
+        imageUri: "https://github.com/lybiomoraesjr.png",
       },
     },
 
@@ -46,8 +44,7 @@ export const ocurrenceDetailsMock: OccurrenceDetail = {
       author: {
         uuid: "userId2",
         name: "Thales Miranda dos Santos",
-        imageUri:
-          "https://www.save-free.com/cdn/https://instagram.fccm11-1.fna.fbcdn.net/v/t51.2885-19/274568729_917049325630882_5233696976206523807_n.jpg?_nc_ht=instagram.fccm11-1.fna.fbcdn.net&_nc_cat=110&_nc_ohc=my5EiGuM9JUQ7kNvgHexDaH&edm=AEF8tYYBAAAA&ccb=7-5&oh=00_AYBi-x7O6rGmNURCCowIMoL2-GsAnLlFpSTtjwQgsZJOOw&oe=66604DE3&_nc_sid=1e20d2",
+        imageUri: "https://github.com/lybiomoraesjr.png",
       },
     },
 
@@ -58,8 +55,7 @@ export const ocurrenceDetailsMock: OccurrenceDetail = {
       author: {
         uuid: "userId2",
         name: "Thales Miranda dos Santos",
-        imageUri:
-          "https://www.save-free.com/cdn/https://instagram.fccm11-1.fna.fbcdn.net/v/t51.2885-19/274568729_917049325630882_5233696976206523807_n.jpg?_nc_ht=instagram.fccm11-1.fna.fbcdn.net&_nc_cat=110&_nc_ohc=my5EiGuM9JUQ7kNvgHexDaH&edm=AEF8tYYBAAAA&ccb=7-5&oh=00_AYBi-x7O6rGmNURCCowIMoL2-GsAnLlFpSTtjwQgsZJOOw&oe=66604DE3&_nc_sid=1e20d2",
+        imageUri: "https://github.com/lybiomoraesjr.png",
       },
     },
   ],
