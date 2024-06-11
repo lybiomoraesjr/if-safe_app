@@ -7,7 +7,7 @@ export enum OccurrenceStatus {
 export type User = {
   uuid: string;
   name: string;
-  imageUri?: string;
+  avatar?: string;
   email?: string;
 };
 
@@ -22,12 +22,12 @@ export type OccurrenceItem = {
 
 export type Comment = {
   uuid: string;
-  content: string;
+  text: string;
   date: Date;
   author: User;
 };
 
-export type OccurrenceDetails = OccurrenceItem & {
+export type OccurrenceDetail = OccurrenceItem & {
   description: string;
   author: User;
   comments: Comment[];

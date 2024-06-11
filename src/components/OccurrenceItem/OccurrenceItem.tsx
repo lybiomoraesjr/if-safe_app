@@ -8,7 +8,7 @@ import {
   InteractButton,
   NotificationView,
   NotifierCount,
-  Picture,
+  OccurrenceImage,
   Title,
 } from "./OccurrenceItem.styles";
 import { formattedDate } from "../../utils/dateUtils";
@@ -35,12 +35,14 @@ const OcurrenceItem: React.FC<OcurrenceItemProps> = ({
 
   return (
     <Container>
-      <Picture
+      <OccurrenceImage
         source={{ uri: imageUri }}
         placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
       />
 
       <Info>
+        <Title>{title}</Title>
+        <Date>Publicado em {displayDate}</Date>
         <NotificationView>
           <IconWithTooltip
             IconComponent={Warning}
@@ -53,9 +55,6 @@ const OcurrenceItem: React.FC<OcurrenceItemProps> = ({
           <NotifierCount>{notifiersNumber}</NotifierCount>
           <Text>{status}</Text>
         </NotificationView>
-
-        <Title>{title}</Title>
-        <Date>Publicado em {displayDate}</Date>
       </Info>
 
       <InteractButton onPress={onInteract}>

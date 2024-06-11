@@ -5,7 +5,7 @@ import { Container } from "./NewOccurrenceScreen.styles.";
 const NewOccurrenceScreen: React.FC = () => {
   return (
     <Container>
-      <ScreenHeader title="Ocorrência" />
+      <ScreenHeader title="Nova Ocorrência" />
     </Container>
   );
 };

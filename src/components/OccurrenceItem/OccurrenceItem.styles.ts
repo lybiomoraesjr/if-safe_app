@@ -5,20 +5,19 @@ export const Container = styled.View`
   flex-direction: row;
   align-items: center;
 
-  padding: 0px 20px;
-
   margin-bottom: 15px;
 `;
 
-export const Picture = styled(Image)`
-  width: 100px;
-  height: 100px;
+export const OccurrenceImage = styled(Image)`
+  width: 80px;
+  height: 80px;
   border-radius: 7px;
 `;
 
 export const Info = styled.View`
   flex: 1;
   padding: 0px 15px;
+  row-gap: 3px;
 `;
 
 export const NotificationView = styled.View`

@@ -7,7 +7,7 @@ import {
   Greeting,
   Message,
   Name,
-  Picture,
+  UserImage,
 } from "./HomeHeader.styles";
 
 import { LinearGradient } from "expo-linear-gradient";
@@ -30,7 +30,7 @@ const HomeHeader: React.FC = () => {
       colors={[COLORS.GREEN_GRADIENT_START, COLORS.GREEN_GRADIENT_END]}
     >
       <Container style={{ paddingTop }}>
-        <Picture
+        <UserImage
           source={user.avatar ? { uri: user.avatar } : defaulUserPhotoImg}
           placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
         />

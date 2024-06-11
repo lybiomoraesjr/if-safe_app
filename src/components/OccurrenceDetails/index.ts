@@ -1,1 +1,1 @@
-export { default } from "./OccurrenceDetails";
+export { default } from "./OccurrenceDetail";
