@@ -2,7 +2,6 @@ import React from "react";
 import { Container, Title } from "./Home.styles";
 import HomeHeader from "../../components/HomeHeader";
 import OccurrenceList from "../../components/OccurrenceList";
-import { Divider } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
 import { occurrencesListMock } from "../../utils/occurrencesListMock";

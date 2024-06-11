@@ -4,8 +4,6 @@ import {
   Date,
   Description,
   Name,
-  NotificationView,
-  NotifierCount,
   OccurrenceImage,
   Status,
   Title,
@@ -13,12 +11,10 @@ import {
 } from "./OccurrenceDetail.styles";
 import { ChatCircle, DotsThree, Warning } from "phosphor-react-native";
 import { formattedDate } from "../../utils/dateUtils";
-import { OccurrenceDetail, User } from "../../types";
+import { OccurrenceDetail } from "../../types";
 import { TouchableOpacity, View } from "react-native";
 import { Divider, Text } from "@rneui/base";
 import InputComponent from "../InputComponent";
-import CommentList from "../CommentList";
-import OcurrenceItem from "../OccurrenceItem/OccurrenceItem";
 import CommentItem from "../CommentItem";
 
 type OcurrenceDetailProps = {
@@ -29,8 +25,8 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
   ocurrenceDetail,
 }) => {
   const displayDate = formattedDate(ocurrenceDetail.date);
+  const comments = ocurrenceDetail.comments || [];
 
-  const comments = ocurrenceDetail.comments;
   return (
     <Container>
       <View
@@ -38,25 +34,33 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
           flexDirection: "row",
         }}
       >
-        <View style={{ flexDirection: "row" }}>
-          <UserImage
-            source={{ uri: "https://github.com/lybiomoraesjr.png" }}
-            placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
-          />
-          <View style={{}}>
+        <UserImage
+          source={{ uri: "https://github.com/lybiomoraesjr.png" }}
+          placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
+        />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            flex: 1,
+          }}
+        >
+          <View>
             <Name>{ocurrenceDetail.author.name}</Name>
+            <Date>{displayDate}</Date>
           </View>
+
+          <TouchableOpacity>
+            <DotsThree size={16} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity>
-          <DotsThree size={16} />
-        </TouchableOpacity>
       </View>
       <OccurrenceImage
         source={{ uri: ocurrenceDetail.imageUri }}
         placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
       />
       <Title>{ocurrenceDetail.title}</Title>
-      <Date>{displayDate}</Date>
+
       <Status>{ocurrenceDetail.status}</Status>
       <Description>{ocurrenceDetail.description}</Description>
       <View>
@@ -64,12 +68,14 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
 
         <View style={{ flexDirection: "row" }}>
           <View style={{ flexDirection: "row" }}>
-            <Warning size={16} />
-            <Text>13</Text>
+            <TouchableOpacity>
+              <Warning size={16} />
+            </TouchableOpacity>
+            <Text>{ocurrenceDetail.notifiersIDs.length}</Text>
           </View>
           <View style={{ flexDirection: "row" }}>
             <ChatCircle size={16} />
-            <Text>13</Text>
+            <Text>{comments.length}</Text>
           </View>
         </View>
 
@@ -79,16 +85,14 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
           placeholder="Escreva um comentário"
           leftIcon={{ type: "font-awesome", name: "comment" }}
         />
-
-        <Divider style={{ margin: 18 }} />
       </View>
 
-      {comments.map((comment) => (
+      {comments.length > 0 && comments.map((comment) => (
         <CommentItem
           key={comment.uuid}
           name={comment.author.name}
-          avatar={comment.author.imageUri}
-          text={comment.content}
+          avatar={comment.author.avatar}
+          text={comment.text}
           date={comment.date}
         />
       ))}

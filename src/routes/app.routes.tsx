@@ -13,14 +13,14 @@ import theme from "../theme";
 
 import NewOccurrenceScreen from "../screens/NewOccurrenceScreen";
 import OccurrenceDetailScreen from "../screens/OccurrenceDetailScreen";
-import CommentsScreen from "../screens/CommentsScreen";
+
 
 type AppRoutes = {
   home: undefined;
   newOccurrenceScreen: undefined;
   profile: undefined;
   occurrenceDetailScreen: undefined;
-  commentsScreen: undefined;
+  
 };
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -48,7 +48,7 @@ export function AppRoutes() {
     >
       <Screen
         name="home"
-        component={OccurrenceDetailScreen}
+        component={Home}
         options={{
           tabBarIcon: ({ color }) => <House color={color} size={iconSize} />,
         }}
@@ -80,11 +80,7 @@ export function AppRoutes() {
         options={{ tabBarButton: () => null }}
       />
 
-      <Screen
-        name="commentsScreen"
-        component={CommentsScreen}
-        options={{ tabBarButton: () => null }}
-      />
+   
     </Navigator>
   );
 }

@@ -7,7 +7,7 @@ import OcurrenceDetail from "../../components/OccurrenceDetails/OccurrenceDetail
 const OccurrenceDetailScreen: React.FC = () => {
   return (
     <Container>
-      <ScreenHeader title="Ocorrência" />
+      <ScreenHeader title="Ocorrência" showBackButton />
 
       <OcurrenceDetail ocurrenceDetail={ocurrenceDetailsMock} />
     </Container>

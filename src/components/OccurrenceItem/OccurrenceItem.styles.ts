@@ -8,7 +8,7 @@ export const Container = styled.View`
   margin-bottom: 15px;
 `;
 
-export const Picture = styled(Image)`
+export const OccurrenceImage = styled(Image)`
   width: 100px;
   height: 100px;
   border-radius: 7px;

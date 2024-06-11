@@ -8,7 +8,7 @@ import {
   InteractButton,
   NotificationView,
   NotifierCount,
-  Picture,
+  OccurrenceImage,
   Title,
 } from "./OccurrenceItem.styles";
 import { formattedDate } from "../../utils/dateUtils";
@@ -35,7 +35,7 @@ const OcurrenceItem: React.FC<OcurrenceItemProps> = ({
 
   return (
     <Container>
-      <Picture
+      <OccurrenceImage
         source={{ uri: imageUri }}
         placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
       />

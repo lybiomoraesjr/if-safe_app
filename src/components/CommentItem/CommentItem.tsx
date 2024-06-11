@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { formattedDate } from "../../utils/dateUtils";
-import { Container, Picture } from "./CommentItem.styles";
+import { Container, UserImage } from "./CommentItem.styles";
 import { DotsThree } from "phosphor-react-native";
 
 type CommentItemProps = {
@@ -20,7 +20,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const displayDate = formattedDate(date);
   return (
     <Container>
-      <Picture
+      <UserImage
         source={{
           uri: avatar,
         }}
@@ -28,15 +28,14 @@ const CommentItem: React.FC<CommentItemProps> = ({
       />
 
       <View style={{ flex: 1 }}>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text>{name}</Text>
-
-          <Text>{displayDate}</Text>
 
           <TouchableOpacity>
             <DotsThree size={16} />
           </TouchableOpacity>
         </View>
+        <Text>{displayDate}</Text>
 
         <Text>{text}</Text>
       </View>
