@@ -16,6 +16,7 @@ import { TouchableOpacity, View } from "react-native";
 import { Divider, Text } from "@rneui/base";
 import InputComponent from "../InputComponent";
 import CommentItem from "../CommentItem";
+import defaulUserPhotoImg from "../../assets/userPhotoDefault.png";
 
 type OcurrenceDetailProps = {
   ocurrenceDetail: OccurrenceDetail;
@@ -35,7 +36,11 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
         }}
       >
         <UserImage
-          source={{ uri: "https://github.com/lybiomoraesjr.png" }}
+          source={{
+            uri: ocurrenceDetail.author.avatar
+              ? ocurrenceDetail.author.avatar
+              : defaulUserPhotoImg,
+          }}
           placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
         />
         <View
@@ -87,15 +92,16 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
         />
       </View>
 
-      {comments.length > 0 && comments.map((comment) => (
-        <CommentItem
-          key={comment.uuid}
-          name={comment.author.name}
-          avatar={comment.author.avatar}
-          text={comment.text}
-          date={comment.date}
-        />
-      ))}
+      {comments.length > 0 &&
+        comments.map((comment) => (
+          <CommentItem
+            key={comment.uuid}
+            name={comment.author.name}
+            avatar={comment.author.avatar}
+            text={comment.text}
+            date={comment.date}
+          />
+        ))}
     </Container>
   );
 };
