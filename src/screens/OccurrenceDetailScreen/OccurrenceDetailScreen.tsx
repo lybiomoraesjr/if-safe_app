@@ -5,11 +5,12 @@ import HomeHeader from "../../components/HomeHeader";
 import { Divider } from "@rneui/base";
 import { Container, Title } from "./OccurrenceDetailScreen.styles";
 import OccurrenceFooter from "../../components/OccurrenceFooter";
+import ScreenHeader from "../../components/ScreenHeader";
 
 const OccurrenceDetailScreen: React.FC = () => {
   return (
     <Container>
-      <HomeHeader />
+      <ScreenHeader title="Ocorrência" />
 
       <Title>Ocorrência:</Title>
       <Divider style={{ margin: 18 }} />

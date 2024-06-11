@@ -1,17 +1,12 @@
-import { useNavigation } from "@react-navigation/native";
-import { Text, View } from "react-native";
-import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
+import React from "react";
+import { Container } from "./CommentsScreen.styles";
+import ScreenHeader from "../../components/ScreenHeader";
 
 const CommentsScreen: React.FC = () => {
-  const navigation = useNavigation<AuthNavigatorRoutesProps>();
-
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
   return (
-    <View>
-      <Text>Header</Text>
-    </View>
+    <Container>
+      <ScreenHeader title="Comentários" />
+    </Container>
   );
 };
 

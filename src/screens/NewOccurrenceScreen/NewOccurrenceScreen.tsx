@@ -1,10 +1,12 @@
-import { Text, View } from "react-native";
+import React from "react";
+import ScreenHeader from "../../components/ScreenHeader";
+import { Container } from "./NewOccurrenceScreen.styles.";
 
-const NewOccurrenceScreen = () => {
+const NewOccurrenceScreen: React.FC = () => {
   return (
-    <View>
-      <Text>New Occurrence Page</Text>
-    </View>
+    <Container>
+      <ScreenHeader title="Ocorrência" />
+    </Container>
   );
 };
 
