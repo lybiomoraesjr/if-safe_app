@@ -47,10 +47,11 @@ const SignIn: React.FC = () => {
     try {
       setIsLoading(true);
       await signIn(email, password);
-    } catch (error) {
-      const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.message
+     
+    } catch (error: any) {
+      console.log("error =>", error);
+      const title = error
+        ? error
         : "Não foi possível entrar. Tente novamente mais tarde.";
 
       setIsLoading(false);

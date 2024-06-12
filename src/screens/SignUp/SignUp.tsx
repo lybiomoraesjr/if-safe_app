@@ -56,11 +56,11 @@ const SignUn: React.FC = () => {
       setIsLoading(true);
       await api.post("/users", { name, email, password });
       await signIn(email, password);
-    } catch (error) {
+    } catch (error: any) {
       setIsLoading(false);
-      const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.message
+
+      const title = error
+        ? error
         : "Não foi possível criar a conta. Tente novamente mais tarde.";
 
       Alert.alert(title);
