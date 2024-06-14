@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { formattedDate } from "../../utils/dateUtils";
 import { Container, UserImage } from "./CommentItem.styles";
 import { DotsThree } from "phosphor-react-native";
-import defaulUserPhotoImg from "../../assets/userPhotoDefault.png";
+import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 
 type CommentItemProps = {
   avatar?: string;
@@ -19,12 +19,11 @@ const CommentItem: React.FC<CommentItemProps> = ({
   text,
 }) => {
   const displayDate = formattedDate(date);
+
   return (
     <Container>
       <UserImage
-        source={{
-          uri: avatar ? avatar : defaulUserPhotoImg,
-        }}
+        source={avatar ? { uri: avatar } : defaultUserPhotoImg}
         placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
       />
 

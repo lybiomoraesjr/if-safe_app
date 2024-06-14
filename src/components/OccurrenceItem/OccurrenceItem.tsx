@@ -12,9 +12,8 @@ import {
   Title,
 } from "./OccurrenceItem.styles";
 import { formattedDate } from "../../utils/dateUtils";
-import IconWithTooltip from "../IconWithTooltip";
 
-interface OcurrenceItemProps {
+interface OccurrenceItemProps {
   imageUri: string;
   notifiersNumber: number;
   status: string;
@@ -23,7 +22,7 @@ interface OcurrenceItemProps {
   onInteract: () => void;
 }
 
-const OcurrenceItem: React.FC<OcurrenceItemProps> = ({
+const OccurrenceItem: React.FC<OccurrenceItemProps> = ({
   imageUri,
   notifiersNumber,
   status,
@@ -44,14 +43,7 @@ const OcurrenceItem: React.FC<OcurrenceItemProps> = ({
         <Title>{title}</Title>
         <Date>Publicado em {displayDate}</Date>
         <NotificationView>
-          <IconWithTooltip
-            IconComponent={Warning}
-            size={16}
-            color="#8D8D99"
-            tooltipText="Alertas Aumentam a Relevância da Ocorrência"
-            tooltipWidth={180}
-            tooltipHeight={60}
-          />
+          <Warning size={16} color="#8D8D99" />
           <NotifierCount>{notifiersNumber}</NotifierCount>
           <Text>{status}</Text>
         </NotificationView>
@@ -64,4 +56,4 @@ const OcurrenceItem: React.FC<OcurrenceItemProps> = ({
   );
 };
 
-export default OcurrenceItem;
+export default OccurrenceItem;

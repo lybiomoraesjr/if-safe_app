@@ -11,22 +11,24 @@ import {
 } from "./OccurrenceDetail.styles";
 import { ChatCircle, DotsThree, Warning } from "phosphor-react-native";
 import { formattedDate } from "../../utils/dateUtils";
-import { OccurrenceDetail } from "../../types";
-import { TouchableOpacity, View } from "react-native";
-import { Divider, Text } from "@rneui/base";
-import InputComponent from "../Input";
-import CommentItem from "../CommentItem";
-import defaulUserPhotoImg from "../../assets/userPhotoDefault.png";
 
-type OcurrenceDetailProps = {
-  ocurrenceDetail: OccurrenceDetail;
+import { Text, TouchableOpacity, View } from "react-native";
+
+import CommentItem from "../CommentItem";
+import defaultUserPhotoImg from "../../assets/userPhotoDefault.png";
+import Input from "../Input";
+import { OccurrenceDetailType } from "@/types";
+
+
+type OccurrenceDetailProps = {
+  occurrenceDetail: OccurrenceDetailType;
 };
 
-const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
-  ocurrenceDetail,
+const OccurrenceDetail: React.FC<OccurrenceDetailProps> = ({
+  occurrenceDetail,
 }) => {
-  const displayDate = formattedDate(ocurrenceDetail.date);
-  const comments = ocurrenceDetail.comments || [];
+  const displayDate = formattedDate(occurrenceDetail.date);
+  const comments = occurrenceDetail.comments;
 
   return (
     <Container>
@@ -37,9 +39,9 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
       >
         <UserImage
           source={{
-            uri: ocurrenceDetail.author.avatar
-              ? ocurrenceDetail.author.avatar
-              : defaulUserPhotoImg,
+            uri: occurrenceDetail.author.avatar
+              ? occurrenceDetail.author.avatar
+              : defaultUserPhotoImg,
           }}
           placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
         />
@@ -51,7 +53,7 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
           }}
         >
           <View>
-            <Name>{ocurrenceDetail.author.name}</Name>
+            <Name>{occurrenceDetail.author.name}</Name>
             <Date>{displayDate}</Date>
           </View>
 
@@ -61,22 +63,20 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
         </View>
       </View>
       <OccurrenceImage
-        source={{ uri: ocurrenceDetail.imageUri }}
+        source={{ uri: occurrenceDetail.imageUri }}
         placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
       />
-      <Title>{ocurrenceDetail.title}</Title>
+      <Title>{occurrenceDetail.title}</Title>
 
-      <Status>{ocurrenceDetail.status}</Status>
-      <Description>{ocurrenceDetail.description}</Description>
+      <Status>{occurrenceDetail.status}</Status>
+      <Description>{occurrenceDetail.description}</Description>
       <View>
-        <Divider style={{ margin: 18 }} />
-
         <View style={{ flexDirection: "row" }}>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity>
               <Warning size={16} />
             </TouchableOpacity>
-            <Text>{ocurrenceDetail.notifiersIDs.length}</Text>
+            <Text>{occurrenceDetail.notifiersIDs.length}</Text>
           </View>
           <View style={{ flexDirection: "row" }}>
             <ChatCircle size={16} />
@@ -84,12 +84,7 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
           </View>
         </View>
 
-        <Divider style={{ margin: 18 }} />
-
-        <InputComponent
-          placeholder="Escreva um comentário"
-          leftIcon={{ type: "font-awesome", name: "comment" }}
-        />
+        <Input placeholder="Escreva um comentário" />
       </View>
 
       {comments.length > 0 &&
@@ -106,4 +101,4 @@ const OcurrenceDetail: React.FC<OcurrenceDetailProps> = ({
   );
 };
 
-export default OcurrenceDetail;
+export default OccurrenceDetail;

@@ -4,8 +4,9 @@ import HomeHeader from "../../components/HomeHeader";
 import OccurrenceList from "../../components/OccurrenceList";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
-import { occurrencesListMock } from "../../utils/occurrencesListMock";
+
 import Status from "../../components/OccurrenceStatus";
+import { MockOccurrencesList } from "@/utils/mockData";
 
 const Home: React.FC = () => {
   const navigation = useNavigation<AppNavigatorRoutesProps>();
@@ -22,7 +23,7 @@ const Home: React.FC = () => {
       <Title>Ocorrências:</Title>
 
       <OccurrenceList
-        occurrences={occurrencesListMock}
+        occurrences={MockOccurrencesList}
         onInteract={handleNavigateToOccurrenceDetail}
       />
     </Container>
