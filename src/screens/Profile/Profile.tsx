@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container, Picture } from "./Profile.styles";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import InputComponent from "../../components/InputComponent";
-import ButtonComponent from "../../components/ButtonComponent";
+import ButtonComponent from "../../components/Button";
 import * as ImagePicker from "expo-image-picker";
 
 import * as yup from "yup";
@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import Loading from "../../components/Loading";
 import ScreenHeader from "../../components/ScreenHeader";
+import Button from "../../components/Button";
 
 type FormDataProps = {
   name: string;
@@ -75,7 +76,7 @@ const Profile: React.FC = () => {
 
           <InputComponent placeholder="Confirme a nova senha" />
 
-          <ButtonComponent title="Atualizar" />
+          <Button title="Atualizar" />
         </View>
       </ScrollView>
     </Container>

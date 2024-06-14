@@ -4,13 +4,14 @@ import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 import { Controller, set, useForm } from "react-hook-form";
-import ButtonComponent from "../../components/ButtonComponent";
+import ButtonComponent from "../../components/Button";
 import InputComponent from "../../components/InputComponent";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
 import { AppError } from "../../utils/AppError";
 import { useAuth } from "../../hooks/useAuth";
+import Button from "../../components/Button";
 
 type FormDataProps = {
   name: string;
@@ -131,14 +132,14 @@ const SignUn: React.FC = () => {
         )}
       />
 
-      <ButtonComponent
-        loading={isLoading}
+      <Button
+        isLoading={isLoading}
         disabled={isLoading}
         title="Acessar"
         onPress={handleSubmit(handleSignUp)}
       />
 
-      <ButtonComponent
+      <Button
         variant="outline"
         title="Voltar para o Login"
         onPress={handleGoBack}
