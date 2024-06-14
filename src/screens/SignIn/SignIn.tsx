@@ -4,13 +4,14 @@ import { Alert, Image, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 import ButtonComponent from "../../components/Button/Button";
-import InputComponent from "../../components/InputComponent";
+import InputComponent from "../../components/Input";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../hooks/useAuth";
 import { AppError } from "../../utils/AppError";
 import Button from "../../components/Button/Button";
+import Input from "@/components/Input/Input";
 
 type FormDataProps = {
   email: string;
@@ -70,7 +71,7 @@ const SignIn: React.FC = () => {
         control={control}
         name="email"
         render={({ field: { onChange, value } }) => (
-          <InputComponent
+          <Input
             placeholder="E-mail"
             onChangeText={onChange}
             value={value}
@@ -83,7 +84,7 @@ const SignIn: React.FC = () => {
         control={control}
         name="password"
         render={({ field: { onChange, value } }) => (
-          <InputComponent
+          <Input
             placeholder="Senha"
             onChangeText={onChange}
             value={value}

@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 import { Controller, set, useForm } from "react-hook-form";
 import ButtonComponent from "../../components/Button";
-import InputComponent from "../../components/InputComponent";
+import InputComponent from "../../components/Input";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";

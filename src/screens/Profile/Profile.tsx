@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Picture } from "./Profile.styles";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import InputComponent from "../../components/InputComponent";
+import InputComponent from "../../components/Input";
 import ButtonComponent from "../../components/Button";
 import * as ImagePicker from "expo-image-picker";
 
@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import Loading from "../../components/Loading";
 import ScreenHeader from "../../components/ScreenHeader";
 import Button from "../../components/Button";
+import Input from "@/components/Input/Input";
 
 type FormDataProps = {
   name: string;
@@ -67,14 +68,14 @@ const Profile: React.FC = () => {
             </Text>
           </TouchableOpacity>
 
-          <InputComponent value="Lybio Moraes Junior" />
-          <InputComponent disabled value="j.lybio@aluno.ifsp.br" />
+          <Input value="Lybio Moraes Junior" />
+          <Input value="j.lybio@aluno.ifsp.br" />
 
           <Text>Alterar senha</Text>
-          <InputComponent placeholder="Senha antiga" />
-          <InputComponent placeholder="Nova senha" />
+          <Input placeholder="Senha antiga" />
+          <Input placeholder="Nova senha" />
 
-          <InputComponent placeholder="Confirme a nova senha" />
+          <Input placeholder="Confirme a nova senha" />
 
           <Button title="Atualizar" />
         </View>

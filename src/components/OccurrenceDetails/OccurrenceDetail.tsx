@@ -14,7 +14,7 @@ import { formattedDate } from "../../utils/dateUtils";
 import { OccurrenceDetail } from "../../types";
 import { TouchableOpacity, View } from "react-native";
 import { Divider, Text } from "@rneui/base";
-import InputComponent from "../InputComponent";
+import InputComponent from "../Input";
 import CommentItem from "../CommentItem";
 import defaulUserPhotoImg from "../../assets/userPhotoDefault.png";
 
