@@ -6,7 +6,7 @@ export const Container = styled.View`
 
 export const InputReactNative = styled.TextInput`
   height: 54px;
-  background-color: gray;
+  background-color: ${({ theme }) => theme.COLORS.GRAY_200};
   border-radius: 8px;
   padding: 16px;
 `;

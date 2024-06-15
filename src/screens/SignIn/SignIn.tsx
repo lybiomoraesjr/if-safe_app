@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Container } from "./SignIn.styles";
+import {
+  Container,
+  ImgContainer,
+  InputContainer,
+  TextQuest,
+} from "./SignIn.styles";
 import { Alert, Image, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
@@ -49,7 +54,6 @@ const SignIn: React.FC = () => {
     try {
       setIsLoading(true);
       await signIn(email, password);
-     
     } catch (error: any) {
       console.log("error =>", error);
       const title = error
@@ -63,46 +67,48 @@ const SignIn: React.FC = () => {
 
   return (
     <Container>
-      <View>
+      <ImgContainer>
         <Image source={require("./../../assets/ifsafe-logo.png")} />
-      </View>
+      </ImgContainer>
 
-      <Controller
-        control={control}
-        name="email"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            placeholder="E-mail"
-            onChangeText={onChange}
-            value={value}
-            errorMessage={errors.email?.message}
-          />
-        )}
-      />
+      <InputContainer>
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="E-mail"
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.email?.message}
+            />
+          )}
+        />
 
-      <Controller
-        control={control}
-        name="password"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            placeholder="Senha"
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry
-            errorMessage={errors.password?.message}
-            returnKeyType="send"
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="Senha"
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry
+              errorMessage={errors.password?.message}
+              returnKeyType="send"
+            />
+          )}
+        />
 
-      <Button
-        title="Acessar"
-        isLoading={isLoading}
-        disabled={isLoading}
-        onPress={handleSubmit(handleSignIn)}
-      />
+        <Button
+          title="Acessar"
+          isLoading={isLoading}
+          disabled={isLoading}
+          onPress={handleSubmit(handleSignIn)}
+        />
+      </InputContainer>
 
-      <Text>Ainda não tem acesso?</Text>
+      <TextQuest>Ainda não tem acesso?</TextQuest>
 
       <Button
         variant="outline"
