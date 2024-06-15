@@ -5,7 +5,8 @@ export const Container = styled.View`
 `;
 
 export const InputReactNative = styled.TextInput`
-  height: 54px;
+  min-height: 56px;
+  max-height: 56px;
   background-color: ${({ theme }) => theme.COLORS.GRAY_200};
   border-radius: 8px;
   padding: 16px;
