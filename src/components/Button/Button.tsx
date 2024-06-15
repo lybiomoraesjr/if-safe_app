@@ -1,8 +1,7 @@
 import React from "react";
 import { TouchableOpacityProps } from "react-native";
 import { useTheme } from "styled-components";
-import { Container, Title } from "./Button.styles";
-import Loading from "../Loading";
+import { Container, Loading, Title } from "./Button.styles";
 
 type ButtonProps = TouchableOpacityProps & {
   title: string;
@@ -19,22 +18,28 @@ const Button: React.FC<ButtonProps> = ({
   const { COLORS } = useTheme();
   return (
     <Container
-      style={{
-        backgroundColor:
-          variant === "outline" ? "transparent" : COLORS.BRAND_MID,
+      style={[
+        {
+          backgroundColor:
+            variant === "outline" ? "transparent" : COLORS.BRAND_MID,
 
-        borderWidth: variant === "outline" ? 1 : 0,
-        borderColor: COLORS.BRAND_MID,
-      }}
+          borderWidth: variant === "outline" ? 1 : 0,
+        },
+        rest.style,
+      ]}
+      disabled={isLoading}
       {...rest}
     >
       {isLoading ? (
         <Loading />
       ) : (
         <Title
-          style={{
-            color: variant === "outline" ? COLORS.BRAND_LIGHT : COLORS.WHITE,
-          }}
+          style={[
+            {
+              color: variant === "outline" ? COLORS.BRAND_LIGHT : COLORS.WHITE,
+            },
+            rest.style,
+          ]}
         >
           {title}
         </Title>

@@ -1,15 +1,15 @@
 import React from "react";
-import { ocurrenceDetailsMock } from "../../utils/ocurrenceDetailsMock";
 import { Container } from "./OccurrenceDetailScreen.styles";
 import ScreenHeader from "../../components/ScreenHeader";
-import OcurrenceDetail from "../../components/OccurrenceDetails/OccurrenceDetail";
+import OccurrenceDetail from "../../components/OccurrenceDetail/OccurrenceDetail";
+import { MockOccurrenceDetail } from "@/utils/mockData";
 
 const OccurrenceDetailScreen: React.FC = () => {
   return (
     <Container>
       <ScreenHeader title="Ocorrência" showBackButton />
 
-      <OcurrenceDetail ocurrenceDetail={ocurrenceDetailsMock} />
+      <OccurrenceDetail occurrenceDetail={MockOccurrenceDetail} />
     </Container>
   );
 };

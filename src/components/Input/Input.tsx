@@ -1,6 +1,6 @@
 import React from "react";
-import { TextInputProps, View, Text, StyleSheet } from "react-native";
-import { InputComponent } from "./Input.styles";
+import { TextInputProps } from "react-native";
+import { Container, InputReactNative, Message } from "./Input.styles";
 
 type InputProps = TextInputProps & {
   errorMessage?: string;
@@ -8,21 +8,11 @@ type InputProps = TextInputProps & {
 
 const Input: React.FC<InputProps> = ({ errorMessage, ...rest }) => {
   return (
-    <View style={styles.container}>
-      <InputComponent {...rest} />
-      {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
-    </View>
+    <Container>
+      <InputReactNative {...rest} />
+      {errorMessage && <Message>{errorMessage}</Message>}
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 16,
-  },
-  errorText: {
-    color: "red",
-    marginTop: 4,
-  },
-});
 
 export default Input;

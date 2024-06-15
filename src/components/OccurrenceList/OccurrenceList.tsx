@@ -1,12 +1,12 @@
 import React from "react";
 import { Container } from "./OccurrenceList.styles";
 import { FlatList } from "react-native";
-import { OccurrenceItem } from "../../types";
-import OcurrenceItem from "../OccurrenceItem";
+import { OccurrenceItemType } from "@/types";
+import OccurrenceItem from "../OccurrenceItem";
 
 interface OccurrenceListProps {
   onInteract: () => void;
-  occurrences: OccurrenceItem[];
+  occurrences: OccurrenceItemType[];
 }
 
 const OccurrenceList: React.FC<OccurrenceListProps> = ({
@@ -19,7 +19,7 @@ const OccurrenceList: React.FC<OccurrenceListProps> = ({
         data={occurrences}
         keyExtractor={(item) => item.uuid}
         renderItem={({ item }) => (
-          <OcurrenceItem
+          <OccurrenceItem
             imageUri={item.imageUri}
             notifiersNumber={item.notifiersIDs.length}
             status={item.status}

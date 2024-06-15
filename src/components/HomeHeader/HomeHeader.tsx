@@ -13,7 +13,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../../hooks/useAuth";
 
-import defaulUserPhotoImg from "../../assets/userPhotoDefault.png";
+import defaultUserPhotoImg from "../../assets/userPhotoDefault.png";
 import { SignOut } from "phosphor-react-native";
 import { useTheme } from "styled-components";
 
@@ -31,7 +31,7 @@ const HomeHeader: React.FC = () => {
     >
       <Container style={{ paddingTop }}>
         <UserImage
-          source={user.avatar ? { uri: user.avatar } : defaulUserPhotoImg}
+          source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
           placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
         />
         <Greeting>
