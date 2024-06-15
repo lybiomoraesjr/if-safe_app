@@ -3,13 +3,11 @@ import { Alert, ScrollView, Text, View } from "react-native";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
-import { Controller, set, useForm } from "react-hook-form";
-import ButtonComponent from "../../components/Button";
-import InputComponent from "../../components/Input";
+import { Controller, useForm } from "react-hook-form";
+import Input from "../../components/Input";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
-import { AppError } from "../../utils/AppError";
 import { useAuth } from "../../hooks/useAuth";
 import Button from "../../components/Button";
 
@@ -80,7 +78,7 @@ const SignUn: React.FC = () => {
         control={control}
         name="name"
         render={({ field: { onChange, value } }) => (
-          <InputComponent
+          <Input
             placeholder="Nome"
             onChangeText={onChange}
             value={value}
@@ -93,7 +91,7 @@ const SignUn: React.FC = () => {
         control={control}
         name="email"
         render={({ field: { onChange, value } }) => (
-          <InputComponent
+          <Input
             placeholder="E-mail"
             onChangeText={onChange}
             value={value}
@@ -106,7 +104,7 @@ const SignUn: React.FC = () => {
         control={control}
         name="password"
         render={({ field: { onChange, value } }) => (
-          <InputComponent
+          <Input
             placeholder="Senha"
             onChangeText={onChange}
             value={value}
@@ -120,7 +118,7 @@ const SignUn: React.FC = () => {
         control={control}
         name="password_confirm"
         render={({ field: { onChange, value } }) => (
-          <InputComponent
+          <Input
             placeholder="Confirme a Senha"
             onChangeText={onChange}
             value={value}

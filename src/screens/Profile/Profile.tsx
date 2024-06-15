@@ -1,30 +1,59 @@
 import React, { useState } from "react";
 import { Container, Picture } from "./Profile.styles";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import InputComponent from "../../components/Input";
-import ButtonComponent from "../../components/Button";
 import * as ImagePicker from "expo-image-picker";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import Loading from "../../components/Loading";
+import { Controller, useForm } from "react-hook-form";
 import ScreenHeader from "../../components/ScreenHeader";
 import Button from "../../components/Button";
 import Input from "@/components/Input/Input";
+import { useAuth } from "@/hooks/useAuth";
 
 type FormDataProps = {
   name: string;
-  email: string;
-  password: string;
-  old_password: string;
-  confirm_password: string;
+  email?: string;
+  password?: string;
+  old_password?: string;
+  confirm_password?: string;
 };
+
+const profileSchema = yup.object({
+  name: yup.string().required("Informe o nome"),
+  password: yup
+    .string()
+    .min(6, "A senha deve ter pelo menos 6 dígitos.")
+    .nullable()
+    .transform((value) => (!!value ? value : null)),
+  confirm_password: yup
+    .string()
+    .nullable()
+    .transform((value) => (!!value ? value : null))
+    .oneOf([yup.ref("password"), ""], "A confirmação de senha não confere."),
+});
 
 const Profile: React.FC = () => {
   const [userPhoto, setUserPhoto] = useState(
     "https://github.com/lybiomoraesjr.png"
   );
+
+  const { user } = useAuth();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({
+    defaultValues: {
+      name: user.name,
+      email: user.email,
+    },
+    resolver: yupResolver(profileSchema),
+  });
+
+  async function handleProfileUpdate(data: FormDataProps) {
+    console.log(data);
+  }
 
   async function handleUserPhotoSelected() {
     try {
@@ -68,16 +97,71 @@ const Profile: React.FC = () => {
             </Text>
           </TouchableOpacity>
 
-          <Input value="Lybio Moraes Junior" />
-          <Input value="j.lybio@aluno.ifsp.br" />
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="E-mail"
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.name?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="E-mail"
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.email?.message}
+              />
+            )}
+          />
 
           <Text>Alterar senha</Text>
-          <Input placeholder="Senha antiga" />
-          <Input placeholder="Nova senha" />
+          <Controller
+            control={control}
+            name="old_password"
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder="Senha atual"
+                onChangeText={onChange}
+                errorMessage={errors.old_password?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder="Nova senha"
+                onChangeText={onChange}
+                errorMessage={errors.password?.message}
+              />
+            )}
+          />
 
-          <Input placeholder="Confirme a nova senha" />
+          <Controller
+            control={control}
+            name="confirm_password"
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder="Confirme a nova senha"
+                onChangeText={onChange}
+                errorMessage={errors.confirm_password?.message}
+              />
+            )}
+          />
 
-          <Button title="Atualizar" />
+          <Button
+            title="Atualizar"
+            onPress={handleSubmit(handleProfileUpdate)}
+          />
         </View>
       </ScrollView>
     </Container>
