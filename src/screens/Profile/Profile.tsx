@@ -10,6 +10,7 @@ import ScreenHeader from "../../components/ScreenHeader";
 import Button from "../../components/Button";
 import Input from "@/components/Input/Input";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "styled-components";
 
 type FormDataProps = {
   name: string;
@@ -37,6 +38,8 @@ const Profile: React.FC = () => {
   const [userPhoto, setUserPhoto] = useState(
     "https://github.com/lybiomoraesjr.png"
   );
+
+  const { COLORS, FONT_SIZE, FONT_FAMILY } = useTheme();
 
   const { user } = useAuth();
   const {
@@ -84,85 +87,104 @@ const Profile: React.FC = () => {
   return (
     <Container>
       <ScreenHeader title="Perfil" />
-      <ScrollView>
-        <View style={{ justifyContent: "center" }}>
+      <ScrollView style={{ paddingHorizontal: 20, marginTop: 5 }}>
+        <View style={{ alignItems: "center", marginBottom: 20 }}>
           <Picture
             source={{ uri: userPhoto }}
             placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
           />
 
-          <TouchableOpacity onPress={handleUserPhotoSelected}>
-            <Text style={{ color: "green", fontWeight: "bold" }}>
+          <TouchableOpacity
+            onPress={handleUserPhotoSelected}
+            style={{ marginTop: 5 }}
+          >
+            <Text
+              style={{
+                color: COLORS.BRAND_MID,
+                fontFamily: FONT_FAMILY.BOLD,
+                fontSize: FONT_SIZE.SM,
+              }}
+            >
               Alterar foto
             </Text>
           </TouchableOpacity>
-
-          <Controller
-            control={control}
-            name="name"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                placeholder="E-mail"
-                onChangeText={onChange}
-                value={value}
-                errorMessage={errors.name?.message}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                placeholder="E-mail"
-                onChangeText={onChange}
-                value={value}
-                errorMessage={errors.email?.message}
-              />
-            )}
-          />
-
-          <Text>Alterar senha</Text>
-          <Controller
-            control={control}
-            name="old_password"
-            render={({ field: { onChange } }) => (
-              <Input
-                placeholder="Senha atual"
-                onChangeText={onChange}
-                errorMessage={errors.old_password?.message}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="password"
-            render={({ field: { onChange } }) => (
-              <Input
-                placeholder="Nova senha"
-                onChangeText={onChange}
-                errorMessage={errors.password?.message}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="confirm_password"
-            render={({ field: { onChange } }) => (
-              <Input
-                placeholder="Confirme a nova senha"
-                onChangeText={onChange}
-                errorMessage={errors.confirm_password?.message}
-              />
-            )}
-          />
-
-          <Button
-            title="Atualizar"
-            onPress={handleSubmit(handleProfileUpdate)}
-          />
         </View>
+
+        <Controller
+          control={control}
+          name="name"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="E-mail"
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.name?.message}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="E-mail"
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.email?.message}
+            />
+          )}
+        />
+
+        <Text
+          style={{
+            marginTop: 15,
+            marginBottom: 5,
+            fontFamily: FONT_FAMILY.BOLD,
+            fontSize: FONT_SIZE.SM,
+          }}
+        >
+          Alterar senha
+        </Text>
+        <Controller
+          control={control}
+          name="old_password"
+          render={({ field: { onChange } }) => (
+            <Input
+              placeholder="Senha atual"
+              onChangeText={onChange}
+              errorMessage={errors.old_password?.message}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange } }) => (
+            <Input
+              placeholder="Nova senha"
+              onChangeText={onChange}
+              errorMessage={errors.password?.message}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="confirm_password"
+          render={({ field: { onChange } }) => (
+            <Input
+              placeholder="Confirme a nova senha"
+              onChangeText={onChange}
+              errorMessage={errors.confirm_password?.message}
+            />
+          )}
+        />
+
+        <Button
+          title="Atualizar"
+          onPress={handleSubmit(handleProfileUpdate)}
+          style={{ marginTop: 10 }}
+        />
       </ScrollView>
     </Container>
   );
