@@ -12,12 +12,7 @@ import { api } from "../../services/api";
 import { AppError } from "../../utils/AppError";
 import { useAuth } from "../../hooks/useAuth";
 import Button from "../../components/Button";
-import {
-  ButtonsContainer,
-  Container,
-  ImgContainer,
-  InputContainer,
-} from "./SignUp.styles";
+import { Container, ImgContainer, InputContainer } from "./SignUp.styles";
 
 type FormDataProps = {
   name: string;

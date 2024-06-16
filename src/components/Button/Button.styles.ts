@@ -8,6 +8,7 @@ export const Container = styled.TouchableOpacity`
 
   align-items: center;
   justify-content: center;
+  margin-bottom: 10px;
 
   border-color: ${({ theme }) => theme.COLORS.BRAND_LIGHT};
 `;
