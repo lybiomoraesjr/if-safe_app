@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import Button from "../../components/Button";
+import { Container, ImgContainer, InputContainer } from "./SignUp.styles";
 
 type FormDataProps = {
   name: string;
@@ -67,12 +68,24 @@ const SignUn: React.FC = () => {
   };
 
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
-      <View>
+    <Container>
+      <ImgContainer>
         <Image source={require("./../../assets/ifsafe-logo.png")} />
-      </View>
+      </ImgContainer>
 
-      <Text>Registre-se</Text>
+      <InputContainer>
+        <Controller
+          control={control}
+          name="name"
+          render={({ field: { onChange, value } }) => (
+            <InputComponent
+              placeholder="Nome"
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.name?.message}
+            />
+          )}
+        />
 
       <Controller
         control={control}
@@ -142,7 +155,7 @@ const SignUn: React.FC = () => {
         title="Voltar para o Login"
         onPress={handleGoBack}
       />
-    </ScrollView>
+    </Container>
   );
 };
 
