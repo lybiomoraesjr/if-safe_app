@@ -6,9 +6,9 @@ export const Container = styled.View`
 `;
 
 export const Picture = styled(Image)`
-  width: 90px;
-  height: 90px;
-  border-radius: 45px;
-  border-width: 1px;
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  border-width: 2px;
   border-color: ${({ theme }) => theme.COLORS.GRAY_400};
 `;
