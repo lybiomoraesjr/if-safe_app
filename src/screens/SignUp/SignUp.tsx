@@ -12,6 +12,12 @@ import { api } from "../../services/api";
 import { AppError } from "../../utils/AppError";
 import { useAuth } from "../../hooks/useAuth";
 import Button from "../../components/Button";
+import {
+  ButtonsContainer,
+  Container,
+  ImgContainer,
+  InputContainer,
+} from "./SignUp.styles";
 
 type FormDataProps = {
   name: string;
@@ -69,68 +75,68 @@ const SignUn: React.FC = () => {
   };
 
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
-      <View>
+    <Container>
+      <ImgContainer>
         <Image source={require("./../../assets/ifsafe-logo.png")} />
-      </View>
+      </ImgContainer>
 
-      <Text>Registre-se</Text>
+      <InputContainer>
+        <Controller
+          control={control}
+          name="name"
+          render={({ field: { onChange, value } }) => (
+            <InputComponent
+              placeholder="Nome"
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.name?.message}
+            />
+          )}
+        />
 
-      <Controller
-        control={control}
-        name="name"
-        render={({ field: { onChange, value } }) => (
-          <InputComponent
-            placeholder="Nome"
-            onChangeText={onChange}
-            value={value}
-            errorMessage={errors.name?.message}
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <InputComponent
+              placeholder="E-mail"
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.email?.message}
+            />
+          )}
+        />
 
-      <Controller
-        control={control}
-        name="email"
-        render={({ field: { onChange, value } }) => (
-          <InputComponent
-            placeholder="E-mail"
-            onChangeText={onChange}
-            value={value}
-            errorMessage={errors.email?.message}
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, value } }) => (
+            <InputComponent
+              placeholder="Senha"
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry
+              errorMessage={errors.password?.message}
+            />
+          )}
+        />
 
-      <Controller
-        control={control}
-        name="password"
-        render={({ field: { onChange, value } }) => (
-          <InputComponent
-            placeholder="Senha"
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry
-            errorMessage={errors.password?.message}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="password_confirm"
-        render={({ field: { onChange, value } }) => (
-          <InputComponent
-            placeholder="Confirme a Senha"
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry
-            onSubmitEditing={handleSubmit(handleSignUp)}
-            returnKeyType="send"
-            errorMessage={errors.password_confirm?.message}
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="password_confirm"
+          render={({ field: { onChange, value } }) => (
+            <InputComponent
+              placeholder="Confirme a Senha"
+              onChangeText={onChange}
+              value={value}
+              secureTextEntry
+              onSubmitEditing={handleSubmit(handleSignUp)}
+              returnKeyType="send"
+              errorMessage={errors.password_confirm?.message}
+            />
+          )}
+        />
+      </InputContainer>
 
       <Button
         isLoading={isLoading}
@@ -144,7 +150,7 @@ const SignUn: React.FC = () => {
         title="Voltar para o Login"
         onPress={handleGoBack}
       />
-    </ScrollView>
+    </Container>
   );
 };
 
