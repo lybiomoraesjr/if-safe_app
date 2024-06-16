@@ -35,7 +35,7 @@ const HomeHeader: React.FC = () => {
           placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
         />
         <Greeting>
-          <Message>Olá</Message>
+          <Message>Olá,</Message>
           <Name>{user.name}</Name>
         </Greeting>
         <TouchableOpacity onPress={signOut}>
