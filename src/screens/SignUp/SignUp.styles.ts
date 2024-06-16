@@ -1,19 +1,21 @@
 import styled from "styled-components/native";
 
-export const Container = styled.View`
-  flex: 1;
-  padding: 20px 20px;
-  /* border-color: black;
-  border-style: solid;
-  border-width: 3px; */
+export const Container = styled.ScrollView`
+  padding: 0 20px;
   background-color: ${({ theme }) => theme.COLORS.WHITE};
 `;
 
-export const ImgContainer = styled.View`
-  /* flex: 1; */
-  margin-top: 60px;
+export const ImageContainer = styled.View`
+  margin: 40px 0;
   align-items: center;
   justify-content: center;
+`;
+
+export const Register = styled.Text`
+  text-align: center;
+  font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
+  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
+  margin-bottom: 15px;
 `;
 
 export const InputContainer = styled.View`

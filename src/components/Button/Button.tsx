@@ -13,6 +13,7 @@ const Button: React.FC<ButtonProps> = ({
   title,
   isLoading,
   variant,
+  style,
   ...rest
 }) => {
   const { COLORS } = useTheme();
@@ -25,7 +26,7 @@ const Button: React.FC<ButtonProps> = ({
 
           borderWidth: variant === "outline" ? 1 : 0,
         },
-        rest.style,
+        style,
       ]}
       disabled={isLoading}
       {...rest}
@@ -38,7 +39,6 @@ const Button: React.FC<ButtonProps> = ({
             {
               color: variant === "outline" ? COLORS.BRAND_LIGHT : COLORS.WHITE,
             },
-            rest.style,
           ]}
         >
           {title}
