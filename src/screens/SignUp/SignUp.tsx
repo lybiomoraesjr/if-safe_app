@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, ScrollView, Text, View } from "react-native";
+import { Alert, Text } from "react-native";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
@@ -10,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import Button from "../../components/Button";
-import { Container, ImgContainer, InputContainer } from "./SignUp.styles";
+import { Container, ImageContainer, Register } from "./SignUp.styles";
 
 type FormDataProps = {
   name: string;
@@ -45,10 +45,10 @@ const SignUn: React.FC = () => {
     resolver: yupResolver(signUpSchema),
   });
 
-  const navigation = useNavigation<AuthNavigatorRoutesProps>();
+  const { goBack } = useNavigation();
 
   const handleGoBack = () => {
-    navigation.goBack();
+    goBack();
   };
 
   const handleSignUp = async ({ name, email, password }: FormDataProps) => {
@@ -69,23 +69,11 @@ const SignUn: React.FC = () => {
 
   return (
     <Container>
-      <ImgContainer>
-        <Image source={require("./../../assets/ifsafe-logo.png")} />
-      </ImgContainer>
+      <ImageContainer>
+        <Image source={require("@/assets/ifsafe-logo.png")} />
+      </ImageContainer>
 
-      <InputContainer>
-        <Controller
-          control={control}
-          name="name"
-          render={({ field: { onChange, value } }) => (
-            <InputComponent
-              placeholder="Nome"
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.name?.message}
-            />
-          )}
-        />
+      <Register>Crie sua conta</Register>
 
       <Controller
         control={control}
@@ -146,8 +134,9 @@ const SignUn: React.FC = () => {
       <Button
         isLoading={isLoading}
         disabled={isLoading}
-        title="Acessar"
+        title="Criar e acessar"
         onPress={handleSubmit(handleSignUp)}
+        style={{ marginBottom: 40 }}
       />
 
       <Button

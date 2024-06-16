@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../hooks/useAuth";
 import Button from "../../components/Button/Button";
 import Input from "@/components/Input/Input";
+import { useTheme } from "styled-components";
 
 type FormDataProps = {
   email: string;
@@ -24,6 +25,8 @@ const signInSchema = yup.object({
 });
 
 const SignIn: React.FC = () => {
+  const { FONT_SIZE, COLORS, FONT_FAMILY } = useTheme();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const { signIn } = useAuth();
@@ -63,6 +66,16 @@ const SignIn: React.FC = () => {
         <Image source={require("./../../assets/ifsafe-logo.png")} />
       </ImgContainer>
 
+      <Text
+        style={{
+          textAlign: "center",
+          fontSize: FONT_SIZE.LG,
+          fontFamily: FONT_FAMILY.BOLD,
+          paddingBottom: 15,
+        }}
+      >
+        Acesse sua conta
+      </Text>
       <Controller
         control={control}
         name="email"
