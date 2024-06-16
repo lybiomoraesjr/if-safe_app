@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, ImgContainer, TextQuest } from "./SignIn.styles";
-import { Alert, Image, Text, View } from "react-native";
+import { Alert, Image, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 import { Controller, useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Button from "../../components/Button/Button";
 import Input from "@/components/Input/Input";
 import { useTheme } from "styled-components";
+import { AppError } from "@/utils/AppError";
 
 type FormDataProps = {
   email: string;
@@ -25,7 +26,7 @@ const signInSchema = yup.object({
 });
 
 const SignIn: React.FC = () => {
-  const { FONT_SIZE, COLORS, FONT_FAMILY } = useTheme();
+  const { FONT_SIZE, FONT_FAMILY } = useTheme();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,10 +50,11 @@ const SignIn: React.FC = () => {
     try {
       setIsLoading(true);
       await signIn(email, password);
-    } catch (error: any) {
-      console.log("error =>", error);
-      const title = error
-        ? error
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.data
         : "Não foi possível entrar. Tente novamente mais tarde.";
 
       setIsLoading(false);

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Alert, Text } from "react-native";
+import { Alert } from "react-native";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 import { Controller, useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import * as yup from "yup";
@@ -11,6 +10,7 @@ import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import Button from "../../components/Button";
 import { Container, ImageContainer, Register } from "./SignUp.styles";
+import { AppError } from "@/utils/AppError";
 
 type FormDataProps = {
   name: string;
@@ -56,12 +56,14 @@ const SignUn: React.FC = () => {
       setIsLoading(true);
       await api.post("/users", { name, email, password });
       await signIn(email, password);
-    } catch (error: any) {
+    } catch (error) {
       setIsLoading(false);
 
-      const title = error
-        ? error
-        : "Não foi possível criar a conta. Tente novamente mais tarde.";
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.data
+        : "Não foi possível criar a conta. Tente novamente mais tarde";
 
       Alert.alert(title);
     }
