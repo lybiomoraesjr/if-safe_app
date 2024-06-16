@@ -1,5 +1,10 @@
 import React from "react";
-import { Container, Title } from "./Home.styles";
+import {
+  Container,
+  ContentContainer,
+  HomeContainer,
+  Title,
+} from "./Home.styles";
 import HomeHeader from "../../components/HomeHeader";
 import OccurrenceList from "../../components/OccurrenceList";
 import { useNavigation } from "@react-navigation/native";
@@ -19,8 +24,10 @@ const Home: React.FC = () => {
     <Container>
       <HomeHeader />
 
-      <Status status="cancelado" />
-      <Title>Ocorrências:</Title>
+      <ContentContainer>
+        <Status status="cancelado" />
+        <Title>Ocorrências:</Title>
+      </ContentContainer>
 
       <OccurrenceList
         occurrences={MockOccurrencesList}
