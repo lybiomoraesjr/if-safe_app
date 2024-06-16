@@ -2,10 +2,9 @@ import { Container, Title } from "./ScreenHeader.styles";
 import { useTheme } from "styled-components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { TouchableOpacity, ViewStyle } from "react-native";
+import { TouchableOpacity, View, ViewStyle } from "react-native";
 import { ArrowLeft } from "phosphor-react-native";
 import { useNavigation } from "@react-navigation/native";
-import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
 
 type ScreenHeaderProps = {
   title: string;
@@ -18,12 +17,12 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 }) => {
   const { COLORS } = useTheme();
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation<AuthNavigatorRoutesProps>();
+  const { goBack } = useNavigation();
 
   const paddingTop = insets.top + 42;
 
   const handleGoBack = () => {
-    navigation.goBack();
+    goBack();
   };
 
   const containerStyle: ViewStyle = {
@@ -38,12 +37,16 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
     >
       <Container style={containerStyle}>
         {showBackButton && (
-          <TouchableOpacity activeOpacity={0.7} onPress={handleGoBack}>
-            <ArrowLeft size={24} weight="bold" color={COLORS.WHITE} />
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity activeOpacity={0.7} onPress={handleGoBack}>
+              <ArrowLeft size={24} weight="bold" color={COLORS.WHITE} />
+            </TouchableOpacity>
+          </View>
         )}
 
-        <Title>{title}</Title>
+        <View style={{ flex: 1, alignItems: "center" }}>
+          <Title>{title}</Title>
+        </View>
       </Container>
     </LinearGradient>
   );
