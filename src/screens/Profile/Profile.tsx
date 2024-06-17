@@ -13,6 +13,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "styled-components";
 import { api } from "@/services/api";
 import { AppError } from "@/utils/AppError";
+import { storageAuthTokenGet } from "@/storage/storageAuthToken";
+import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
+import * as FileSystem from "expo-file-system";
 
 type FormDataProps = {
   name: string;
@@ -39,9 +42,6 @@ const profileSchema = yup.object({
 const Profile: React.FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
-  const [userPhoto, setUserPhoto] = useState(
-    "https://github.com/lybiomoraesjr.png"
-  );
 
   const { COLORS, FONT_SIZE, FONT_FAMILY } = useTheme();
 
@@ -62,14 +62,21 @@ const Profile: React.FC = () => {
     try {
       setIsUpdating(true);
 
-      const userUpdated = user;
-      userUpdated.name = data.name;
+      const token = await storageAuthTokenGet();
 
-      await api.put("/users", data);
+      let config = {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      };
+      // const userUpdated = user;
+      // userUpdated.name = data.name;
 
-      await updateUserProfile(userUpdated);
+      const response = await api.get("/posts", config);
+      console.log(response.data);
+      // await updateUserProfile(userUpdated);
 
-      Alert.alert("Sucesso", "Perfil atualizado com sucesso");
+      // Alert.alert("Sucesso", "Perfil atualizado com sucesso");
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError ? error.data : "Erro na atualização do perfil";
@@ -99,7 +106,32 @@ const Profile: React.FC = () => {
           return Alert.alert("Erro", "A imagem deve ter no máximo 5MB");
         }
 
-        setUserPhoto(uri);
+        const fileExtension = photoSelected.assets[0].uri.split(".").pop();
+
+        const base64Image = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        const userPhotoUploadForm = {
+          avatar: `data:image/${fileExtension};base64,${base64Image}`,
+        };
+
+        const avatarUpdatedResponse = await api.patch(
+          "/users/avatar",
+          userPhotoUploadForm,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const userUpdated = user;
+        userUpdated.avatar = avatarUpdatedResponse.data.avatar;
+
+        updateUserProfile(userUpdated);
+
+        Alert.alert("Sucesso", "Foto de perfil atualizada com sucesso");
       }
     } catch (error) {
       console.log(error);
@@ -111,7 +143,7 @@ const Profile: React.FC = () => {
       <ScrollView style={{ paddingHorizontal: 20, marginTop: 5 }}>
         <View style={{ alignItems: "center", marginBottom: 20 }}>
           <Picture
-            source={{ uri: userPhoto }}
+            source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
             placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
           />
 
