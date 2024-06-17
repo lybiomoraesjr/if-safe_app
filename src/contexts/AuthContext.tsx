@@ -11,11 +11,13 @@ import {
   storageAuthTokenRemove,
   storageAuthTokenSave,
 } from "../storage/storageAuthToken";
+import { set } from "react-hook-form";
 
 export type AuthContextDataProps = {
   user: UserDTO;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  updateUserProfile: (userUpdated: UserDTO) => Promise<void>;
   isLoadingUserStorageData: boolean;
 };
 
@@ -60,6 +62,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         userAndTokenUpdate(data.user, data.token);
       }
     } catch (error) {
+      console.log(error);
       throw error;
     } finally {
       setIsLoadingUserStorageData(false);
@@ -76,6 +79,15 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       throw error;
     } finally {
       setIsLoadingUserStorageData(false);
+    }
+  };
+
+  const updateUserProfile = async (userUpdated: UserDTO) => {
+    try {
+      setUser(userUpdated);
+      await storageUserSave(userUpdated);
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -107,6 +119,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         signIn,
         signOut,
         isLoadingUserStorageData,
+        updateUserProfile,
       }}
     >
       {children}

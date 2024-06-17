@@ -25,6 +25,8 @@ const HomeHeader: React.FC = () => {
 
   const paddingTop = insets.top + 32;
 
+  const firstName = user.name.split(" ")[0];
+
   return (
     <LinearGradient
       colors={[COLORS.GREEN_GRADIENT_START, COLORS.GREEN_GRADIENT_END]}
@@ -36,7 +38,7 @@ const HomeHeader: React.FC = () => {
         />
         <Greeting>
           <Message>Olá,</Message>
-          <Name>{user.name}</Name>
+          <Name>{firstName}</Name>
         </Greeting>
         <TouchableOpacity onPress={signOut}>
           <SignOut size={32} color={COLORS.WHITE} />
