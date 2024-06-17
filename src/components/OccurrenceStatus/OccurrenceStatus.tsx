@@ -14,9 +14,12 @@ const OccurrenceStatus: React.FC<OccurrenceStatusProps> = ({ name }) => {
       style={{
         backgroundColor: COLORS.GRAY_500,
         borderRadius: 6,
-        padding: 10,
+        height: FONT_SIZE.SM * 2,
+        // paddingVertical: 5,
+        paddingHorizontal: FONT_SIZE.SM,
         justifyContent: "center",
         alignItems: "center",
+        marginRight: 10,
       }}
     >
       <Text

@@ -13,7 +13,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../../hooks/useAuth";
 
-import defaultUserPhotoImg from "../../assets/userPhotoDefault.png";
+import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 import { SignOut } from "phosphor-react-native";
 import { useTheme } from "styled-components";
 

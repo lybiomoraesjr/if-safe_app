@@ -2,7 +2,7 @@ import { AppError } from "@/utils/AppError";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://ifsafe-ifsp.vercel.app",
+  baseURL: "https://ifsafe-ifsp.vercel.app",
 });
 
 api.interceptors.response.use(
