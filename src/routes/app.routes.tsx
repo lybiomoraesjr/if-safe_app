@@ -6,21 +6,19 @@ import {
 
 import { House, PlusSquare, UserCircle } from "phosphor-react-native";
 
-import Home from "../screens/Home";
-import Profile from "../screens/Profile";
+import Home from "@/screens/Home";
+import Profile from "@/screens/Profile";
 
-import theme from "../theme";
+import theme from "@/theme";
 
-import NewOccurrenceScreen from "../screens/NewOccurrenceScreen";
-import OccurrenceDetailScreen from "../screens/OccurrenceDetailScreen";
-
+import NewOccurrenceScreen from "@/screens/NewOccurrenceScreen";
+import OccurrenceDetailScreen from "@/screens/OccurrenceDetailScreen";
 
 type AppRoutes = {
   home: undefined;
   newOccurrenceScreen: undefined;
   profile: undefined;
   occurrenceDetailScreen: undefined;
-  
 };
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -79,8 +77,6 @@ export function AppRoutes() {
         component={OccurrenceDetailScreen}
         options={{ tabBarButton: () => null }}
       />
-
-   
     </Navigator>
   );
 }

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Container, ImgContainer, TextQuest } from "./SignIn.styles";
 import { Alert, Image, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { AuthNavigatorRoutesProps } from "../../routes/auth.routes";
+import { AuthNavigatorRoutesProps } from "@/routes/auth.routes";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAuth } from "../../hooks/useAuth";
-import Button from "../../components/Button/Button";
+import { useAuth } from "@/hooks/useAuth";
+import Button from "@/components/Button/Button";
 import Input from "@/components/Input/Input";
 import { useTheme } from "styled-components";
 import { AppError } from "@/utils/AppError";
@@ -87,6 +87,7 @@ const SignIn: React.FC = () => {
             onChangeText={onChange}
             value={value}
             errorMessage={errors.email?.message}
+            autoCapitalize="none"
           />
         )}
       />
@@ -102,6 +103,7 @@ const SignIn: React.FC = () => {
             secureTextEntry
             errorMessage={errors.password?.message}
             returnKeyType="send"
+            onSubmitEditing={handleSubmit(handleSignIn)}
           />
         )}
       />
