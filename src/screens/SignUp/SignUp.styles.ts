@@ -17,8 +17,3 @@ export const Register = styled.Text`
   font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
   margin-bottom: 15px;
 `;
-
-export const InputContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-`;

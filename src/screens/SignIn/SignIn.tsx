@@ -65,7 +65,7 @@ const SignIn: React.FC = () => {
   return (
     <Container>
       <ImgContainer>
-        <Image source={require("./../../assets/ifsafe-logo.png")} />
+        <Image source={require("@/assets/ifsafe-logo.png")} />
       </ImgContainer>
 
       <Text
@@ -109,7 +109,6 @@ const SignIn: React.FC = () => {
       <Button
         title="Acessar"
         isLoading={isLoading}
-        disabled={isLoading}
         onPress={handleSubmit(handleSignIn)}
       />
 

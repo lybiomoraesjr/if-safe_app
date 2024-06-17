@@ -16,8 +16,9 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   showBackButton,
 }) => {
   const { COLORS } = useTheme();
-  const insets = useSafeAreaInsets();
   const { goBack } = useNavigation();
+  
+  const insets = useSafeAreaInsets();
 
   const paddingTop = insets.top + 42;
 

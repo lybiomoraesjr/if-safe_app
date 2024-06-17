@@ -57,6 +57,7 @@ const SignUn: React.FC = () => {
       await api.post("/users", { name, email, password });
       await signIn(email, password);
     } catch (error) {
+      console.log(error);
       setIsLoading(false);
 
       const isAppError = error instanceof AppError;
@@ -135,7 +136,6 @@ const SignUn: React.FC = () => {
 
       <Button
         isLoading={isLoading}
-        disabled={isLoading}
         title="Criar e acessar"
         onPress={handleSubmit(handleSignUp)}
         style={{ marginBottom: 40 }}

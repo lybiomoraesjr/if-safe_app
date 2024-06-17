@@ -11,13 +11,15 @@ import Button from "../../components/Button";
 import Input from "@/components/Input/Input";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "styled-components";
+import { api } from "@/services/api";
+import { AppError } from "@/utils/AppError";
 
 type FormDataProps = {
   name: string;
-  email?: string;
-  password?: string;
-  old_password?: string;
-  confirm_password?: string;
+  email: string;
+  password: string;
+  old_password: string;
+  confirm_password: string;
 };
 
 const profileSchema = yup.object({
@@ -31,17 +33,19 @@ const profileSchema = yup.object({
     .string()
     .nullable()
     .transform((value) => (!!value ? value : null))
-    .oneOf([yup.ref("password"), ""], "A confirmação de senha não confere."),
+    .oneOf([yup.ref("password"), null], "A confirmação de senha não confere."),
 });
 
 const Profile: React.FC = () => {
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const [userPhoto, setUserPhoto] = useState(
     "https://github.com/lybiomoraesjr.png"
   );
 
   const { COLORS, FONT_SIZE, FONT_FAMILY } = useTheme();
 
-  const { user } = useAuth();
+  const { user, updateUserProfile } = useAuth();
   const {
     control,
     handleSubmit,
@@ -55,7 +59,24 @@ const Profile: React.FC = () => {
   });
 
   async function handleProfileUpdate(data: FormDataProps) {
-    console.log(data);
+    try {
+      setIsUpdating(true);
+
+      const userUpdated = user;
+      userUpdated.name = data.name;
+
+      await api.put("/users", data);
+
+      await updateUserProfile(userUpdated);
+
+      Alert.alert("Sucesso", "Perfil atualizado com sucesso");
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.data : "Erro na atualização do perfil";
+      Alert.alert(title);
+    } finally {
+      setIsUpdating(false);
+    }
   }
 
   async function handleUserPhotoSelected() {
@@ -153,6 +174,7 @@ const Profile: React.FC = () => {
               placeholder="Senha atual"
               onChangeText={onChange}
               errorMessage={errors.old_password?.message}
+              secureTextEntry
             />
           )}
         />
@@ -164,6 +186,7 @@ const Profile: React.FC = () => {
               placeholder="Nova senha"
               onChangeText={onChange}
               errorMessage={errors.password?.message}
+              secureTextEntry
             />
           )}
         />
@@ -176,6 +199,7 @@ const Profile: React.FC = () => {
               placeholder="Confirme a nova senha"
               onChangeText={onChange}
               errorMessage={errors.confirm_password?.message}
+              secureTextEntry
             />
           )}
         />
@@ -183,6 +207,7 @@ const Profile: React.FC = () => {
         <Button
           title="Atualizar"
           onPress={handleSubmit(handleProfileUpdate)}
+          isLoading={isUpdating}
           style={{ marginTop: 10 }}
         />
       </ScrollView>
