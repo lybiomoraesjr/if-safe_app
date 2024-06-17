@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { Container, Picture } from "./Profile.styles";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import ScreenHeader from "../../components/ScreenHeader";
-import Button from "../../components/Button";
+import ScreenHeader from "@/components/ScreenHeader";
+import Button from "@/components/Button";
 import Input from "@/components/Input/Input";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "styled-components";

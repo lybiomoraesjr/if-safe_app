@@ -1,9 +1,17 @@
 import { AppError } from "@/utils/AppError";
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
+
+type SignOut = () => void;
+
+type APIInstanceProps = AxiosInstance & {
+  registerInterceptTokenManager: (SignOut: SignOut) => () => void;
+};
 
 const api = axios.create({
   baseURL: "https://ifsafe-ifsp.vercel.app",
-});
+}) as APIInstanceProps;
+
+
 
 api.interceptors.response.use(
   (response) => response,

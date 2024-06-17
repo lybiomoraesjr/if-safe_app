@@ -3,12 +3,12 @@ import { Alert } from "react-native";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
-import Input from "../../components/Input";
+import Input from "@/components/Input";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { api } from "../../services/api";
-import { useAuth } from "../../hooks/useAuth";
-import Button from "../../components/Button";
+import { api } from "@/services/api";
+import { useAuth } from "@/hooks/useAuth";
+import Button from "@/components/Button";
 import { Container, ImageContainer, Register } from "./SignUp.styles";
 import { AppError } from "@/utils/AppError";
 
@@ -100,6 +100,7 @@ const SignUn: React.FC = () => {
             onChangeText={onChange}
             value={value}
             errorMessage={errors.email?.message}
+            autoCapitalize="none"
           />
         )}
       />

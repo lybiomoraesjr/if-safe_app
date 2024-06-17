@@ -1,17 +1,16 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { UserDTO } from "../dtos/UserDTO";
-import { api } from "../services/api";
+import { UserDTO } from "@/dtos/UserDTO";
+import { api } from "@/services/api";
 import {
   storageUserGet,
   storageUserRemove,
   storageUserSave,
-} from "../storage/storageUser";
+} from "@/storage/storageUser";
 import {
   storageAuthTokenGet,
   storageAuthTokenRemove,
   storageAuthTokenSave,
-} from "../storage/storageAuthToken";
-import { set } from "react-hook-form";
+} from "@/storage/storageAuthToken";
 
 export type AuthContextDataProps = {
   user: UserDTO;
