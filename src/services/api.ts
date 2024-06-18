@@ -11,17 +11,30 @@ const api = axios.create({
   baseURL: "https://ifsafe-ifsp.vercel.app",
 }) as APIInstanceProps;
 
+api.registerInterceptTokenManager = (signOut: SignOut) => {
+  const interceptTokenManager = api.interceptors.response.use(
+    (response) => response,
+    (resquestError) => {
+      // if (resquestError?.response?.status === 401) {
+      //   if (
+      //     resquestError.response.data === "token.invalid" ||
+      //     resquestError.response.data === "token.expired"
+      //   ) {
+      //   }
+      //   signOut();
+      // }
 
-
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.data) {
-      return Promise.reject(new AppError(error.response.data));
-    } else {
-      return Promise.reject(error);
+      if (resquestError.response && resquestError.response.data) {
+        return Promise.reject(new AppError(resquestError.response.data));
+      } else {
+        return Promise.reject(resquestError);
+      }
     }
-  }
-);
+  );
+
+  return () => {
+    api.interceptors.response.eject(interceptTokenManager);
+  };
+};
 
 export { api };
