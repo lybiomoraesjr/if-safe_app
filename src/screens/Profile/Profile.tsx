@@ -57,36 +57,43 @@ const Profile: React.FC = () => {
     resolver: yupResolver(profileSchema),
   });
 
-  async function handleProfileUpdate(data: FormDataProps) {
+  const handleProfileUpdate = async (data: FormDataProps) => {
     try {
       setIsUpdating(true);
 
       const token = await storageAuthTokenGet();
 
       let config = {
+        name: data.name,
+        oldpassword: data.old_password,
+
         headers: {
           Authorization: "Bearer " + token,
         },
       };
-      // const userUpdated = user;
-      // userUpdated.name = data.name;
 
-      const response = await api.get("/posts", config);
-      console.log(response.data);
-      // await updateUserProfile(userUpdated);
+      await api.put(`/users/${user.id}`, config);
 
-      // Alert.alert("Sucesso", "Perfil atualizado com sucesso");
+      const userUpdated = user;
+      userUpdated.name = data.name;
+
+      await updateUserProfile(userUpdated);
+
+      Alert.alert("Sucesso", "Perfil atualizado com sucesso");
     } catch (error) {
+      console.log(error);
       const isAppError = error instanceof AppError;
       const title = isAppError ? error.data : "Erro na atualização do perfil";
       Alert.alert(title);
     } finally {
       setIsUpdating(false);
     }
-  }
+  };
 
-  async function handleUserPhotoSelected() {
+  const handleUserPhotoSelected = async (data: FormDataProps) => {
     try {
+      const token = await storageAuthTokenGet();
+
       const photoSelected = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
@@ -115,15 +122,22 @@ const Profile: React.FC = () => {
           avatar: `data:image/${fileExtension};base64,${base64Image}`,
         };
 
-        const avatarUpdatedResponse = await api.patch(
-          "/users/avatar",
-          userPhotoUploadForm,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+        let config = {
+          name: data.name,
+          oldpassword: data.old_password,
+          avatar: userPhotoUploadForm.avatar,
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        };
+
+        const avatarUpdatedResponse = await api.put(
+          `/users/${user.id}`,
+          config
         );
+
+        console.log(avatarUpdatedResponse);
 
         const userUpdated = user;
         userUpdated.avatar = avatarUpdatedResponse.data.avatar;
@@ -135,7 +149,7 @@ const Profile: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   return (
     <Container>
       <ScreenHeader title="Perfil" />
@@ -147,7 +161,7 @@ const Profile: React.FC = () => {
           />
 
           <TouchableOpacity
-            onPress={handleUserPhotoSelected}
+            onPress={handleSubmit(handleUserPhotoSelected)}
             style={{ marginTop: 5 }}
           >
             <Text
@@ -167,7 +181,7 @@ const Profile: React.FC = () => {
           name="name"
           render={({ field: { onChange, value } }) => (
             <Input
-              placeholder="E-mail"
+              placeholder="Nome"
               onChangeText={onChange}
               value={value}
               errorMessage={errors.name?.message}
@@ -183,6 +197,8 @@ const Profile: React.FC = () => {
               onChangeText={onChange}
               value={value}
               errorMessage={errors.email?.message}
+              editable={false}
+              autoCapitalize="none"
             />
           )}
         />

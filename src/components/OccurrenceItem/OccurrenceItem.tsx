@@ -11,7 +11,7 @@ import {
   OccurrenceImage,
   Title,
 } from "./OccurrenceItem.styles";
-import { formattedDate } from "../../utils/dateUtils";
+import { formattedDate } from "@/utils/dateUtils";
 
 interface OccurrenceItemProps {
   imageUri: string;
@@ -27,10 +27,10 @@ const OccurrenceItem: React.FC<OccurrenceItemProps> = ({
   notifiersNumber,
   status,
   title,
-  date,
+  
   onInteract,
 }) => {
-  const displayDate = formattedDate(date);
+  // const displayDate = formattedDate(date);
 
   return (
     <Container>
@@ -41,7 +41,7 @@ const OccurrenceItem: React.FC<OccurrenceItemProps> = ({
 
       <Info>
         <Title>{title}</Title>
-        <Date>Publicado em {displayDate}</Date>
+        {/* <Date>Publicado em {displayDate}</Date> */}
         <NotificationView>
           <Warning size={16} color="#8D8D99" />
           <NotifierCount>{notifiersNumber}</NotifierCount>
