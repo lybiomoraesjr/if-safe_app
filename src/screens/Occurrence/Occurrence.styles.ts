@@ -1,7 +1,16 @@
 import styled from "styled-components/native";
 import { Image } from "expo-image";
 
-export const Container = styled.ScrollView`
+export const Container = styled.View`
+  flex: 1;
+`;
+
+export const Title = styled.Text`
+  color: ${({ theme }) => theme.COLORS.GRAY_800};
+  font-size: ${({ theme }) => theme.FONT_SIZE.XXL}px;
+  font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
+
+  margin: 18px 18px 0;
 `;
 
 export const UserImage = styled(Image)`
@@ -38,7 +47,7 @@ export const Name = styled.Text``;
 
 export const DetailsSection = styled.View``;
 
-export const Title = styled.Text`
+export const Title2 = styled.Text`
   color: ${({ theme }) => theme.COLORS.GRAY_800};
   font-size: ${({ theme }) => theme.FONT_SIZE.LG}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};

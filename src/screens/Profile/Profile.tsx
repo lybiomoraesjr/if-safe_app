@@ -63,6 +63,11 @@ const Profile: React.FC = () => {
 
       const token = await storageAuthTokenGet();
 
+      const userUpdated = user;
+      userUpdated.name = data.name;
+
+      console.log(userUpdated)
+
       let config = {
         name: data.name,
         oldpassword: data.old_password,
@@ -74,14 +79,10 @@ const Profile: React.FC = () => {
 
       await api.put(`/users/${user.id}`, config);
 
-      const userUpdated = user;
-      userUpdated.name = data.name;
-
       await updateUserProfile(userUpdated);
 
       Alert.alert("Sucesso", "Perfil atualizado com sucesso");
     } catch (error) {
-      console.log(error);
       const isAppError = error instanceof AppError;
       const title = isAppError ? error.data : "Erro na atualização do perfil";
       Alert.alert(title);
@@ -122,7 +123,7 @@ const Profile: React.FC = () => {
           avatar: `data:image/${fileExtension};base64,${base64Image}`,
         };
 
-        let config = {
+        const config = {
           name: data.name,
           oldpassword: data.old_password,
           avatar: userPhotoUploadForm.avatar,
@@ -137,8 +138,6 @@ const Profile: React.FC = () => {
           config
         );
 
-        console.log(avatarUpdatedResponse);
-
         const userUpdated = user;
         userUpdated.avatar = avatarUpdatedResponse.data.avatar;
 
@@ -148,6 +147,8 @@ const Profile: React.FC = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setPhotoIsLoading(false);
     }
   };
   return (

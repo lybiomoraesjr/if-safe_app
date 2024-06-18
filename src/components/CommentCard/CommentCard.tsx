@@ -1,18 +1,18 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { formattedDate } from "../../utils/dateUtils";
-import { Container, UserImage } from "./CommentItem.styles";
+import { formattedDate } from "@/utils/dateUtils";
+import { Container, UserImage } from "./CommentCard.styles";
 import { DotsThree } from "phosphor-react-native";
 import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 
-type CommentItemProps = {
+type CommentCardProps = {
   avatar?: string;
   name: string;
   date: Date;
   text: string;
 };
 
-const CommentItem: React.FC<CommentItemProps> = ({
+const CommentCard: React.FC<CommentCardProps> = ({
   avatar,
   name,
   date,
@@ -43,4 +43,4 @@ const CommentItem: React.FC<CommentItemProps> = ({
   );
 };
 
-export default CommentItem;
+export default CommentCard;

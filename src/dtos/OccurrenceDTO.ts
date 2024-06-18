@@ -1,7 +1,8 @@
 import { OccurrenceStatusEnum } from "@/types";
 import { UserDTO } from "./UserDTO";
+import { CommentDTO } from "./CommentDTO";
 
-export type OccurrenceItemDTO = {
+export type OccurrenceDTO = {
   id: string;
   name: string;
   image: string;
@@ -9,4 +10,6 @@ export type OccurrenceItemDTO = {
   status: OccurrenceStatusEnum;
   date: Date;
   autor: UserDTO;
+  description: string;
+  comments: CommentDTO[];
 };

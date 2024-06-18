@@ -1,47 +1,47 @@
 import React from "react";
 import {
   Container,
-  Date,
   Description,
   Name,
   OccurrenceImage,
   Status,
-  Title,
+  Title2,
   UserImage,
-} from "./OccurrenceDetail.styles";
-import { ChatCircle, DotsThree, Warning } from "phosphor-react-native";
-import { formattedDate } from "../../utils/dateUtils";
-
+} from "./Occurrence.styles";
+import ScreenHeader from "@/components/ScreenHeader";
+import { formattedDate } from "@/utils/dateUtils";
 import { Text, TouchableOpacity, View } from "react-native";
+import { ChatCircle, DotsThree, Warning } from "phosphor-react-native";
+import Input from "@/components/Input";
+import CommentCard from "@/components/CommentCard";
+import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
+import { useRoute } from "@react-navigation/native";
 
-import CommentItem from "../CommentItem";
-import defaultUserPhotoImg from "../../assets/userPhotoDefault.png";
-import Input from "../Input";
-import { OccurrenceDetailType } from "@/types";
-
-
-type OccurrenceDetailProps = {
-  occurrenceDetail: OccurrenceDetailType;
+type RouteParamsProps = {
+  occurrenceId: string;
 };
 
-const OccurrenceDetail: React.FC<OccurrenceDetailProps> = ({
-  occurrenceDetail,
-}) => {
-  const displayDate = formattedDate(occurrenceDetail.date);
-  const comments = occurrenceDetail.comments;
+const Occurrence: React.FC = () => {
+  // const displayDate = formattedDate(data.date);
+  // const comments = data.comments;
 
+  const route = useRoute();
+
+  const { occurrenceId } = route.params as RouteParamsProps;
+
+  console.log(occurrenceId);
   return (
     <Container>
-      <View
+      <ScreenHeader title="Ocorrência" showBackButton />
+
+      {/* <View
         style={{
           flexDirection: "row",
         }}
       >
         <UserImage
           source={{
-            uri: occurrenceDetail.author.avatar
-              ? occurrenceDetail.author.avatar
-              : defaultUserPhotoImg,
+            uri: data.autor.avatar ? data.autor.avatar : defaultUserPhotoImg,
           }}
           placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
         />
@@ -53,7 +53,7 @@ const OccurrenceDetail: React.FC<OccurrenceDetailProps> = ({
           }}
         >
           <View>
-            <Name>{occurrenceDetail.author.name}</Name>
+            <Name>{data.autor.name}</Name>
             <Date>{displayDate}</Date>
           </View>
 
@@ -63,20 +63,20 @@ const OccurrenceDetail: React.FC<OccurrenceDetailProps> = ({
         </View>
       </View>
       <OccurrenceImage
-        source={{ uri: occurrenceDetail.imageUri }}
+        source={{ uri: data.image }}
         placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
       />
-      <Title>{occurrenceDetail.title}</Title>
+      <Title2>{data.name}</Title2>
 
-      <Status>{occurrenceDetail.status}</Status>
-      <Description>{occurrenceDetail.description}</Description>
+      <Status>{data.status}</Status>
+      <Description>{data.description}</Description>
       <View>
         <View style={{ flexDirection: "row" }}>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity>
               <Warning size={16} />
             </TouchableOpacity>
-            <Text>{occurrenceDetail.notifiersIDs.length}</Text>
+            <Text>{data.likes.length}</Text>
           </View>
           <View style={{ flexDirection: "row" }}>
             <ChatCircle size={16} />
@@ -89,16 +89,16 @@ const OccurrenceDetail: React.FC<OccurrenceDetailProps> = ({
 
       {comments.length > 0 &&
         comments.map((comment) => (
-          <CommentItem
+          <CommentCard
             key={comment.uuid}
             name={comment.author.name}
             avatar={comment.author.avatar}
             text={comment.text}
             date={comment.date}
           />
-        ))}
+        ))} */}
     </Container>
   );
 };
 
-export default OccurrenceDetail;
+export default Occurrence;

@@ -11,7 +11,7 @@ import {
 } from "./HomeHeader.styles";
 
 import { LinearGradient } from "expo-linear-gradient";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 import { SignOut } from "phosphor-react-native";
