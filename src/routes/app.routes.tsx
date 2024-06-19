@@ -11,12 +11,12 @@ import Profile from "@/screens/Profile";
 
 import theme from "@/theme";
 
-import NewOccurrenceScreen from "@/screens/NewOccurrenceScreen";
+import NewOccurrence from "@/screens/NewOccurrence";
 import Occurrence from "@/screens/Occurrence";
 
 type AppRoutes = {
   home: undefined;
-  newOccurrenceScreen: undefined;
+  newOccurrence: undefined;
   profile: undefined;
   occurrence: { occurrenceId: string };
 };
@@ -53,8 +53,8 @@ export function AppRoutes() {
       />
 
       <Screen
-        name="newOccurrenceScreen"
-        component={NewOccurrenceScreen}
+        name="newOccurrence"
+        component={NewOccurrence}
         options={{
           tabBarIcon: ({ color }) => (
             <PlusSquare color={color} size={iconSize} />
