@@ -3,13 +3,15 @@ import { UserDTO } from "./UserDTO";
 import { CommentDTO } from "./CommentDTO";
 
 export type OccurrenceDTO = {
-  id: string;
-  name: string;
+  _id: string;
+  title: string;
   image: string;
   likes: string[];
   status: OccurrenceStatusEnum;
   date: Date;
-  autor: UserDTO;
+  author: UserDTO;
   description: string;
   comments: CommentDTO[];
 };
+
+

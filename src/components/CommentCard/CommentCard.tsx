@@ -8,7 +8,7 @@ import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 type CommentCardProps = {
   avatar?: string;
   name: string;
-  date: Date;
+  date?: Date | undefined;
   text: string;
 };
 
@@ -18,7 +18,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
   date,
   text,
 }) => {
-  const displayDate = formattedDate(date);
+  // const displayDate = formattedDate(date);
 
   return (
     <Container>
@@ -35,7 +35,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
             <DotsThree size={16} />
           </TouchableOpacity>
         </View>
-        <Text>{displayDate}</Text>
+        {/* <Text>{displayDate}</Text> */}
 
         <Text>{text}</Text>
       </View>

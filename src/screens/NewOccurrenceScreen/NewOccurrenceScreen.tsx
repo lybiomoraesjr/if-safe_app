@@ -10,6 +10,8 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import { api } from "@/services/api";
+import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 
 const NewOccurrenceScreen: React.FC = () => {
   type FormDataProps = {
@@ -20,8 +22,21 @@ const NewOccurrenceScreen: React.FC = () => {
 
   const {
     control,
+    handleSubmit,
     formState: { errors },
   } = useForm<FormDataProps>({});
+
+  const handleCreateOccurrence = async (data: FormDataProps) => {
+    const token = await storageAuthTokenGet();
+
+    const response = await api.post(`posts/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log(data);
+  };
 
   return (
     <Container>
@@ -70,7 +85,10 @@ const NewOccurrenceScreen: React.FC = () => {
           <PhotoView />
         </PhotoContainer>
         <ButtonsContainer>
-          <Button title="Publicar" />
+          <Button
+            title="Publicar"
+            onPress={handleSubmit(handleCreateOccurrence)}
+          />
           <Button title="Descartar" />
         </ButtonsContainer>
       </InputContainer>

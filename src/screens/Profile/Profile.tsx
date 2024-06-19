@@ -63,11 +63,6 @@ const Profile: React.FC = () => {
 
       const token = await storageAuthTokenGet();
 
-      const userUpdated = user;
-      userUpdated.name = data.name;
-
-      console.log(userUpdated)
-
       let config = {
         name: data.name,
         oldpassword: data.old_password,
@@ -79,7 +74,7 @@ const Profile: React.FC = () => {
 
       await api.put(`/users/${user.id}`, config);
 
-      await updateUserProfile(userUpdated);
+      await updateUserProfile({ ...user, name: data.name });
 
       Alert.alert("Sucesso", "Perfil atualizado com sucesso");
     } catch (error) {
@@ -124,7 +119,6 @@ const Profile: React.FC = () => {
         };
 
         const config = {
-          name: data.name,
           oldpassword: data.old_password,
           avatar: userPhotoUploadForm.avatar,
           headers: {
@@ -133,15 +127,12 @@ const Profile: React.FC = () => {
           },
         };
 
-        const avatarUpdatedResponse = await api.put(
-          `/users/${user.id}`,
-          config
-        );
+        await api.put(`/users/${user.id}`, config);
 
-        const userUpdated = user;
-        userUpdated.avatar = avatarUpdatedResponse.data.avatar;
-
-        updateUserProfile(userUpdated);
+        await updateUserProfile({
+          ...user,
+          avatar: userPhotoUploadForm.avatar,
+        });
 
         Alert.alert("Sucesso", "Foto de perfil atualizada com sucesso");
       }

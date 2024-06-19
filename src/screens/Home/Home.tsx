@@ -22,7 +22,9 @@ const Home: React.FC = () => {
     navigate("occurrence", { occurrenceId: id });
   };
 
-  const occurrenceData = [
+  console.log(posts);
+
+  const occurrenceStatus = [
     "Todas",
     "Minhas",
     OccurrenceStatusEnum.PENDING,
@@ -57,12 +59,12 @@ const Home: React.FC = () => {
     fetchOccurrences();
   }, []);
 
-  console.log(posts);
+  // console.log(posts);
   return (
     <Container>
       <HomeHeader />
       <FlatList
-        data={occurrenceData}
+        data={occurrenceStatus}
         keyExtractor={(item) => item}
         renderItem={({ item }) => <Status name={item} />}
         horizontal
@@ -81,9 +83,9 @@ const Home: React.FC = () => {
               image={item.image}
               notifiersNumber={item.likes.length}
               status={item.status}
-              title={item.name}
+              title={item.title}
               date={item.date}
-              onInteract={() => handleNavigateToOccurrence(item.id)}
+              onInteract={() => handleNavigateToOccurrence(item._id)}
             />
           )}
           showsVerticalScrollIndicator={false}
