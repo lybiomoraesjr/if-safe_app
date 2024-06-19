@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Picture } from "./Profile.styles";
+import { Container } from "./Profile.styles";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as yup from "yup";
@@ -15,6 +15,7 @@ import { AppError } from "@/utils/AppError";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 import * as FileSystem from "expo-file-system";
+import UserPhoto from "@/components/UserPhoto";
 
 type FormDataProps = {
   name: string;
@@ -40,7 +41,6 @@ const profileSchema = yup.object({
 
 const Profile: React.FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
-  const [photoIsLoading, setPhotoIsLoading] = useState(false);
 
   const { COLORS, FONT_SIZE, FONT_FAMILY } = useTheme();
 
@@ -138,18 +138,16 @@ const Profile: React.FC = () => {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setPhotoIsLoading(false);
     }
   };
   return (
-    <Container>
+    <View style={{ flex: 1 }}>
       <ScreenHeader title="Perfil" />
       <ScrollView style={{ paddingHorizontal: 20, marginTop: 5 }}>
         <View style={{ alignItems: "center", marginBottom: 20 }}>
-          <Picture
+          <UserPhoto
+            size={100}
             source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
-            placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
           />
 
           <TouchableOpacity
@@ -250,7 +248,7 @@ const Profile: React.FC = () => {
           style={{ marginTop: 10 }}
         />
       </ScrollView>
-    </Container>
+    </View>
   );
 };
 

@@ -1,8 +1,8 @@
-import { UserDTO } from "./UserDTO";
-
 export type CommentDTO = {
-  uuid: string;
-  text: string;
-  date: Date;
-  author: UserDTO;
+  commentId: string;
+  userId: string;
+  userName: string;
+  comment: string;
+  commentDate: Date;
+  userAvatar: string;
 };

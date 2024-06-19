@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ScreenHeader from "@/components/ScreenHeader";
 import {
   ButtonsContainer,
@@ -6,14 +6,17 @@ import {
   InputContainer,
   PhotoContainer,
   PhotoView,
-} from "./NewOccurrenceScreen.styles.";
+} from "./NewOccurrence.styles.";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { api } from "@/services/api";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+import { Alert } from "react-native";
 
-const NewOccurrenceScreen: React.FC = () => {
+const NewOccurrence: React.FC = () => {
   type FormDataProps = {
     title: string;
     location: string;
@@ -25,6 +28,51 @@ const NewOccurrenceScreen: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormDataProps>({});
+
+  const handlePhotoSelected = async (data: FormDataProps) => {
+    try {
+      const token = await storageAuthTokenGet();
+
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true,
+      });
+
+      if (photoSelected.canceled) {
+        return;
+      }
+
+      if (photoSelected.assets[0].uri) {
+        const { uri, fileSize } = photoSelected.assets[0];
+
+        if (fileSize && fileSize / 1024 / 1024 > 5) {
+          return Alert.alert("Erro", "A imagem deve ter no máximo 5MB");
+        }
+
+        const fileExtension = photoSelected.assets[0].uri.split(".").pop();
+
+        const base64Image = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        const userPhotoUploadForm = {
+          avatar: `data:image/${fileExtension};base64,${base64Image}`,
+        };
+
+        const config = {
+          avatar: userPhotoUploadForm.avatar,
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        };
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleCreateOccurrence = async (data: FormDataProps) => {
     const token = await storageAuthTokenGet();
@@ -55,7 +103,7 @@ const NewOccurrenceScreen: React.FC = () => {
           )}
         />
 
-        <Button title="Foto" />
+        <Button title="Foto" onPress={handleSubmit(handlePhotoSelected)} />
 
         <Controller
           control={control}
@@ -96,4 +144,4 @@ const NewOccurrenceScreen: React.FC = () => {
   );
 };
 
-export default NewOccurrenceScreen;
+export default NewOccurrence;
