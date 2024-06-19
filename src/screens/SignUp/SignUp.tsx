@@ -57,7 +57,6 @@ const SignUn: React.FC = () => {
       await api.post("/users", { name, email, password });
       await signIn(email, password);
     } catch (error) {
-      console.log(error);
       setIsLoading(false);
 
       const isAppError = error instanceof AppError;

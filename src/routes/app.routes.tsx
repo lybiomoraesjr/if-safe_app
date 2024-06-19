@@ -12,13 +12,13 @@ import Profile from "@/screens/Profile";
 import theme from "@/theme";
 
 import NewOccurrenceScreen from "@/screens/NewOccurrenceScreen";
-import OccurrenceDetailScreen from "@/screens/OccurrenceDetailScreen";
+import Occurrence from "@/screens/Occurrence";
 
 type AppRoutes = {
   home: undefined;
   newOccurrenceScreen: undefined;
   profile: undefined;
-  occurrenceDetailScreen: undefined;
+  occurrence: { occurrenceId: string };
 };
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -73,8 +73,8 @@ export function AppRoutes() {
       />
 
       <Screen
-        name="occurrenceDetailScreen"
-        component={OccurrenceDetailScreen}
+        name="occurrence"
+        component={Occurrence}
         options={{ tabBarButton: () => null }}
       />
     </Navigator>

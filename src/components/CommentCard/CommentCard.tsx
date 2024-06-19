@@ -1,24 +1,24 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { formattedDate } from "../../utils/dateUtils";
-import { Container, UserImage } from "./CommentItem.styles";
+import { formattedDate } from "@/utils/dateUtils";
+import { Container, UserImage } from "./CommentCard.styles";
 import { DotsThree } from "phosphor-react-native";
 import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 
-type CommentItemProps = {
+type CommentCardProps = {
   avatar?: string;
   name: string;
-  date: Date;
+  date?: Date | undefined;
   text: string;
 };
 
-const CommentItem: React.FC<CommentItemProps> = ({
+const CommentCard: React.FC<CommentCardProps> = ({
   avatar,
   name,
   date,
   text,
 }) => {
-  const displayDate = formattedDate(date);
+  // const displayDate = formattedDate(date);
 
   return (
     <Container>
@@ -35,7 +35,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             <DotsThree size={16} />
           </TouchableOpacity>
         </View>
-        <Text>{displayDate}</Text>
+        {/* <Text>{displayDate}</Text> */}
 
         <Text>{text}</Text>
       </View>
@@ -43,4 +43,4 @@ const CommentItem: React.FC<CommentItemProps> = ({
   );
 };
 
-export default CommentItem;
+export default CommentCard;

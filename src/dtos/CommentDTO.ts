@@ -1,6 +1,6 @@
 import { UserDTO } from "./UserDTO";
 
-export type CommentItemDTO = {
+export type CommentDTO = {
   uuid: string;
   text: string;
   date: Date;

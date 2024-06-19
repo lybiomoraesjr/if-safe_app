@@ -10,11 +10,11 @@ import {
   NotifierCount,
   OccurrenceImage,
   Title,
-} from "./OccurrenceItem.styles";
+} from "./OccurrenceCard.styles";
 import { formattedDate } from "@/utils/dateUtils";
 
-interface OccurrenceItemProps {
-  imageUri: string;
+interface OccurrenceCardProps {
+  image: string;
   notifiersNumber: number;
   status: string;
   title: string;
@@ -22,12 +22,12 @@ interface OccurrenceItemProps {
   onInteract: () => void;
 }
 
-const OccurrenceItem: React.FC<OccurrenceItemProps> = ({
-  imageUri,
+const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
+  image,
   notifiersNumber,
   status,
   title,
-  
+
   onInteract,
 }) => {
   // const displayDate = formattedDate(date);
@@ -35,7 +35,7 @@ const OccurrenceItem: React.FC<OccurrenceItemProps> = ({
   return (
     <Container>
       <OccurrenceImage
-        source={{ uri: imageUri }}
+        source={{ uri: `data:image/jpeg;base64,${image}` }}
         placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
       />
 
@@ -56,4 +56,4 @@ const OccurrenceItem: React.FC<OccurrenceItemProps> = ({
   );
 };
 
-export default OccurrenceItem;
+export default OccurrenceCard;

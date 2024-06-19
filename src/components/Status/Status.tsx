@@ -2,11 +2,11 @@ import React from "react";
 import { Pressable, Text } from "react-native";
 import { useTheme } from "styled-components";
 
-type OccurrenceStatusProps = {
+type StatusProps = {
   name: string;
 };
 
-const OccurrenceStatus: React.FC<OccurrenceStatusProps> = ({ name }) => {
+const Status: React.FC<StatusProps> = ({ name }) => {
   const { COLORS, FONT_SIZE, FONT_FAMILY } = useTheme();
 
   return (
@@ -15,7 +15,6 @@ const OccurrenceStatus: React.FC<OccurrenceStatusProps> = ({ name }) => {
         backgroundColor: COLORS.GRAY_500,
         borderRadius: 6,
         height: FONT_SIZE.SM * 2,
-        // paddingVertical: 5,
         paddingHorizontal: FONT_SIZE.SM,
         justifyContent: "center",
         alignItems: "center",
@@ -36,4 +35,4 @@ const OccurrenceStatus: React.FC<OccurrenceStatusProps> = ({ name }) => {
   );
 };
 
-export default OccurrenceStatus;
+export default Status;

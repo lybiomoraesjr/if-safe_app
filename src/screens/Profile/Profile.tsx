@@ -74,14 +74,10 @@ const Profile: React.FC = () => {
 
       await api.put(`/users/${user.id}`, config);
 
-      const userUpdated = user;
-      userUpdated.name = data.name;
-
-      await updateUserProfile(userUpdated);
+      await updateUserProfile({ ...user, name: data.name });
 
       Alert.alert("Sucesso", "Perfil atualizado com sucesso");
     } catch (error) {
-      console.log(error);
       const isAppError = error instanceof AppError;
       const title = isAppError ? error.data : "Erro na atualização do perfil";
       Alert.alert(title);
@@ -122,8 +118,7 @@ const Profile: React.FC = () => {
           avatar: `data:image/${fileExtension};base64,${base64Image}`,
         };
 
-        let config = {
-          name: data.name,
+        const config = {
           oldpassword: data.old_password,
           avatar: userPhotoUploadForm.avatar,
           headers: {
@@ -132,22 +127,19 @@ const Profile: React.FC = () => {
           },
         };
 
-        const avatarUpdatedResponse = await api.put(
-          `/users/${user.id}`,
-          config
-        );
+        await api.put(`/users/${user.id}`, config);
 
-        console.log(avatarUpdatedResponse);
-
-        const userUpdated = user;
-        userUpdated.avatar = avatarUpdatedResponse.data.avatar;
-
-        updateUserProfile(userUpdated);
+        await updateUserProfile({
+          ...user,
+          avatar: userPhotoUploadForm.avatar,
+        });
 
         Alert.alert("Sucesso", "Foto de perfil atualizada com sucesso");
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setPhotoIsLoading(false);
     }
   };
   return (

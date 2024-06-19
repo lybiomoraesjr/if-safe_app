@@ -3,26 +3,28 @@ import { Container, Title } from "./Home.styles";
 import HomeHeader from "../../components/HomeHeader";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
-import { Alert, FlatList, View } from "react-native";
+import { Alert, FlatList } from "react-native";
 import { OccurrenceStatusEnum } from "@/types";
-import OccurrenceStatus from "../../components/OccurrenceStatus";
-import OccurrenceItem from "@/components/OccurrenceItem";
+import Status from "../../components/Status";
+import OccurrenceCard from "@/components/OccurrenceCard";
 import { api } from "@/services/api";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
-import { OccurrenceItemDTO } from "@/dtos/OccurrenceItemDTO";
 import { AppError } from "@/utils/AppError";
 import Loading from "@/components/Loading";
+import { OccurrenceDTO } from "@/dtos/OccurrenceDTO";
 
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { navigate } = useNavigation<AppNavigatorRoutesProps>();
-  const [posts, setPosts] = useState<OccurrenceItemDTO[]>([]);
+  const [posts, setPosts] = useState<OccurrenceDTO[]>([]);
 
-  const handleNavigateToOccurrenceDetail = () => {
-    navigate("occurrenceDetailScreen");
+  const handleNavigateToOccurrence = (id: string) => {
+    navigate("occurrence", { occurrenceId: id });
   };
 
-  const occurrenceData = [
+  console.log(posts);
+
+  const occurrenceStatus = [
     "Todas",
     "Minhas",
     OccurrenceStatusEnum.PENDING,
@@ -57,13 +59,14 @@ const Home: React.FC = () => {
     fetchOccurrences();
   }, []);
 
+  // console.log(posts);
   return (
     <Container>
       <HomeHeader />
       <FlatList
-        data={occurrenceData}
+        data={occurrenceStatus}
         keyExtractor={(item) => item}
-        renderItem={({ item }) => <OccurrenceStatus name={item} />}
+        renderItem={({ item }) => <Status name={item} />}
         horizontal
         showsHorizontalScrollIndicator={false}
       />
@@ -75,15 +78,14 @@ const Home: React.FC = () => {
       ) : (
         <FlatList
           data={posts}
-          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <OccurrenceItem
-              imageUri={item.image}
+            <OccurrenceCard
+              image={item.image}
               notifiersNumber={item.likes.length}
               status={item.status}
-              title={item.name}
+              title={item.title}
               date={item.date}
-              onInteract={handleNavigateToOccurrenceDetail}
+              onInteract={() => handleNavigateToOccurrence(item._id)}
             />
           )}
           showsVerticalScrollIndicator={false}
