@@ -29,7 +29,7 @@ const NewOccurrence: React.FC = () => {
     formState: { errors },
   } = useForm<FormDataProps>({});
 
-  const handlePhotoSelected = async (data: FormDataProps) => {
+  const handleCreateOccurrence = async (data: FormDataProps) => {
     try {
       const token = await storageAuthTokenGet();
 
@@ -57,31 +57,24 @@ const NewOccurrence: React.FC = () => {
           encoding: FileSystem.EncodingType.Base64,
         });
 
-        const userPhotoUploadForm = {
-          avatar: `data:image/${fileExtension};base64,${base64Image}`,
-        };
+        const encodedUserPhoto = `data:image/${fileExtension};base64,${base64Image}`;
 
         const config = {
-          avatar: userPhotoUploadForm.avatar,
+          description: data.description,
+          image: encodedUserPhoto,
+          location: data.location,
+          title: data.title,
           headers: {
             Authorization: "Bearer " + token,
             "Content-Type": "application/json",
           },
         };
+
+        await api.post(`/posts`, config);
       }
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleCreateOccurrence = async (data: FormDataProps) => {
-    const token = await storageAuthTokenGet();
-
-    const response = await api.post(`posts/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
   };
 
   return (
@@ -101,7 +94,7 @@ const NewOccurrence: React.FC = () => {
           )}
         />
 
-        <Button title="Foto" onPress={handleSubmit(handlePhotoSelected)} />
+        <Button title="Foto" />
 
         <Controller
           control={control}
