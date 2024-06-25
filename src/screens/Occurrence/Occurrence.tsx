@@ -81,11 +81,13 @@ const Occurrence: React.FC = () => {
     }
   };
 
-  const MakeAComment = async (comment: string) => {
+  const MakeAComment = async (data: FormDataProps) => {
     try {
       const token = await storageAuthTokenGet();
 
-      const response = await api.post(`/posts/comments/${occurrenceId}`, {
+      const comment = data.comment;
+
+      await api.post(`/posts/comments/${occurrenceId}`, {
         comment,
         headers: {
           Authorization: "Bearer " + token,
@@ -104,19 +106,14 @@ const Occurrence: React.FC = () => {
     }
   }, [occurrenceId]);
 
-  
-
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormDataProps>({
-   
-    
-  });
+  } = useForm<FormDataProps>({});
 
   return (
-    <ScrollView>
+    <View>
       <ScreenHeader title="Ocorrência" showBackButton />
 
       {isLoading ? (
@@ -160,7 +157,21 @@ const Occurrence: React.FC = () => {
               <Text>{occurrence.comments.length}</Text>
             </CommentSection>
           </OcurrenceIcons>
-          <Input placeholder="Escreva um comentário" />
+
+          <Controller
+            control={control}
+            name="comment"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Escreva um comentário"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+
+          <Button title="Comentar" onPress={handleSubmit(MakeAComment)} />
+
           {occurrence.comments.map((comment) => (
             <CommentCard
               key={comment.commentId}
@@ -171,7 +182,7 @@ const Occurrence: React.FC = () => {
           ))}
         </Container>
       )}
-    </ScrollView>
+    </View>
   );
 };
 export default Occurrence;
