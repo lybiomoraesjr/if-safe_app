@@ -82,8 +82,6 @@ const NewOccurrence: React.FC = () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log(data);
   };
 
   return (

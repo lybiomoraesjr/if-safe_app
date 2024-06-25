@@ -66,7 +66,7 @@ const Profile: React.FC = () => {
       let config = {
         name: data.name,
         oldpassword: data.old_password,
-
+        newpassword: data.password,
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -86,7 +86,7 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleUserPhotoSelected = async (data: FormDataProps) => {
+  const handleUserPhotoSelected = async () => {
     try {
       const token = await storageAuthTokenGet();
 
@@ -114,13 +114,10 @@ const Profile: React.FC = () => {
           encoding: FileSystem.EncodingType.Base64,
         });
 
-        const userPhotoUploadForm = {
-          avatar: `data:image/${fileExtension};base64,${base64Image}`,
-        };
+        const encodedUserPhoto = `data:image/${fileExtension};base64,${base64Image}`;
 
         const config = {
-          oldpassword: data.old_password,
-          avatar: userPhotoUploadForm.avatar,
+          avatar: encodedUserPhoto,
           headers: {
             Authorization: "Bearer " + token,
             "Content-Type": "application/json",
@@ -131,7 +128,7 @@ const Profile: React.FC = () => {
 
         await updateUserProfile({
           ...user,
-          avatar: userPhotoUploadForm.avatar,
+          avatar: encodedUserPhoto,
         });
 
         Alert.alert("Sucesso", "Foto de perfil atualizada com sucesso");

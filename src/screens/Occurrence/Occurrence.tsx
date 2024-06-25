@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { OccurrenceImage, Title } from "./Occurrence.styles";
 import ScreenHeader from "@/components/ScreenHeader";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { ChatCircle, DotsThree, Warning } from "phosphor-react-native";
 import Input from "@/components/Input";
 import CommentCard from "@/components/CommentCard";
@@ -54,7 +54,7 @@ const Occurrence: React.FC = () => {
   }, [occurrenceId]);
 
   return (
-    <View>
+    <ScrollView>
       <ScreenHeader title="Ocorrência" showBackButton />
 
       {isLoading ? (
@@ -117,7 +117,7 @@ const Occurrence: React.FC = () => {
           ))}
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 };
 export default Occurrence;

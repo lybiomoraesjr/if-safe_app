@@ -11,18 +11,16 @@ import { api } from "@/services/api";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import { AppError } from "@/utils/AppError";
 import Loading from "@/components/Loading";
-import { OccurrenceDTO } from "@/dtos/OccurrenceDTO";
+import { OccurrenceCardDTO } from "@/dtos/OccurrenceCardDTO";
 
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { navigate } = useNavigation<AppNavigatorRoutesProps>();
-  const [posts, setPosts] = useState<OccurrenceDTO[]>([]);
+  const [posts, setPosts] = useState<OccurrenceCardDTO[]>([]);
 
   const handleNavigateToOccurrence = (id: string) => {
     navigate("occurrence", { occurrenceId: id });
   };
-
-  console.log(posts);
 
   const occurrenceStatus = [
     "Todas",
@@ -59,7 +57,6 @@ const Home: React.FC = () => {
     fetchOccurrences();
   }, []);
 
-  // console.log(posts);
   return (
     <Container>
       <HomeHeader />
