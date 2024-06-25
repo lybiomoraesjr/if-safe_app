@@ -1,18 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  AlertSection,
-  CommentSection,
-  Container,
-  Header,
-  OccurrenceImage,
-  OcurrenceIcons,
-  Title,
-  UserIcons,
-  UserNameTxt,
-  UserNameView,
-} from "./Occurrence.styles";
+import { OccurrenceImage, Title } from "./Occurrence.styles";
 import ScreenHeader from "@/components/ScreenHeader";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { ChatCircle, DotsThree, Warning } from "phosphor-react-native";
 import Input from "@/components/Input";
 import CommentCard from "@/components/CommentCard";
@@ -65,51 +54,59 @@ const Occurrence: React.FC = () => {
   }, [occurrenceId]);
 
   return (
-    <ScrollView>
+    <View>
       <ScreenHeader title="Ocorrência" showBackButton />
 
       {isLoading ? (
         <Loading />
       ) : (
-        <Container>
-          <Header>
-            <View>
-              <UserPhoto
-                size={54}
-                source={{
-                  uri: occurrence.authorAvatar
-                    ? occurrence.authorAvatar
-                    : defaultUserPhotoImg,
-                }}
-              />
-            </View>
+        <View>
+          <View style={{ flexDirection: "row" }}>
+            <UserPhoto
+              size={54}
+              source={{
+                uri: occurrence.authorAvatar
+                  ? occurrence.authorAvatar
+                  : defaultUserPhotoImg,
+              }}
+            />
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                flex: 1,
+              }}
+            >
+              <View>
+                <Text>{occurrence.authorName}</Text>
+              </View>
 
-            <UserIcons>
-              <UserNameView>
-                <UserNameTxt>{occurrence.authorName}</UserNameTxt>
-              </UserNameView>
               <TouchableOpacity>
                 <DotsThree size={ICON_SIZE} />
               </TouchableOpacity>
-            </UserIcons>
-          </Header>
+            </View>
+          </View>
           <OccurrenceImage source={{ uri: occurrence.image }} />
           <Title>{occurrence.title}</Title>
           <Text>{occurrence.status}</Text>
           <Text>{occurrence.description}</Text>
-          <OcurrenceIcons>
-            <AlertSection>
-              <TouchableOpacity>
-                <Warning size={ICON_SIZE} />
-              </TouchableOpacity>
-              <Text>{occurrence.likes.length}</Text>
-            </AlertSection>
-            <CommentSection>
-              <ChatCircle size={ICON_SIZE} />
-              <Text>{occurrence.comments.length}</Text>
-            </CommentSection>
-          </OcurrenceIcons>
-          <Input placeholder="Escreva um comentário" />
+          <View>
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity>
+                  <Warning size={ICON_SIZE} />
+                </TouchableOpacity>
+                <Text>{occurrence.likes.length}</Text>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <ChatCircle size={ICON_SIZE} />
+                <Text>{occurrence.comments.length}</Text>
+              </View>
+            </View>
+
+            <Input placeholder="Escreva um comentário" />
+          </View>
+
           {occurrence.comments.map((comment) => (
             <CommentCard
               key={comment.commentId}
@@ -118,9 +115,9 @@ const Occurrence: React.FC = () => {
               text={comment.comment}
             />
           ))}
-        </Container>
+        </View>
       )}
-    </ScrollView>
+    </View>
   );
 };
 export default Occurrence;

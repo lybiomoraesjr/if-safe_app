@@ -11,17 +11,12 @@ type CommentCardProps = {
   text: string;
 };
 
-const CommentCard: React.FC<CommentCardProps> = ({
-  avatar,
-  name,
-  text,
-}) => {
+const CommentCard: React.FC<CommentCardProps> = ({ avatar, name, text }) => {
   return (
     <Container>
       <UserPhoto
-      size={54}
+        size={54}
         source={avatar ? { uri: avatar } : defaultUserPhotoImg}
-   
       />
       <View style={{ flex: 1 }}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
