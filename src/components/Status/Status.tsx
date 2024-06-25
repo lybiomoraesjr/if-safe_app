@@ -12,13 +12,13 @@ const Status: React.FC<StatusProps> = ({ name }) => {
   return (
     <Pressable
       style={{
-        backgroundColor: COLORS.GRAY_500,
+        backgroundColor: COLORS.GRAY_200,
         borderRadius: 6,
         height: FONT_SIZE.SM * 2,
         paddingHorizontal: FONT_SIZE.SM,
         justifyContent: "center",
         alignItems: "center",
-        marginRight: 10,
+        margin: 10,
       }}
     >
       <Text
