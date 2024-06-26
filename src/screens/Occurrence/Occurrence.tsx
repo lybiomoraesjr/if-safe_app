@@ -113,7 +113,7 @@ const Occurrence: React.FC = () => {
   } = useForm<FormDataProps>({});
 
   return (
-    <ScrollView>
+    <View>
       <ScreenHeader title="Ocorrência" showBackButton />
 
       {isLoading ? (
@@ -182,7 +182,7 @@ const Occurrence: React.FC = () => {
           ))}
         </Container>
       )}
-    </ScrollView>
+    </View>
   );
 };
 export default Occurrence;
