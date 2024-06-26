@@ -12,8 +12,10 @@ const Status: React.FC<StatusProps> = ({ name }) => {
   return (
     <Pressable
       style={{
-        backgroundColor: COLORS.GRAY_200,
-        borderRadius: 6,
+        // backgroundColor: COLORS.GRAY_200,
+        borderWidth: 1,
+        borderColor: COLORS.GRAY_300,
+        borderRadius: 15,
         height: FONT_SIZE.SM * 2,
         paddingHorizontal: FONT_SIZE.SM,
         justifyContent: "center",
@@ -23,10 +25,10 @@ const Status: React.FC<StatusProps> = ({ name }) => {
     >
       <Text
         style={{
-          color: COLORS.GRAY_800,
+          color: COLORS.GRAY_600,
           fontSize: FONT_SIZE.SM,
           fontFamily: FONT_FAMILY.BOLD,
-          textTransform: "uppercase",
+          // textTransform: "uppercase",
         }}
       >
         {name}
