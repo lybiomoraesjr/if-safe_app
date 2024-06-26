@@ -1,21 +1,20 @@
-import React, { useState } from "react";
-import { Container } from "./Profile.styles";
+import React, { useState, useEffect } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import ScreenHeader from "@/components/ScreenHeader";
 import Button from "@/components/Button";
 import Input from "@/components/Input/Input";
 import { useAuth } from "@/hooks/useAuth";
-import { useTheme } from "styled-components";
+import { useTheme } from "styled-components/native";
 import { api } from "@/services/api";
 import { AppError } from "@/utils/AppError";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
-import * as FileSystem from "expo-file-system";
 import UserPhoto from "@/components/UserPhoto";
+import PhotoPickerModal from "@/components/PhotoPickerModal";
+import { usePhoto } from "@/hooks/usePhoto";
 
 type FormDataProps = {
   name: string;
@@ -40,11 +39,16 @@ const profileSchema = yup.object({
 });
 
 const Profile: React.FC = () => {
+  const CALLER = "profile";
+
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const { COLORS, FONT_SIZE, FONT_FAMILY } = useTheme();
 
   const { user, updateUserProfile } = useAuth();
+
+  const { selectedPhoto } = usePhoto();
   const {
     control,
     handleSubmit,
@@ -56,6 +60,12 @@ const Profile: React.FC = () => {
     },
     resolver: yupResolver(profileSchema),
   });
+
+  useEffect(() => {
+    if (selectedPhoto.caller === CALLER && selectedPhoto.uri) {
+      handleUserPhotoSelected(selectedPhoto.uri);
+    }
+  }, [selectedPhoto.uri]);
 
   const handleProfileUpdate = async (data: FormDataProps) => {
     try {
@@ -86,57 +96,31 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleUserPhotoSelected = async () => {
+  const handleUserPhotoSelected = async (encodedUserPhoto: string) => {
     try {
       const token = await storageAuthTokenGet();
 
-      const photoSelected = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 1,
-        aspect: [4, 4],
-        allowsEditing: true,
+      const config = {
+        avatar: encodedUserPhoto,
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+      };
+
+      await api.put(`/users/${user.id}`, config);
+
+      await updateUserProfile({
+        ...user,
+        avatar: encodedUserPhoto,
       });
 
-      if (photoSelected.canceled) {
-        return;
-      }
-
-      if (photoSelected.assets[0].uri) {
-        const { uri, fileSize } = photoSelected.assets[0];
-
-        if (fileSize && fileSize / 1024 / 1024 > 5) {
-          return Alert.alert("Erro", "A imagem deve ter no máximo 5MB");
-        }
-
-        const fileExtension = photoSelected.assets[0].uri.split(".").pop();
-
-        const base64Image = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        const encodedUserPhoto = `data:image/${fileExtension};base64,${base64Image}`;
-
-        const config = {
-          avatar: encodedUserPhoto,
-          headers: {
-            Authorization: "Bearer " + token,
-            "Content-Type": "application/json",
-          },
-        };
-
-        await api.put(`/users/${user.id}`, config);
-
-        await updateUserProfile({
-          ...user,
-          avatar: encodedUserPhoto,
-        });
-
-        Alert.alert("Sucesso", "Foto de perfil atualizada com sucesso");
-      }
+      Alert.alert("Sucesso", "Foto de perfil atualizada com sucesso");
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <View style={{ flex: 1 }}>
       <ScreenHeader title="Perfil" />
@@ -148,7 +132,7 @@ const Profile: React.FC = () => {
           />
 
           <TouchableOpacity
-            onPress={handleSubmit(handleUserPhotoSelected)}
+            onPress={() => setModalVisible(true)}
             style={{ marginTop: 5 }}
           >
             <Text
@@ -245,6 +229,11 @@ const Profile: React.FC = () => {
           style={{ marginTop: 10 }}
         />
       </ScrollView>
+      <PhotoPickerModal
+        isVisible={isModalVisible}
+        caller={CALLER}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 };

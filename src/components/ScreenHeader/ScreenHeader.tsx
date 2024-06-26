@@ -1,5 +1,5 @@
 import { Container, Title } from "./ScreenHeader.styles";
-import { useTheme } from "styled-components";
+import { useTheme } from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { TouchableOpacity, View, ViewStyle } from "react-native";

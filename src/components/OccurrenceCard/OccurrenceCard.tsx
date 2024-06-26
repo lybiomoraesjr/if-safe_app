@@ -35,7 +35,7 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
   return (
     <Container>
       <OccurrenceImage
-        source={{ uri: `data:image/jpeg;base64,${image}` }}
+        source={{ uri: image }}
         placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
       />
 

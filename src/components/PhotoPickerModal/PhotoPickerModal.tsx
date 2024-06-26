@@ -1,24 +1,63 @@
-import React, { useState } from "react";
-import { Modal } from "react-native";
+import React from "react";
+import { Modal, TouchableWithoutFeedback } from "react-native";
 import { ModalContainer, ModalContent } from "./PhotoPickerModal.styles";
+import IconButton from "../IconButton";
+import { Camera, Image, X } from "phosphor-react-native";
+import { useTheme } from "styled-components/native";
+import { usePhoto } from "@/hooks/usePhoto";
+import { ChooseImageEnum } from "@/types/enums";
 
-type GenericModalProps = {
+type PhotoPickerModalProps = {
   isVisible: boolean;
+  caller: string;
+  onClose: () => void;
 };
 
-const PhotoPickerModal: React.FC<GenericModalProps> = (isVisible) => {
-  const [modalActive, setModalActive] = useState(false);
+const PhotoPickerModal: React.FC<PhotoPickerModalProps> = ({
+  isVisible,
+  caller,
+  onClose,
+}) => {
+  const { COLORS } = useTheme();
+  const { chooseImage } = usePhoto();
 
   return (
     <Modal
       animationType="fade"
       transparent={true}
-      visible={modalActive}
-      onRequestClose={() => setModalActive(false)}
+      visible={isVisible}
+      onRequestClose={onClose}
     >
-      <ModalContainer>
-        <ModalContent></ModalContent>
-      </ModalContainer>
+      <TouchableWithoutFeedback onPress={onClose}>
+        <ModalContainer>
+          <ModalContent>
+            <IconButton
+              icon={Camera}
+              onPress={async () => {
+                await chooseImage(ChooseImageEnum.OPEN_CAMERA, caller);
+                onClose();
+              }}
+              iconColor={COLORS.BRAND_MID}
+              iconSize={32}
+            />
+            <IconButton
+              icon={Image}
+              onPress={async () => {
+                await chooseImage(ChooseImageEnum.OPEN_GALLERY, caller);
+                onClose();
+              }}
+              iconColor={COLORS.BRAND_MID}
+              iconSize={32}
+            />
+            <IconButton
+              icon={X}
+              onPress={onClose}
+              iconColor={COLORS.BRAND_MID}
+              iconSize={32}
+            />
+          </ModalContent>
+        </ModalContainer>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };

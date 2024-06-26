@@ -12,6 +12,8 @@ import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import { AppError } from "@/utils/AppError";
 import Loading from "@/components/Loading";
 import { OccurrenceCardDTO } from "@/dtos/OccurrenceCardDTO";
+import { useAuth } from "@/hooks/useAuth";
+import Button from "@/components/Button";
 
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -60,6 +62,7 @@ const Home: React.FC = () => {
   return (
     <Container>
       <HomeHeader />
+
       <FlatList
         data={occurrenceStatus}
         keyExtractor={(item) => item}

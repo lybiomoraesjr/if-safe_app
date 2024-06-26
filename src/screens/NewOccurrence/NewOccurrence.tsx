@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ScreenHeader from "@/components/ScreenHeader";
 import {
   ButtonsContainer,
@@ -6,76 +6,81 @@ import {
   InputContainer,
   PhotoContainer,
   PhotoView,
-} from "./NewOccurrence.styles.";
+} from "./NewOccurrence.styles";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { api } from "@/services/api";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
-import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
+import PhotoPickerModal from "@/components/PhotoPickerModal";
+import { usePhoto } from "@/hooks/usePhoto";
+import OccurrencePhoto from "@/components/OccurrencePhoto/OccurrencePhoto";
 import { Alert } from "react-native";
+import { useTheme } from "styled-components";
+
+type FormDataProps = {
+  title: string;
+  location: string;
+  description: string;
+};
 
 const NewOccurrence: React.FC = () => {
-  type FormDataProps = {
-    title: string;
-    location: string;
-    description: string;
-  };
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [photoUri, setPhotoUri] = useState<string | null>(null);
 
+  const { selectedPhoto } = usePhoto();
+
+  const { COLORS } = useTheme();
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormDataProps>({});
 
-  const handleCreateOccurrence = async (data: FormDataProps) => {
+  const handleResetForm = (): void => {
+    reset({
+      title: "",
+      description: "",
+      location: "",
+    });
+
+    setPhotoUri(null);
+  };
+
+  const handleCreateOccurrence = async (
+    data: FormDataProps,
+    encodedUserPhoto: string | null
+  ) => {
     try {
       const token = await storageAuthTokenGet();
 
-      const photoSelected = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 1,
-        aspect: [4, 4],
-        allowsEditing: true,
-      });
+      const config = {
+        description: data.description,
+        image: encodedUserPhoto,
+        location: data.location,
+        title: data.title,
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+      };
 
-      if (photoSelected.canceled) {
-        return;
-      }
+      await api.post(`/posts`, config);
 
-      if (photoSelected.assets[0].uri) {
-        const { uri, fileSize } = photoSelected.assets[0];
+      Alert.alert("Sucesso", "Ocorrência criada com sucesso");
 
-        if (fileSize && fileSize / 1024 / 1024 > 5) {
-          return Alert.alert("Erro", "A imagem deve ter no máximo 5MB");
-        }
-
-        const fileExtension = photoSelected.assets[0].uri.split(".").pop();
-
-        const base64Image = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        const encodedUserPhoto = `data:image/${fileExtension};base64,${base64Image}`;
-
-        const config = {
-          description: data.description,
-          image: encodedUserPhoto,
-          location: data.location,
-          title: data.title,
-          headers: {
-            Authorization: "Bearer " + token,
-            "Content-Type": "application/json",
-          },
-        };
-
-        await api.post(`/posts`, config);
-      }
+      handleResetForm();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (selectedPhoto.caller === "newOccurrence") {
+      setPhotoUri(selectedPhoto.uri);
+    }
+  }, [selectedPhoto.uri]);
 
   return (
     <Container>
@@ -93,9 +98,7 @@ const NewOccurrence: React.FC = () => {
             />
           )}
         />
-
-        <Button title="Foto" />
-
+        <Button title="Foto" onPress={() => setModalVisible(true)} />
         <Controller
           control={control}
           name="location"
@@ -121,16 +124,32 @@ const NewOccurrence: React.FC = () => {
           )}
         />
         <PhotoContainer>
-          <PhotoView />
+          {photoUri ? (
+            <OccurrencePhoto size={200} source={{ uri: photoUri }} />
+          ) : (
+            <PhotoView />
+          )}
         </PhotoContainer>
         <ButtonsContainer>
           <Button
-            title="Publicar"
-            onPress={handleSubmit(handleCreateOccurrence)}
+            title="Descartar"
+            onPress={handleResetForm}
+            style={{ backgroundColor: COLORS.CANCELED }}
           />
-          <Button title="Descartar" />
+          <Button
+            title="Publicar"
+            onPress={handleSubmit((data) =>
+              handleCreateOccurrence(data, photoUri)
+            )}
+          />
         </ButtonsContainer>
       </InputContainer>
+
+      <PhotoPickerModal
+        isVisible={isModalVisible}
+        caller="newOccurrence"
+        onClose={() => setModalVisible(false)}
+      />
     </Container>
   );
 };
