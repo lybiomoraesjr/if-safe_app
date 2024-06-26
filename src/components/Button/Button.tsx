@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacityProps } from "react-native";
-import { useTheme } from "styled-components";
+import { useTheme } from "styled-components/native";
 import { Container, Loading, Title } from "./Button.styles";
 
 type ButtonProps = TouchableOpacityProps & {
@@ -35,11 +35,9 @@ const Button: React.FC<ButtonProps> = ({
         <Loading />
       ) : (
         <Title
-          style={[
-            {
-              color: variant === "outline" ? COLORS.BRAND_LIGHT : COLORS.WHITE,
-            },
-          ]}
+          style={{
+            color: variant === "outline" ? COLORS.BRAND_LIGHT : COLORS.WHITE,
+          }}
         >
           {title}
         </Title>

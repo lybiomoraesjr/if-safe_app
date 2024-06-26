@@ -9,9 +9,10 @@ export const ModalContainer = styled.View`
 
 export const ModalContent = styled.View`
   background-color: ${({ theme }) => theme.COLORS.WHITE};
-
-  border-radius: 30px;
-  padding: 35px;
-  width: 200px;
+  border-radius: 15px;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
+  padding: 25px;
+  width: 200px;
 `;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
-import { useTheme } from "styled-components";
+import { useTheme } from "styled-components/native";
 
 type StatusProps = {
   name: string;

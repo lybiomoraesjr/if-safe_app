@@ -16,6 +16,8 @@ export default {
     GRAY_600: "#323238",
     GRAY_700: "#29292E",
     GRAY_800: "#202024",
+
+    CANCELED: "#DD6D6D",
   },
   FONT_FAMILY: {
     REGULAR: "Roboto_400Regular",

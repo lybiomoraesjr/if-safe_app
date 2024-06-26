@@ -23,9 +23,16 @@ import { AppError } from "@/utils/AppError";
 import Loading from "@/components/Loading";
 import UserPhoto from "@/components/UserPhoto";
 import { OccurrenceDTO } from "@/dtos/OccurrenceDTO";
+import { storageAuthTokenGet } from "@/storage/storageAuthToken";
+import { Controller, useForm } from "react-hook-form";
+import Button from "@/components/Button";
 
 type RouteParamsProps = {
   occurrenceId: string;
+};
+
+type FormDataProps = {
+  comment: string;
 };
 
 const Occurrence: React.FC = () => {
@@ -58,11 +65,52 @@ const Occurrence: React.FC = () => {
     }
   };
 
+  const likeOccurrence = async () => {
+    try {
+      const token = await storageAuthTokenGet();
+
+      const response = await api.post(`/posts/likes/${occurrenceId}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      Alert.alert("Sucesso", "Ocorrência curtida com sucesso.");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const MakeAComment = async (data: FormDataProps) => {
+    try {
+      const token = await storageAuthTokenGet();
+
+      const comment = data.comment;
+
+      await api.post(`/posts/comments/${occurrenceId}`, {
+        comment,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      Alert.alert("Sucesso", "Comentário feito com sucesso.");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (occurrenceId) {
       fetchOccurrence();
     }
   }, [occurrenceId]);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({});
 
   return (
     <ScrollView>
@@ -109,7 +157,21 @@ const Occurrence: React.FC = () => {
               <Text>{occurrence.comments.length}</Text>
             </CommentSection>
           </OcurrenceIcons>
-          <Input placeholder="Escreva um comentário" />
+
+          <Controller
+            control={control}
+            name="comment"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Escreva um comentário"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+
+          <Button title="Comentar" onPress={handleSubmit(MakeAComment)} />
+
           {occurrence.comments.map((comment) => (
             <CommentCard
               key={comment.commentId}
