@@ -2,10 +2,12 @@ import styled from "styled-components/native";
 
 export const Container = styled.View`
   flex: 1;
+  background-color: ${({ theme }) => theme.COLORS.WHITE};
 `;
 export const InputContainer = styled.ScrollView`
   flex: 1;
-  padding: 10px 10px;
+  padding: 0 10px;
+  margin: 10px 0;
 `;
 
 export const PhotoContainer = styled.View`

@@ -15,4 +15,5 @@ export const ModalContent = styled.View`
   align-items: center;
   padding: 25px;
   width: 200px;
+  height: 100px;
 `;

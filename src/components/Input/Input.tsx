@@ -1,16 +1,16 @@
 import React from "react";
-import { TextInputProps } from "react-native";
-import { Container, InputReactNative, Message } from "./Input.styles";
+import { Container } from "./Input.styles";
+import {
+  InputProps as InputReactNativeElementsProps,
+  Input as InputReactNativeElements,
+} from "@rneui/themed";
 
-type InputProps = TextInputProps & {
-  errorMessage?: string;
-};
+type InputProps = InputReactNativeElementsProps & {};
 
-const Input: React.FC<InputProps> = ({ errorMessage, ...rest }) => {
+const Input: React.FC<InputProps> = ({ ...rest }) => {
   return (
     <Container>
-      <InputReactNative {...rest} />
-      {errorMessage && <Message>{errorMessage}</Message>}
+      <InputReactNativeElements {...rest} />
     </Container>
   );
 };

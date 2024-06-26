@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, TouchableWithoutFeedback } from "react-native";
 import { ModalContainer, ModalContent } from "./PhotoPickerModal.styles";
 import IconButton from "../IconButton";
@@ -6,6 +6,7 @@ import { Camera, Image, X } from "phosphor-react-native";
 import { useTheme } from "styled-components/native";
 import { usePhoto } from "@/hooks/usePhoto";
 import { ChooseImageEnum } from "@/types/enums";
+import Loading from "../Loading";
 
 type PhotoPickerModalProps = {
   isVisible: boolean;
@@ -21,6 +22,8 @@ const PhotoPickerModal: React.FC<PhotoPickerModalProps> = ({
   const { COLORS } = useTheme();
   const { chooseImage } = usePhoto();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <Modal
       animationType="fade"
@@ -31,30 +34,40 @@ const PhotoPickerModal: React.FC<PhotoPickerModalProps> = ({
       <TouchableWithoutFeedback onPress={onClose}>
         <ModalContainer>
           <ModalContent>
-            <IconButton
-              icon={Camera}
-              onPress={async () => {
-                await chooseImage(ChooseImageEnum.OPEN_CAMERA, caller);
-                onClose();
-              }}
-              iconColor={COLORS.BRAND_MID}
-              iconSize={32}
-            />
-            <IconButton
-              icon={Image}
-              onPress={async () => {
-                await chooseImage(ChooseImageEnum.OPEN_GALLERY, caller);
-                onClose();
-              }}
-              iconColor={COLORS.BRAND_MID}
-              iconSize={32}
-            />
-            <IconButton
-              icon={X}
-              onPress={onClose}
-              iconColor={COLORS.BRAND_MID}
-              iconSize={32}
-            />
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <>
+                <IconButton
+                  icon={Camera}
+                  onPress={async () => {
+                    setIsLoading(true);
+                    await chooseImage(ChooseImageEnum.OPEN_CAMERA, caller);
+                    onClose();
+                    setIsLoading(false);
+                  }}
+                  iconColor={COLORS.BRAND_MID}
+                  iconSize={32}
+                />
+                <IconButton
+                  icon={Image}
+                  onPress={async () => {
+                    setIsLoading(true);
+                    await chooseImage(ChooseImageEnum.OPEN_GALLERY, caller);
+                    onClose();
+                    setIsLoading(false);
+                  }}
+                  iconColor={COLORS.BRAND_MID}
+                  iconSize={32}
+                />
+                <IconButton
+                  icon={X}
+                  onPress={onClose}
+                  iconColor={COLORS.BRAND_MID}
+                  iconSize={32}
+                />
+              </>
+            )}
           </ModalContent>
         </ModalContainer>
       </TouchableWithoutFeedback>

@@ -4,6 +4,7 @@ import { Image } from "expo-image";
 export const Container = styled.View`
   flex: 1;
   padding: 15px;
+  background-color: ${({ theme }) => theme.COLORS.WHITE};
 `;
 
 export const Header = styled.View`
@@ -40,7 +41,7 @@ export const Title = styled.Text`
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `;
 
-export const OcurrenceIcons = styled.View`
+export const OccurrenceIcons = styled.View`
   flex-direction: row;
   column-gap: 20px;
   margin-bottom: 10px;

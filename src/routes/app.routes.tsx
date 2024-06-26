@@ -30,15 +30,15 @@ export function AppRoutes() {
   const iconSize = 24;
 
   return (
-    <PhotoContextProvider>
+
       <Navigator
         screenOptions={{
           headerShown: false,
           tabBarShowLabel: false,
           tabBarActiveTintColor: theme.COLORS.BRAND_LIGHT,
-          tabBarInactiveTintColor: theme.COLORS.GRAY_200,
+          tabBarInactiveTintColor: theme.COLORS.GRAY_400,
           tabBarStyle: {
-            backgroundColor: theme.COLORS.GRAY_800,
+            backgroundColor: theme.COLORS.WHITE,
             borderTopWidth: 0,
             height: Platform.OS === "android" ? "auto" : 96,
             paddingBottom: 40,
@@ -80,6 +80,6 @@ export function AppRoutes() {
           options={{ tabBarButton: () => null }}
         />
       </Navigator>
-    </PhotoContextProvider>
+   
   );
 }

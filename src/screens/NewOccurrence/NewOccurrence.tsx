@@ -15,8 +15,10 @@ import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import PhotoPickerModal from "@/components/PhotoPickerModal";
 import { usePhoto } from "@/hooks/usePhoto";
 import OccurrencePhoto from "@/components/OccurrencePhoto/OccurrencePhoto";
-import { Alert } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "styled-components";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 type FormDataProps = {
   title: string;
@@ -24,19 +26,29 @@ type FormDataProps = {
   description: string;
 };
 
+const profileSchema = yup.object({
+  title: yup.string().required("Informe o título"),
+  location: yup.string().required("Informe a localização"),
+  description: yup.string().required("Informe a descrição"),
+});
+
 const NewOccurrence: React.FC = () => {
+  const CALLER = "newOccurrence";
+
   const [isModalVisible, setModalVisible] = useState(false);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
   const { selectedPhoto } = usePhoto();
 
-  const { COLORS } = useTheme();
+  const { COLORS, FONT_FAMILY, FONT_SIZE } = useTheme();
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormDataProps>({});
+  } = useForm<FormDataProps>({
+    resolver: yupResolver(profileSchema),
+  });
 
   const handleResetForm = (): void => {
     reset({
@@ -77,7 +89,7 @@ const NewOccurrence: React.FC = () => {
   };
 
   useEffect(() => {
-    if (selectedPhoto.caller === "newOccurrence") {
+    if (selectedPhoto.caller === CALLER) {
       setPhotoUri(selectedPhoto.uri);
     }
   }, [selectedPhoto.uri]);
@@ -86,6 +98,30 @@ const NewOccurrence: React.FC = () => {
     <Container>
       <ScreenHeader title="Nova Ocorrência" />
       <InputContainer>
+        <PhotoContainer>
+          {photoUri ? (
+            <OccurrencePhoto size={200} source={{ uri: photoUri }} />
+          ) : (
+            <PhotoView />
+          )}
+        </PhotoContainer>
+
+        <View style={{ alignItems: "center" }}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(true)}
+            style={{ marginTop: 5 }}
+          >
+            <Text
+              style={{
+                color: COLORS.BRAND_MID,
+                fontFamily: FONT_FAMILY.BOLD,
+                fontSize: FONT_SIZE.SM,
+              }}
+            >
+              Escolher foto
+            </Text>
+          </TouchableOpacity>
+        </View>
         <Controller
           control={control}
           name="title"
@@ -98,7 +134,7 @@ const NewOccurrence: React.FC = () => {
             />
           )}
         />
-        <Button title="Foto" onPress={() => setModalVisible(true)} />
+
         <Controller
           control={control}
           name="location"
@@ -123,13 +159,7 @@ const NewOccurrence: React.FC = () => {
             />
           )}
         />
-        <PhotoContainer>
-          {photoUri ? (
-            <OccurrencePhoto size={200} source={{ uri: photoUri }} />
-          ) : (
-            <PhotoView />
-          )}
-        </PhotoContainer>
+
         <ButtonsContainer>
           <Button
             title="Descartar"
@@ -147,7 +177,7 @@ const NewOccurrence: React.FC = () => {
 
       <PhotoPickerModal
         isVisible={isModalVisible}
-        caller="newOccurrence"
+        caller={CALLER}
         onClose={() => setModalVisible(false)}
       />
     </Container>
