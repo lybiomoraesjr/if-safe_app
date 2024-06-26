@@ -5,7 +5,7 @@ import {
   Container,
   Header,
   OccurrenceImage,
-  OcurrenceIcons,
+  OccurrenceIcons,
   Title,
   UserIcons,
   UserNameTxt,
@@ -26,6 +26,7 @@ import { OccurrenceDTO } from "@/dtos/OccurrenceDTO";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/Button";
+import { useTheme } from "styled-components";
 
 type RouteParamsProps = {
   occurrenceId: string;
@@ -36,7 +37,11 @@ type FormDataProps = {
 };
 
 const Occurrence: React.FC = () => {
-  const ICON_SIZE = 16;
+  const ICON_SIZE = 24;
+
+  const { COLORS } = useTheme();
+
+  const [like, setLike] = useState(false);
 
   const [occurrence, setOccurrence] = useState<OccurrenceDTO>(
     {} as OccurrenceDTO
@@ -112,8 +117,12 @@ const Occurrence: React.FC = () => {
     formState: { errors },
   } = useForm<FormDataProps>({});
 
+  const handleLike = () => {
+    setLike(!like);
+  };
+
   return (
-    <View>
+    <ScrollView>
       <ScreenHeader title="Ocorrência" showBackButton />
 
       {isLoading ? (
@@ -145,10 +154,13 @@ const Occurrence: React.FC = () => {
           <Title>{occurrence.title}</Title>
           <Text>{occurrence.status}</Text>
           <Text>{occurrence.description}</Text>
-          <OcurrenceIcons>
+          <OccurrenceIcons>
             <AlertSection>
-              <TouchableOpacity>
-                <Warning size={ICON_SIZE} />
+              <TouchableOpacity onPress={handleLike}>
+                <Warning
+                  size={ICON_SIZE}
+                  color={like ? COLORS.GRAY_800 : COLORS.CANCELED}
+                />
               </TouchableOpacity>
               <Text>{occurrence.likes.length}</Text>
             </AlertSection>
@@ -156,7 +168,7 @@ const Occurrence: React.FC = () => {
               <ChatCircle size={ICON_SIZE} />
               <Text>{occurrence.comments.length}</Text>
             </CommentSection>
-          </OcurrenceIcons>
+          </OccurrenceIcons>
 
           <Controller
             control={control}
@@ -182,7 +194,7 @@ const Occurrence: React.FC = () => {
           ))}
         </Container>
       )}
-    </View>
+    </ScrollView>
   );
 };
 export default Occurrence;

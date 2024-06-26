@@ -15,6 +15,8 @@ import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 import UserPhoto from "@/components/UserPhoto";
 import PhotoPickerModal from "@/components/PhotoPickerModal";
 import { usePhoto } from "@/hooks/usePhoto";
+import { Skeleton } from "@rneui/themed";
+import { Container } from "./Profile.styles";
 
 type FormDataProps = {
   name: string;
@@ -40,6 +42,10 @@ const profileSchema = yup.object({
 
 const Profile: React.FC = () => {
   const CALLER = "profile";
+
+  const PHOTO_SIZE = 150;
+
+  const [photoIsLoading, setPhotoIsLoading] = useState(false);
 
   const [isUpdating, setIsUpdating] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -98,6 +104,7 @@ const Profile: React.FC = () => {
 
   const handleUserPhotoSelected = async (encodedUserPhoto: string) => {
     try {
+      setPhotoIsLoading(true);
       const token = await storageAuthTokenGet();
 
       const config = {
@@ -118,18 +125,24 @@ const Profile: React.FC = () => {
       Alert.alert("Sucesso", "Foto de perfil atualizada com sucesso");
     } catch (error) {
       console.log(error);
+    } finally {
+      setPhotoIsLoading(false);
     }
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <Container>
       <ScreenHeader title="Perfil" />
-      <ScrollView style={{ paddingHorizontal: 20, marginTop: 5 }}>
+      <ScrollView style={{ paddingHorizontal: 20, marginTop: 15 }}>
         <View style={{ alignItems: "center", marginBottom: 20 }}>
-          <UserPhoto
-            size={100}
-            source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
-          />
+          {photoIsLoading ? (
+            <Skeleton width={100} height={100} circle />
+          ) : (
+            <UserPhoto
+              size={100}
+              source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
+            />
+          )}
 
           <TouchableOpacity
             onPress={() => setModalVisible(true)}
@@ -234,7 +247,7 @@ const Profile: React.FC = () => {
         caller={CALLER}
         onClose={() => setModalVisible(false)}
       />
-    </View>
+    </Container>
   );
 };
 

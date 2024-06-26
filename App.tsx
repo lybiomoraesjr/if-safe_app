@@ -12,6 +12,7 @@ import { StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Routes } from "./src/routes";
 import { AuthContextProvider } from "./src/contexts/AuthContext";
+import { PhotoContextProvider } from "@/contexts/PhotoContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -21,16 +22,18 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <SafeAreaProvider>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="transparent"
-          translucent
-        />
-        <AuthContextProvider>
-          {fontsLoaded ? <Routes /> : <Loading />}
-        </AuthContextProvider>
-      </SafeAreaProvider>
+      <PhotoContextProvider>
+        <SafeAreaProvider>
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor="transparent"
+            translucent
+          />
+          <AuthContextProvider>
+            {fontsLoaded ? <Routes /> : <Loading />}
+          </AuthContextProvider>
+        </SafeAreaProvider>
+      </PhotoContextProvider>
     </ThemeProvider>
   );
 }
