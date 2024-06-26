@@ -3,7 +3,19 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.COLORS.WHITE};
+  padding-top: 100px;
 `;
+
+export const TitleContainer = styled.View`
+  padding-left: 20px;
+`;
+
+export const TitleText = styled.Text`
+  color: ${({ theme }) => theme.COLORS.GRAY_400};
+  font-size: ${({ theme }) => theme.FONT_SIZE.XXXL}px;
+  font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
+`;
+
 export const InputContainer = styled.ScrollView`
   flex: 1;
   padding: 0 10px;

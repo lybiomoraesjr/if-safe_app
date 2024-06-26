@@ -32,32 +32,32 @@ const Home: React.FC = () => {
     OccurrenceStatusEnum.CANCELLED,
   ];
 
-  const fetchOccurrences = async () => {
-    try {
-      const token = await storageAuthTokenGet();
+  // const fetchOccurrences = async () => {
+  //   try {
+  //     const token = await storageAuthTokenGet();
 
-      const response = await api.get(`posts/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  //     const response = await api.get(`posts/`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-      setPosts(response.data);
-    } catch (error) {
-      const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível carregar as ocorrências";
+  //     setPosts(response.data);
+  //   } catch (error) {
+  //     const isAppError = error instanceof AppError;
+  //     const title = isAppError
+  //       ? error.data
+  //       : "Não foi possível carregar as ocorrências";
 
-      Alert.alert("Erro", title);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     Alert.alert("Erro", title);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchOccurrences();
-  }, []);
+  // useEffect(() => {
+  //   fetchOccurrences();
+  // }, []);
 
   return (
     <Container>
@@ -73,7 +73,7 @@ const Home: React.FC = () => {
 
       <Title>Ocorrências:</Title>
 
-      {isLoading ? (
+      {/* {isLoading ? (
         <Loading />
       ) : (
         <FlatList
@@ -90,7 +90,7 @@ const Home: React.FC = () => {
           )}
           showsVerticalScrollIndicator={false}
         />
-      )}
+      )} */}
     </Container>
   );
 };

@@ -6,6 +6,8 @@ import {
   InputContainer,
   PhotoContainer,
   PhotoView,
+  TitleContainer,
+  TitleText,
 } from "./NewOccurrence.styles";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/Button";
@@ -96,32 +98,10 @@ const NewOccurrence: React.FC = () => {
 
   return (
     <Container>
-      <ScreenHeader title="Nova Ocorrência" />
+      <TitleContainer>
+        <TitleText>Nova Ocorrência:</TitleText>
+      </TitleContainer>
       <InputContainer>
-        <PhotoContainer>
-          {photoUri ? (
-            <OccurrencePhoto size={200} source={{ uri: photoUri }} />
-          ) : (
-            <PhotoView />
-          )}
-        </PhotoContainer>
-
-        <View style={{ alignItems: "center" }}>
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={{ marginTop: 5 }}
-          >
-            <Text
-              style={{
-                color: COLORS.BRAND_MID,
-                fontFamily: FONT_FAMILY.BOLD,
-                fontSize: FONT_SIZE.SM,
-              }}
-            >
-              Escolher foto
-            </Text>
-          </TouchableOpacity>
-        </View>
         <Controller
           control={control}
           name="title"
@@ -159,6 +139,30 @@ const NewOccurrence: React.FC = () => {
             />
           )}
         />
+        <PhotoContainer>
+          {photoUri ? (
+            <OccurrencePhoto size={200} source={{ uri: photoUri }} />
+          ) : (
+            <PhotoView />
+          )}
+        </PhotoContainer>
+
+        <View style={{ alignItems: "center" }}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(true)}
+            style={{ marginTop: 5 }}
+          >
+            <Text
+              style={{
+                color: COLORS.BRAND_MID,
+                fontFamily: FONT_FAMILY.BOLD,
+                fontSize: FONT_SIZE.SM,
+              }}
+            >
+              Escolher foto
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <ButtonsContainer>
           <Button
