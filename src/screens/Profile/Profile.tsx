@@ -15,7 +15,7 @@ import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 import UserPhoto from "@/components/UserPhoto";
 import PhotoPickerModal from "@/components/PhotoPickerModal";
 import { usePhoto } from "@/hooks/usePhoto";
-import { Skeleton } from "@rneui/themed";
+import { Skeleton } from "@rneui/base";
 import { Container } from "./Profile.styles";
 
 type FormDataProps = {
@@ -43,7 +43,7 @@ const profileSchema = yup.object({
 const Profile: React.FC = () => {
   const CALLER = "profile";
 
-  const PHOTO_SIZE = 150;
+  const PHOTO_SIZE = 100;
 
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
 
@@ -54,7 +54,7 @@ const Profile: React.FC = () => {
 
   const { user, updateUserProfile } = useAuth();
 
-  const { selectedPhoto } = usePhoto();
+  const { selectedPhoto, setSelectedPhoto } = usePhoto();
   const {
     control,
     handleSubmit,
@@ -122,6 +122,8 @@ const Profile: React.FC = () => {
         avatar: encodedUserPhoto,
       });
 
+      setSelectedPhoto({ uri: "", caller: "" });
+
       Alert.alert("Sucesso", "Foto de perfil atualizada com sucesso");
     } catch (error) {
       console.log(error);
@@ -136,10 +138,10 @@ const Profile: React.FC = () => {
       <ScrollView style={{ paddingHorizontal: 20, marginTop: 15 }}>
         <View style={{ alignItems: "center", marginBottom: 20 }}>
           {photoIsLoading ? (
-            <Skeleton width={100} height={100} circle />
+            <Skeleton width={PHOTO_SIZE} height={PHOTO_SIZE} circle />
           ) : (
             <UserPhoto
-              size={100}
+              size={PHOTO_SIZE}
               source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
             />
           )}

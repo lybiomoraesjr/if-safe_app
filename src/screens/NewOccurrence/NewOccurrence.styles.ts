@@ -33,10 +33,3 @@ export const ButtonsContainer = styled.View`
   margin-top: 10px;
   column-gap: 20px;
 `;
-
-export const PhotoView = styled.View`
-  background-color: ${({ theme }) => theme.COLORS.GRAY_200};
-  height: 200px;
-  width: 200px;
-  border-radius: 10px;
-`;
