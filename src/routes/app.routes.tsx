@@ -13,7 +13,7 @@ import theme from "@/theme";
 
 import NewOccurrence from "@/screens/NewOccurrence";
 import Occurrence from "@/screens/Occurrence";
-import { PhotoContextProvider } from "@/contexts/PhotoContext";
+import { OccurrenceContextProvider } from "@/contexts/OccurrenceContext";
 
 type AppRoutes = {
   home: undefined;
@@ -30,7 +30,7 @@ export function AppRoutes() {
   const iconSize = 24;
 
   return (
-
+    <OccurrenceContextProvider>
       <Navigator
         screenOptions={{
           headerShown: false,
@@ -80,6 +80,6 @@ export function AppRoutes() {
           options={{ tabBarButton: () => null }}
         />
       </Navigator>
-   
+    </OccurrenceContextProvider>
   );
 }

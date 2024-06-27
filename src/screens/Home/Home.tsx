@@ -3,21 +3,22 @@ import { Container, Title } from "./Home.styles";
 import HomeHeader from "../../components/HomeHeader";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
-import { Alert, FlatList } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { OccurrenceStatusEnum } from "@/types";
 import Status from "../../components/Status";
 import OccurrenceCard from "@/components/OccurrenceCard";
-import { api } from "@/services/api";
-import { storageAuthTokenGet } from "@/storage/storageAuthToken";
-import { AppError } from "@/utils/AppError";
 import Loading from "@/components/Loading";
-import { OccurrenceCardDTO } from "@/dtos/OccurrenceCardDTO";
+import { useAuth } from "@/hooks/useAuth";
+import { useOccurrence } from "@/hooks/useOccurrence";
 
 const Home: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string | null>("all");
   const [isLoading, setIsLoading] = useState(true);
   const { navigate } = useNavigation<AppNavigatorRoutesProps>();
-  const [posts, setPosts] = useState<OccurrenceCardDTO[]>([]);
+
+  const { user } = useAuth();
+
+  const { occurrenceCards } = useOccurrence();
 
   const handleNavigateToOccurrence = (id: string) => {
     navigate("occurrence", { occurrenceId: id });
@@ -33,39 +34,20 @@ const Home: React.FC = () => {
 
   const occurrenceKeys = Object.keys(OccurrenceFilter);
 
-  const fetchOccurrences = async () => {
-    try {
-      const token = await storageAuthTokenGet();
-
-      const response = await api.get(`posts/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setPosts(response.data);
-    } catch (error) {
-      const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível carregar as ocorrências";
-
-      Alert.alert("Erro", title);
-    } finally {
+  useEffect(() => {
+    if (occurrenceCards.length > 0 || occurrenceCards.length === 0) {
       setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchOccurrences();
-  }, []);
+  }, [occurrenceCards]);
 
   return (
     <Container>
       <HomeHeader />
 
       <FlatList
-        data={occurrenceKeys}
+        data={occurrenceKeys.filter(
+          (item) => user.admin || item !== "cancelled"
+        )}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <Status
@@ -82,9 +64,13 @@ const Home: React.FC = () => {
 
       {isLoading ? (
         <Loading />
+      ) : occurrenceCards.length === 0 ? (
+        <View>
+          <Text>Não há ocorrências disponíveis no momento.</Text>
+        </View>
       ) : (
         <FlatList
-          data={posts}
+          data={occurrenceCards}
           renderItem={({ item }) => (
             <OccurrenceCard
               image={item.image}

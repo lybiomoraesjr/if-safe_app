@@ -1,8 +1,13 @@
+import { OccurrenceCardDTO } from "@/dtos/OccurrenceCardDTO";
 import { api } from "@/services/api";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
-import { createContext, ReactNode, useEffect } from "react";
+import { AppError } from "@/utils/AppError";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { Alert } from "react-native";
 
-export type OccurrenceContextDataProps = {};
+export type OccurrenceContextDataProps = {
+  occurrenceCards: OccurrenceCardDTO[];
+};
 
 export const OccurrenceContext = createContext<OccurrenceContextDataProps>(
   {} as OccurrenceContextDataProps
@@ -15,8 +20,37 @@ type OccurrenceContextProviderProps = {
 export const OccurrenceContextProvider = ({
   children,
 }: OccurrenceContextProviderProps) => {
+  const [occurrenceCards, setOccurrenceCards] = useState<OccurrenceCardDTO[]>(
+    []
+  );
+
+  const fetchOccurrences = async () => {
+    try {
+      const token = await storageAuthTokenGet();
+
+      const response = await api.get(`posts/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setOccurrenceCards(response.data);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.data
+        : "Não foi possível carregar as ocorrências";
+
+      Alert.alert("Erro", title);
+    }
+  };
+
+  useEffect(() => {
+    fetchOccurrences();
+  }, []);
+
   return (
-    <OccurrenceContext.Provider value={{}}>
+    <OccurrenceContext.Provider value={{ occurrenceCards }}>
       {children}
     </OccurrenceContext.Provider>
   );
