@@ -5,7 +5,6 @@ import {
   Container,
   InputContainer,
   PhotoContainer,
-  PhotoView,
   TitleContainer,
   TitleText,
 } from "./NewOccurrence.styles";
@@ -21,6 +20,9 @@ import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "styled-components";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Skeleton } from "@rneui/base";
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigatorRoutesProps } from "@/routes/app.routes";
 
 type FormDataProps = {
   title: string;
@@ -35,12 +37,16 @@ const profileSchema = yup.object({
 });
 
 const NewOccurrence: React.FC = () => {
+  const { navigate } = useNavigation<AppNavigatorRoutesProps>();
+
   const CALLER = "newOccurrence";
+
+  const PHOTO_SIZE = 200;
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
-  const { selectedPhoto } = usePhoto();
+  const { selectedPhoto, setSelectedPhoto } = usePhoto();
 
   const { COLORS, FONT_FAMILY, FONT_SIZE } = useTheme();
   const {
@@ -60,6 +66,8 @@ const NewOccurrence: React.FC = () => {
     });
 
     setPhotoUri(null);
+    setSelectedPhoto({ uri: "", caller: "" });
+    navigate("home");
   };
 
   const handleCreateOccurrence = async (
@@ -141,9 +149,14 @@ const NewOccurrence: React.FC = () => {
         />
         <PhotoContainer>
           {photoUri ? (
-            <OccurrencePhoto size={200} source={{ uri: photoUri }} />
+            <OccurrencePhoto size={PHOTO_SIZE} source={{ uri: photoUri }} />
           ) : (
-            <PhotoView />
+            <Skeleton
+              animation="none"
+              width={PHOTO_SIZE}
+              height={PHOTO_SIZE}
+              style={{ borderRadius: 10 }}
+            />
           )}
         </PhotoContainer>
 

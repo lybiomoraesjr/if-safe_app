@@ -8,6 +8,7 @@ import { PhotoInfo } from "@/types";
 export type PhotoContextDataProps = {
   chooseImage: (source: ChooseImageEnum, caller: string) => Promise<void>;
   selectedPhoto: PhotoInfo;
+  setSelectedPhoto: (photo: PhotoInfo) => void;
 };
 
 export const PhotoContext = createContext<PhotoContextDataProps>(
@@ -75,6 +76,7 @@ export const PhotoContextProvider = ({
       value={{
         chooseImage,
         selectedPhoto,
+        setSelectedPhoto
       }}
     >
       {children}
