@@ -4,7 +4,7 @@ export type OccurrenceCardDTO = {
   _id: string;
   title: string;
   image: string;
-  likes: string[];
+  likes: number;
   status: OccurrenceStatusEnum;
   date: Date;
 };

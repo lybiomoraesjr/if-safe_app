@@ -74,7 +74,7 @@ const Home: React.FC = () => {
           renderItem={({ item }) => (
             <OccurrenceCard
               image={item.image}
-              notifiersNumber={item.likes.length}
+              notifiersNumber={item.likes}
               status={item.status}
               title={item.title}
               date={item.date}
