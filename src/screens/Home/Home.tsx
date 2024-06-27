@@ -12,10 +12,9 @@ import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import { AppError } from "@/utils/AppError";
 import Loading from "@/components/Loading";
 import { OccurrenceCardDTO } from "@/dtos/OccurrenceCardDTO";
-import { useAuth } from "@/hooks/useAuth";
-import Button from "@/components/Button";
 
 const Home: React.FC = () => {
+  const [activeFilter, setActiveFilter] = useState<string | null>("all");
   const [isLoading, setIsLoading] = useState(true);
   const { navigate } = useNavigation<AppNavigatorRoutesProps>();
   const [posts, setPosts] = useState<OccurrenceCardDTO[]>([]);
@@ -24,13 +23,15 @@ const Home: React.FC = () => {
     navigate("occurrence", { occurrenceId: id });
   };
 
-  const occurrenceStatus = [
-    "Todas",
-    "Minhas",
-    OccurrenceStatusEnum.PENDING,
-    OccurrenceStatusEnum.SOLVED,
-    OccurrenceStatusEnum.CANCELLED,
-  ];
+  const OccurrenceFilter: Record<string, string> = {
+    all: "Todas",
+    mine: "Minhas",
+    pending: OccurrenceStatusEnum.PENDING,
+    solved: OccurrenceStatusEnum.SOLVED,
+    cancelled: OccurrenceStatusEnum.CANCELLED,
+  };
+
+  const occurrenceKeys = Object.keys(OccurrenceFilter);
 
   const fetchOccurrences = async () => {
     try {
@@ -64,9 +65,15 @@ const Home: React.FC = () => {
       <HomeHeader />
 
       <FlatList
-        data={occurrenceStatus}
+        data={occurrenceKeys}
         keyExtractor={(item) => item}
-        renderItem={({ item }) => <Status name={item} />}
+        renderItem={({ item }) => (
+          <Status
+            name={OccurrenceFilter[item]}
+            variant={activeFilter === item ? "active" : "inactive"}
+            onPress={() => setActiveFilter(item)}
+          />
+        )}
         horizontal
         showsHorizontalScrollIndicator={false}
       />
