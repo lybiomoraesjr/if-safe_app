@@ -12,7 +12,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useOccurrence } from "@/hooks/useOccurrence";
 
 const Home: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<string | null>("all");
+  const [activeFilter, setActiveFilter] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(true);
   const { navigate } = useNavigation<AppNavigatorRoutesProps>();
 

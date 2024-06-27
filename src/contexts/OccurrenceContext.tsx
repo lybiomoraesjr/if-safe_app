@@ -24,7 +24,7 @@ export const OccurrenceContextProvider = ({
     []
   );
 
-  const fetchOccurrences = async () => {
+  const fetchOccurrenceCards = async () => {
     try {
       const token = await storageAuthTokenGet();
 
@@ -45,8 +45,21 @@ export const OccurrenceContextProvider = ({
     }
   };
 
+  const fetchOccurrenceDetails = async (occurrenceId: string) => {
+    try {
+      await api.get(`posts/${occurrenceId}`);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.data
+        : "Não foi possível carregar os detalhes da ocorrência.";
+
+      Alert.alert("Erro", title);
+    }
+  };
+
   useEffect(() => {
-    fetchOccurrences();
+    fetchOccurrenceCards();
   }, []);
 
   return (

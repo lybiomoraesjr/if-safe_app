@@ -39,6 +39,8 @@ const profileSchema = yup.object({
 const NewOccurrence: React.FC = () => {
   const { navigate } = useNavigation<AppNavigatorRoutesProps>();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const CALLER = "newOccurrence";
 
   const PHOTO_SIZE = 200;
@@ -75,6 +77,7 @@ const NewOccurrence: React.FC = () => {
     encodedUserPhoto: string | null
   ) => {
     try {
+      setIsLoading(true);
       const token = await storageAuthTokenGet();
 
       const config = {
@@ -95,6 +98,9 @@ const NewOccurrence: React.FC = () => {
       handleResetForm();
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -185,6 +191,7 @@ const NewOccurrence: React.FC = () => {
           />
           <Button
             title="Publicar"
+            isLoading={isLoading}
             onPress={handleSubmit((data) =>
               handleCreateOccurrence(data, photoUri)
             )}
