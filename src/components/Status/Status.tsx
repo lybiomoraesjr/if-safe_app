@@ -4,17 +4,20 @@ import { useTheme } from "styled-components/native";
 
 type StatusProps = {
   name: string;
+  variant?: "active" | "inactive";
+  onPress?: () => void;
 };
 
-const Status: React.FC<StatusProps> = ({ name }) => {
+const Status: React.FC<StatusProps> = ({ name, variant, ...rest }) => {
   const { COLORS, FONT_SIZE, FONT_FAMILY } = useTheme();
 
   return (
     <Pressable
       style={{
-        // backgroundColor: COLORS.GRAY_200,
+        backgroundColor: COLORS.WHITE,
         borderWidth: 1,
-        borderColor: COLORS.GRAY_300,
+        borderColor:
+          variant === "active" ? COLORS.BRAND_LIGHT : COLORS.GRAY_300,
         borderRadius: 15,
         height: FONT_SIZE.SM * 2,
         paddingHorizontal: FONT_SIZE.SM,
@@ -22,13 +25,13 @@ const Status: React.FC<StatusProps> = ({ name }) => {
         alignItems: "center",
         margin: 10,
       }}
+      {...rest}
     >
       <Text
         style={{
-          color: COLORS.GRAY_600,
+          color: variant === "active" ? COLORS.BRAND_LIGHT : COLORS.GRAY_300,
           fontSize: FONT_SIZE.SM,
           fontFamily: FONT_FAMILY.BOLD,
-          // textTransform: "uppercase",
         }}
       >
         {name}
