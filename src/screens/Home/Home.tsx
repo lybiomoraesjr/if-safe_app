@@ -3,13 +3,14 @@ import { Container, Title } from "./Home.styles";
 import HomeHeader from "../../components/HomeHeader";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
-import { FlatList, Text, View } from "react-native";
+import { Alert, FlatList, Text, View } from "react-native";
 import { OccurrenceStatusEnum } from "@/types";
 import Status from "../../components/Status";
 import OccurrenceCard from "@/components/OccurrenceCard";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/hooks/useAuth";
 import { useOccurrence } from "@/hooks/useOccurrence";
+import { AppError } from "@/utils/AppError";
 
 const Home: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
@@ -18,7 +19,7 @@ const Home: React.FC = () => {
 
   const { user } = useAuth();
 
-  const { occurrenceCards } = useOccurrence();
+  const { fetchOccurrenceCards, occurrenceCards } = useOccurrence();
 
   const handleNavigateToOccurrence = (id: string) => {
     navigate("occurrence", { occurrenceId: id });
@@ -35,10 +36,27 @@ const Home: React.FC = () => {
   const occurrenceKeys = Object.keys(OccurrenceFilter);
 
   useEffect(() => {
-    if (occurrenceCards.length > 0 || occurrenceCards.length === 0) {
-      setIsLoading(false);
-    }
-  }, [occurrenceCards]);
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+       fetchOccurrenceCards();
+
+       
+      } catch (error) {
+        const isAppError = error instanceof AppError;
+        const title = isAppError
+          ? error.data
+          : "Não foi possível carregar as ocorrências";
+
+        setIsLoading(false);
+        Alert.alert("Erro", title);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Container>
@@ -64,10 +82,6 @@ const Home: React.FC = () => {
 
       {isLoading ? (
         <Loading />
-      ) : occurrenceCards.length === 0 ? (
-        <View>
-          <Text>Não há ocorrências disponíveis no momento.</Text>
-        </View>
       ) : (
         <FlatList
           data={occurrenceCards}
@@ -80,6 +94,11 @@ const Home: React.FC = () => {
               date={item.date}
               onInteract={() => handleNavigateToOccurrence(item._id)}
             />
+          )}
+          ListEmptyComponent={() => (
+            <View>
+              <Text>Não há ocorrências disponíveis no momento.</Text>
+            </View>
           )}
           showsVerticalScrollIndicator={false}
         />

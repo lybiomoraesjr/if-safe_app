@@ -3,13 +3,8 @@ import {
   AlertSection,
   CommentSection,
   Container,
-  Header,
   OccurrenceImage,
-  OccurrenceIcons,
   Title,
-  UserIcons,
-  UserNameTxt,
-  UserNameView,
 } from "./Occurrence.styles";
 import ScreenHeader from "@/components/ScreenHeader";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -27,6 +22,7 @@ import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import { useTheme } from "styled-components";
 import { useOccurrence } from "@/hooks/useOccurrence";
+import { useAuth } from "@/hooks/useAuth";
 
 type RouteParamsProps = {
   occurrenceId: string;
@@ -38,13 +34,11 @@ type FormDataProps = {
 
 const Occurrence: React.FC = () => {
   const ICON_SIZE = 24;
-
   const { COLORS } = useTheme();
 
-  const [like, setLike] = useState(false);
+  const { user } = useAuth();
 
   const { occurrence, fetchOccurrence } = useOccurrence();
-
   const [isLoading, setIsLoading] = useState(true);
 
   const route = useRoute();
@@ -92,7 +86,12 @@ const Occurrence: React.FC = () => {
         try {
           await fetchOccurrence(occurrenceId);
         } catch (error) {
-          console.error("Erro ao buscar ocorrência:", error);
+          const isAppError = error instanceof AppError;
+          const title = isAppError
+            ? error.data
+            : "Não foi possível carregar os detalhes da ocorrência.";
+
+          Alert.alert("Erro", title);
         } finally {
           setIsLoading(false);
         }
@@ -108,10 +107,6 @@ const Occurrence: React.FC = () => {
     formState: { errors },
   } = useForm<FormDataProps>({});
 
-  const handleLike = () => {
-    setLike(!like);
-  };
-
   return (
     <ScrollView>
       <ScreenHeader title="Ocorrência" showBackButton />
@@ -120,48 +115,51 @@ const Occurrence: React.FC = () => {
         <Loading />
       ) : (
         <Container>
-          <Header>
+          <View style={{ flexDirection: "row" }}>
+            <OccurrenceImage source={{ uri: occurrence.image }} />
+
             <View>
-              <UserPhoto
-                size={54}
-                source={{
-                  uri: occurrence
-                    ? occurrence.authorAvatar
-                    : defaultUserPhotoImg,
-                }}
+              <AlertSection>
+                <Warning size={ICON_SIZE} color={COLORS.GRAY_800} />
+                <Text>{occurrence.likes}</Text>
+
+                <ChatCircle size={ICON_SIZE} />
+              </AlertSection>
+
+              {/* <Text>{occurrence.date}</Text> */}
+
+              <Text>{occurrence.status}</Text>
+
+              <Text>{occurrence.location}</Text>
+
+              <Text>Por {occurrence.authorName}</Text>
+              <Button
+                title="Alertar!"
+                onPress={likeOccurrence}
+                style={{ backgroundColor: COLORS.CANCELED }}
               />
             </View>
+          </View>
 
-            <UserIcons>
-              <UserNameView>
-                <UserNameTxt>{occurrence.authorName}</UserNameTxt>
-              </UserNameView>
-              <TouchableOpacity>
-                <DotsThree size={ICON_SIZE} />
-              </TouchableOpacity>
-            </UserIcons>
-          </Header>
-          <OccurrenceImage source={{ uri: occurrence.image }} />
           <Title>{occurrence.title}</Title>
-          <Text>{occurrence.status}</Text>
           <Text>{occurrence.description}</Text>
-          <OccurrenceIcons>
-            <AlertSection>
-              <TouchableOpacity onPress={handleLike}>
-                <Warning
-                  size={ICON_SIZE}
-                  color={like ? COLORS.GRAY_800 : COLORS.CANCELED}
-                />
-              </TouchableOpacity>
-              <Text>{occurrence.likes}</Text>
-            </AlertSection>
-            <CommentSection>
-              <ChatCircle size={ICON_SIZE} />
-              {/* <Text>{occurrence.comments}</Text> */}
-            </CommentSection>
-          </OccurrenceIcons>
 
-          <Controller
+          {user.admin ? (
+            <>
+              <View style={{ flexDirection: "row" }}>
+                <Button
+                  title="Cancelar"
+                  style={{ backgroundColor: COLORS.CANCELED }}
+                />
+
+                <Button title="Resolver" />
+              </View>
+            </>
+          ) : (
+            <Button title="Adicionar Depoimento" />
+          )}
+
+          {/* <Controller
             control={control}
             name="comment"
             render={({ field: { onChange, value } }) => (
@@ -173,16 +171,7 @@ const Occurrence: React.FC = () => {
             )}
           />
 
-          <Button title="Comentar" onPress={handleSubmit(MakeAComment)} />
-
-          {/* {occurrence.comments.map((comment) => (
-            <CommentCard
-              key={comment.commentId}
-              name={comment.userName}
-              avatar={comment.userAvatar}
-              text={comment.comment}
-            />
-          ))} */}
+          <Button title="Comentar" onPress={handleSubmit(MakeAComment)} /> */}
         </Container>
       )}
     </ScrollView>

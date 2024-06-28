@@ -148,10 +148,10 @@ const NewOccurrence: React.FC = () => {
           )}
         </PhotoContainer>
 
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: "center", marginBottom: 12 }}>
           <TouchableOpacity
             onPress={() => setModalVisible(true)}
-            style={{ marginTop: 5 }}
+            style={{ marginTop: 2 }}
           >
             <Text
               style={{
@@ -170,6 +170,7 @@ const NewOccurrence: React.FC = () => {
             title="Descartar"
             onPress={handleResetForm}
             style={{ backgroundColor: COLORS.CANCELED }}
+            disabled={isLoading}
           />
           <Button
             title="Publicar"

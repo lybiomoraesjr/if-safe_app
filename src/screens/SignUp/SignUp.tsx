@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, StatusBar } from "react-native";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
@@ -71,6 +71,11 @@ const SignUn: React.FC = () => {
 
   return (
     <Container>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="transparent"
+        translucent
+      />
       <ImageContainer>
         <Image source={require("@/assets/ifsafe-logo.png")} />
       </ImageContainer>

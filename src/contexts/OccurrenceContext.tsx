@@ -8,9 +8,10 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 export type OccurrenceContextDataProps = {
+  fetchOccurrenceCards: () => Promise<void>;
   occurrenceCards: OccurrenceCardDTO[];
-  occurrence: OccurrenceDTO;
   fetchOccurrence: (occurrenceId: string) => Promise<void>;
+  occurrence: OccurrenceDTO;
   handleCreateOccurrence: (
     data: NewOccurrenceFormData,
     encodedUserPhoto: string | null
@@ -47,12 +48,7 @@ export const OccurrenceContextProvider = ({
 
       setOccurrenceCards(response.data);
     } catch (error) {
-      const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível carregar as ocorrências";
-
-      Alert.alert("Erro", title);
+      throw error;
     }
   };
 
@@ -62,12 +58,7 @@ export const OccurrenceContextProvider = ({
 
       setOccurrence(response.data);
     } catch (error) {
-      const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível carregar os detalhes da ocorrência.";
-
-      Alert.alert("Erro", title);
+      throw error;
     }
   };
 
@@ -99,16 +90,13 @@ export const OccurrenceContextProvider = ({
     fetchOccurrenceCards();
   }, [handleCreateOccurrence]);
 
-  useEffect(() => {
-    fetchOccurrenceCards();
-  }, []);
-
   return (
     <OccurrenceContext.Provider
       value={{
+        fetchOccurrenceCards,
         occurrenceCards,
-        occurrence,
         fetchOccurrence,
+        occurrence,
         handleCreateOccurrence,
       }}
     >

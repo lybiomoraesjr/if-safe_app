@@ -11,4 +11,5 @@ export type OccurrenceDTO = {
   authorAvatar: string;
   title: string;
   status: string;
+  location: string;
 };

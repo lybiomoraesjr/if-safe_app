@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, ImgContainer, TextQuest } from "./SignIn.styles";
-import { Alert, Image, Text } from "react-native";
+import { Alert, Image, StatusBar, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "@/routes/auth.routes";
 import { Controller, useForm } from "react-hook-form";
@@ -64,6 +64,11 @@ const SignIn: React.FC = () => {
 
   return (
     <Container>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="transparent"
+        translucent
+      />
       <ImgContainer>
         <Image source={require("@/assets/ifsafe-logo.png")} />
       </ImgContainer>
