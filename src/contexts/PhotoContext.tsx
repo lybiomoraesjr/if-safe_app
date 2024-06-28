@@ -76,7 +76,7 @@ export const PhotoContextProvider = ({
       value={{
         chooseImage,
         selectedPhoto,
-        setSelectedPhoto
+        setSelectedPhoto,
       }}
     >
       {children}

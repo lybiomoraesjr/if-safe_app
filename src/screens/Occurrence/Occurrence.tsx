@@ -162,7 +162,7 @@ const Occurrence: React.FC = () => {
                   color={like ? COLORS.GRAY_800 : COLORS.CANCELED}
                 />
               </TouchableOpacity>
-              <Text>{occurrence.likes.length}</Text>
+              <Text>{occurrence.likes}</Text>
             </AlertSection>
             <CommentSection>
               <ChatCircle size={ICON_SIZE} />
