@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ScreenHeader from "@/components/ScreenHeader";
 import {
   ButtonsContainer,
   Container,
@@ -11,8 +10,6 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import { api } from "@/services/api";
-import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import PhotoPickerModal from "@/components/PhotoPickerModal";
 import { usePhoto } from "@/hooks/usePhoto";
 import OccurrencePhoto from "@/components/OccurrencePhoto/OccurrencePhoto";
@@ -23,12 +20,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Skeleton } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "@/routes/app.routes";
-
-type FormDataProps = {
-  title: string;
-  location: string;
-  description: string;
-};
+import { useOccurrence } from "@/hooks/useOccurrence";
+import { NewOccurrenceFormData } from "@/types";
 
 const profileSchema = yup.object({
   title: yup.string().required("Informe o título"),
@@ -48,6 +41,8 @@ const NewOccurrence: React.FC = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
+  const { handleCreateOccurrence } = useOccurrence();
+
   const { selectedPhoto, setSelectedPhoto } = usePhoto();
 
   const { COLORS, FONT_FAMILY, FONT_SIZE } = useTheme();
@@ -56,7 +51,7 @@ const NewOccurrence: React.FC = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormDataProps>({
+  } = useForm<NewOccurrenceFormData>({
     resolver: yupResolver(profileSchema),
   });
 
@@ -72,33 +67,20 @@ const NewOccurrence: React.FC = () => {
     navigate("home");
   };
 
-  const handleCreateOccurrence = async (
-    data: FormDataProps,
-    encodedUserPhoto: string | null
-  ) => {
+  const handlePublish = async (data: NewOccurrenceFormData) => {
     try {
       setIsLoading(true);
-      const token = await storageAuthTokenGet();
-
-      const config = {
-        description: data.description,
-        image: encodedUserPhoto,
-        location: data.location,
-        title: data.title,
-        headers: {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json",
-        },
-      };
-
-      await api.post(`/posts`, config);
+      await handleCreateOccurrence(data, photoUri);
 
       Alert.alert("Sucesso", "Ocorrência criada com sucesso");
 
       handleResetForm();
     } catch (error) {
-      console.error(error);
-      setIsLoading(false);
+      console.error("Erro ao criar ocorrência:", error);
+      Alert.alert(
+        "Erro",
+        "Não foi possível criar a ocorrência. Por favor, tente novamente."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -192,9 +174,7 @@ const NewOccurrence: React.FC = () => {
           <Button
             title="Publicar"
             isLoading={isLoading}
-            onPress={handleSubmit((data) =>
-              handleCreateOccurrence(data, photoUri)
-            )}
+            onPress={handleSubmit(handlePublish)}
           />
         </ButtonsContainer>
       </InputContainer>

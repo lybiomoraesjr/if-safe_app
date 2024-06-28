@@ -4,7 +4,7 @@ export type OccurrenceDTO = {
   authorId: string;
   date: string;
   authorName: string;
-  likes: string[];
+  likes: number;
   description: string;
   image: string;
   comments: CommentDTO[];

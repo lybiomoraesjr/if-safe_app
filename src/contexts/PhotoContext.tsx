@@ -52,8 +52,8 @@ export const PhotoContextProvider = ({
       if (result.assets[0].uri) {
         const { uri, fileSize } = result.assets[0];
 
-        if (fileSize && fileSize / 1024 / 1024 > 5) {
-          return Alert.alert("Erro", "A imagem deve ter no máximo 5MB");
+        if (fileSize && fileSize / 1024 / 1024 > 2) {
+          return Alert.alert("Erro", "A imagem deve ter no máximo 2MB");
         }
 
         const fileExtension = uri.split(".").pop();

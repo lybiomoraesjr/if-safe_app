@@ -22,11 +22,11 @@ import { api } from "@/services/api";
 import { AppError } from "@/utils/AppError";
 import Loading from "@/components/Loading";
 import UserPhoto from "@/components/UserPhoto";
-import { OccurrenceDTO } from "@/dtos/OccurrenceDTO";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import { useTheme } from "styled-components";
+import { useOccurrence } from "@/hooks/useOccurrence";
 
 type RouteParamsProps = {
   occurrenceId: string;
@@ -43,32 +43,12 @@ const Occurrence: React.FC = () => {
 
   const [like, setLike] = useState(false);
 
-  const [occurrence, setOccurrence] = useState<OccurrenceDTO>(
-    {} as OccurrenceDTO
-  );
+  const { occurrence, fetchOccurrence } = useOccurrence();
+
   const [isLoading, setIsLoading] = useState(true);
 
   const route = useRoute();
   const { occurrenceId } = route.params as RouteParamsProps;
-
-  const fetchOccurrence = async () => {
-    try {
-      setIsLoading(true);
-
-      const response = await api.get(`posts/${occurrenceId}`);
-
-      setOccurrence(response.data);
-    } catch (error) {
-      const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível carregar os detalhes da ocorrência.";
-
-      Alert.alert("Erro", title);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const likeOccurrence = async () => {
     try {
@@ -106,9 +86,20 @@ const Occurrence: React.FC = () => {
   };
 
   useEffect(() => {
-    if (occurrenceId) {
-      fetchOccurrence();
-    }
+    const fetchData = async () => {
+      if (occurrenceId) {
+        setIsLoading(true);
+        try {
+          await fetchOccurrence(occurrenceId);
+        } catch (error) {
+          console.error("Erro ao buscar ocorrência:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchData();
   }, [occurrenceId]);
 
   const {
@@ -134,7 +125,7 @@ const Occurrence: React.FC = () => {
               <UserPhoto
                 size={54}
                 source={{
-                  uri: occurrence.authorAvatar
+                  uri: occurrence
                     ? occurrence.authorAvatar
                     : defaultUserPhotoImg,
                 }}
@@ -166,7 +157,7 @@ const Occurrence: React.FC = () => {
             </AlertSection>
             <CommentSection>
               <ChatCircle size={ICON_SIZE} />
-              <Text>{occurrence.comments.length}</Text>
+              {/* <Text>{occurrence.comments}</Text> */}
             </CommentSection>
           </OccurrenceIcons>
 
@@ -184,14 +175,14 @@ const Occurrence: React.FC = () => {
 
           <Button title="Comentar" onPress={handleSubmit(MakeAComment)} />
 
-          {occurrence.comments.map((comment) => (
+          {/* {occurrence.comments.map((comment) => (
             <CommentCard
               key={comment.commentId}
               name={comment.userName}
               avatar={comment.userAvatar}
               text={comment.comment}
             />
-          ))}
+          ))} */}
         </Container>
       )}
     </ScrollView>
