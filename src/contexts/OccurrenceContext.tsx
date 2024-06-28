@@ -16,6 +16,7 @@ export type OccurrenceContextDataProps = {
     data: NewOccurrenceFormData,
     encodedUserPhoto: string | null
   ) => Promise<void>;
+  handleLikeOccurrence: (occurrenceId: string) => Promise<void>;
 };
 
 export const OccurrenceContext = createContext<OccurrenceContextDataProps>(
@@ -86,6 +87,35 @@ export const OccurrenceContextProvider = ({
     }
   };
 
+  const handleLikeOccurrence = async (occurrenceId: string) => {
+    try {
+      const token = await storageAuthTokenGet();
+
+      await api.post(`/posts/likes/${occurrenceId}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const HandleMakeAComment = async (occurrenceId: string, comment: string) => {
+    try {
+      const token = await storageAuthTokenGet();
+
+      await api.post(`/posts/comments/${occurrenceId}`, {
+        comment,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
   useEffect(() => {
     fetchOccurrenceCards();
   }, [handleCreateOccurrence]);
@@ -98,6 +128,7 @@ export const OccurrenceContextProvider = ({
         fetchOccurrence,
         occurrence,
         handleCreateOccurrence,
+        handleLikeOccurrence,
       }}
     >
       {children}

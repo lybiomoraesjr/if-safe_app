@@ -38,46 +38,44 @@ const Occurrence: React.FC = () => {
 
   const { user } = useAuth();
 
-  const { occurrence, fetchOccurrence } = useOccurrence();
+  const { occurrence, fetchOccurrence, handleLikeOccurrence } = useOccurrence();
   const [isLoading, setIsLoading] = useState(true);
+
+  const [isLikeLoading, setIsLikeLoading] = useState(false);
 
   const route = useRoute();
   const { occurrenceId } = route.params as RouteParamsProps;
 
-  const likeOccurrence = async () => {
+  const handleLikeWithLoading = async () => {
     try {
-      const token = await storageAuthTokenGet();
-
-      const response = await api.post(`/posts/likes/${occurrenceId}`, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-
-      Alert.alert("Sucesso", "Ocorrência curtida com sucesso.");
+      setIsLikeLoading(true);
+      await handleLikeOccurrence(occurrenceId);
     } catch (error) {
+      setIsLikeLoading(false);
+
       console.log(error);
+    } finally {
+      setIsLikeLoading(false);
     }
   };
+  // const MakeAComment = async (data: FormDataProps) => {
+  //   try {
+  //     const token = await storageAuthTokenGet();
 
-  const MakeAComment = async (data: FormDataProps) => {
-    try {
-      const token = await storageAuthTokenGet();
+  //     const comment = data.comment;
 
-      const comment = data.comment;
+  //     await api.post(`/posts/comments/${occurrenceId}`, {
+  //       comment,
+  //       headers: {
+  //         Authorization: "Bearer " + token,
+  //       },
+  //     });
 
-      await api.post(`/posts/comments/${occurrenceId}`, {
-        comment,
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-
-      Alert.alert("Sucesso", "Comentário feito com sucesso.");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     Alert.alert("Sucesso", "Comentário feito com sucesso.");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,7 +133,8 @@ const Occurrence: React.FC = () => {
               <Text>Por {occurrence.authorName}</Text>
               <Button
                 title="Alertar!"
-                onPress={likeOccurrence}
+                onPress={handleLikeWithLoading}
+                isLoading={isLikeLoading}
                 style={{ backgroundColor: COLORS.CANCELED }}
               />
             </View>
