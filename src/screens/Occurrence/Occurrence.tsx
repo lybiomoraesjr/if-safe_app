@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {
   AlertSection,
-  CommentSection,
   Container,
   OccurrenceImage,
   Title,
 } from "./Occurrence.styles";
 import ScreenHeader from "@/components/ScreenHeader";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { ChatCircle, DotsThree, Warning } from "phosphor-react-native";
-import Input from "@/components/Input";
-import CommentCard from "@/components/CommentCard";
-import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
+import { Alert, ScrollView, Text, View } from "react-native";
+import { ChatCircle, Warning } from "phosphor-react-native";
+
 import { useRoute } from "@react-navigation/native";
-import { api } from "@/services/api";
 import { AppError } from "@/utils/AppError";
 import Loading from "@/components/Loading";
-import UserPhoto from "@/components/UserPhoto";
-import { storageAuthTokenGet } from "@/storage/storageAuthToken";
-import { Controller, useForm } from "react-hook-form";
+
 import Button from "@/components/Button";
 import { useTheme } from "styled-components";
 import { useOccurrence } from "@/hooks/useOccurrence";
@@ -26,10 +20,6 @@ import { useAuth } from "@/hooks/useAuth";
 
 type RouteParamsProps = {
   occurrenceId: string;
-};
-
-type FormDataProps = {
-  comment: string;
 };
 
 const Occurrence: React.FC = () => {
@@ -58,24 +48,6 @@ const Occurrence: React.FC = () => {
       setIsLikeLoading(false);
     }
   };
-  // const MakeAComment = async (data: FormDataProps) => {
-  //   try {
-  //     const token = await storageAuthTokenGet();
-
-  //     const comment = data.comment;
-
-  //     await api.post(`/posts/comments/${occurrenceId}`, {
-  //       comment,
-  //       headers: {
-  //         Authorization: "Bearer " + token,
-  //       },
-  //     });
-
-  //     Alert.alert("Sucesso", "Comentário feito com sucesso.");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,12 +70,6 @@ const Occurrence: React.FC = () => {
 
     fetchData();
   }, [occurrenceId]);
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormDataProps>({});
 
   return (
     <ScrollView>
@@ -157,20 +123,6 @@ const Occurrence: React.FC = () => {
           ) : (
             <Button title="Adicionar Depoimento" />
           )}
-
-          {/* <Controller
-            control={control}
-            name="comment"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                placeholder="Escreva um comentário"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-          />
-
-          <Button title="Comentar" onPress={handleSubmit(MakeAComment)} /> */}
         </Container>
       )}
     </ScrollView>

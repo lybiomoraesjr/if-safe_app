@@ -39,9 +39,7 @@ const Home: React.FC = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-       fetchOccurrenceCards();
-
-       
+        await fetchOccurrenceCards();
       } catch (error) {
         const isAppError = error instanceof AppError;
         const title = isAppError
@@ -88,7 +86,7 @@ const Home: React.FC = () => {
           renderItem={({ item }) => (
             <OccurrenceCard
               image={item.image}
-              notifiersNumber={item.likes}
+              alert={item.likes}
               status={item.status}
               title={item.title}
               date={item.date}

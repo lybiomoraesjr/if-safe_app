@@ -3,9 +3,7 @@ import { OccurrenceDTO } from "@/dtos/OccurrenceDTO";
 import { api } from "@/services/api";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import { NewOccurrenceFormData } from "@/types";
-import { AppError } from "@/utils/AppError";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { Alert } from "react-native";
 
 export type OccurrenceContextDataProps = {
   fetchOccurrenceCards: () => Promise<void>;

@@ -15,7 +15,7 @@ import { formattedDate } from "@/utils/dateUtils";
 
 interface OccurrenceCardProps {
   image: string;
-  notifiersNumber: number;
+  alert: number;
   status: string;
   title: string;
   date: Date;
@@ -24,7 +24,7 @@ interface OccurrenceCardProps {
 
 const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
   image,
-  notifiersNumber,
+  alert,
   status,
   title,
 
@@ -44,7 +44,7 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
         {/* <Date>Publicado em {displayDate}</Date> */}
         <NotificationView>
           <Warning size={16} color="#8D8D99" />
-          <NotifierCount>{notifiersNumber}</NotifierCount>
+          <NotifierCount>{alert}</NotifierCount>
           <Text>{status}</Text>
         </NotificationView>
       </Info>
