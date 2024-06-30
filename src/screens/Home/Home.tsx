@@ -22,9 +22,15 @@ const Home: React.FC = () => {
   const { COLORS } = useTheme();
   const { user } = useAuth();
 
-  const { fetchOccurrenceCards, occurrenceCards } = useOccurrence();
+  const {
+    fetchOccurrenceCards,
+    occurrenceCards,
+    setPositionOfTheOccurrenceInTheArray,
+  } = useOccurrence();
 
-  const handleNavigateToOccurrence = (id: string) => {
+  const handleNavigateToOccurrence = (id: string, index: number) => {
+    setPositionOfTheOccurrenceInTheArray(index);
+
     navigate("occurrence", { occurrenceId: id });
   };
 
@@ -100,14 +106,14 @@ const Home: React.FC = () => {
         ) : (
           <FlatList
             data={occurrenceCards}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <OccurrenceCard
                 image={item.image}
                 alert={item.likes}
                 status={item.status}
                 title={item.title}
                 date={item.date}
-                onInteract={() => handleNavigateToOccurrence(item._id)}
+                onInteract={() => handleNavigateToOccurrence(item._id, index)}
               />
             )}
             ListEmptyComponent={() => (

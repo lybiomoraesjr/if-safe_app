@@ -1,15 +1,11 @@
 import { CommentDTO } from "./CommentDTO";
+import { OccurrenceCardDTO } from "./OccurrenceCardDTO";
 
-export type OccurrenceDTO = {
-  authorId: string;
-  date: string;
-  authorName: string;
-  likes: number;
+export type OccurrenceDTO = OccurrenceCardDTO & {
   description: string;
-  image: string;
+  authorId: string;
+  authorName: string;
   comments: CommentDTO[];
-  authorAvatar: string;
-  title: string;
-  status: string;
+  authorAvatar: string | null;
   location: string;
 };

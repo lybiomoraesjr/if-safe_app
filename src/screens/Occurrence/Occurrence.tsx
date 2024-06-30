@@ -28,7 +28,15 @@ const Occurrence: React.FC = () => {
 
   const { user } = useAuth();
 
-  const { occurrence, fetchOccurrence, handleLikeOccurrence } = useOccurrence();
+  const {
+    occurrence,
+    setOccurrence,
+    fetchOccurrence,
+    handleLikeOccurrence,
+    positionOfTheOccurrenceInTheArray,
+    occurrenceCards,
+    setOccurrenceCards,
+  } = useOccurrence();
   const [isLoading, setIsLoading] = useState(true);
 
   const [isLikeLoading, setIsLikeLoading] = useState(false);
@@ -40,6 +48,23 @@ const Occurrence: React.FC = () => {
     try {
       setIsLikeLoading(true);
       await handleLikeOccurrence(occurrenceId);
+
+      setOccurrenceCards(
+        occurrenceCards.map((occurrenceCard, index) => {
+          if (index === positionOfTheOccurrenceInTheArray) {
+            return {
+              ...occurrenceCard,
+              likes: occurrenceCard.likes + 1,
+            };
+          }
+
+          return occurrenceCard;
+        })
+      );
+      setOccurrence({
+        ...occurrence,
+        likes: occurrence.likes + 1,
+      });
     } catch (error) {
       setIsLikeLoading(false);
 
@@ -52,10 +77,11 @@ const Occurrence: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (occurrenceId) {
-        setIsLoading(true);
         try {
+          setIsLoading(true);
           await fetchOccurrence(occurrenceId);
         } catch (error) {
+          console.log(error);
           const isAppError = error instanceof AppError;
           const title = isAppError
             ? error.data

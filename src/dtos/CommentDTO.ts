@@ -4,5 +4,4 @@ export type CommentDTO = {
   userName: string;
   comment: string;
   commentDate: Date;
-  userAvatar: string;
 };

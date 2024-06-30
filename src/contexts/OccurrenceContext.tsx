@@ -8,13 +8,19 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 export type OccurrenceContextDataProps = {
   fetchOccurrenceCards: () => Promise<void>;
   occurrenceCards: OccurrenceCardDTO[];
+  setOccurrenceCards: (occurrenceCards: OccurrenceCardDTO[]) => void;
   fetchOccurrence: (occurrenceId: string) => Promise<void>;
   occurrence: OccurrenceDTO;
+  setOccurrence: (occurrence: OccurrenceDTO) => void;
   handleCreateOccurrence: (
     data: NewOccurrenceFormData,
     encodedUserPhoto: string | null
   ) => Promise<void>;
   handleLikeOccurrence: (occurrenceId: string) => Promise<void>;
+  positionOfTheOccurrenceInTheArray: number;
+  setPositionOfTheOccurrenceInTheArray: (
+    positionOfTheOccurrenceInTheArray: number
+  ) => void;
 };
 
 export const OccurrenceContext = createContext<OccurrenceContextDataProps>(
@@ -34,6 +40,11 @@ export const OccurrenceContextProvider = ({
   const [occurrence, setOccurrence] = useState<OccurrenceDTO>(
     {} as OccurrenceDTO
   );
+
+  const [
+    positionOfTheOccurrenceInTheArray,
+    setPositionOfTheOccurrenceInTheArray,
+  ] = useState<number>(-1);
 
   const fetchOccurrenceCards = async () => {
     try {
@@ -114,19 +125,19 @@ export const OccurrenceContextProvider = ({
     }
   };
 
-  useEffect(() => {
-    fetchOccurrenceCards();
-  }, [handleCreateOccurrence]);
-
   return (
     <OccurrenceContext.Provider
       value={{
         fetchOccurrenceCards,
         occurrenceCards,
+        setOccurrenceCards,
         fetchOccurrence,
         occurrence,
+        setOccurrence,
         handleCreateOccurrence,
         handleLikeOccurrence,
+        positionOfTheOccurrenceInTheArray,
+        setPositionOfTheOccurrenceInTheArray,
       }}
     >
       {children}
