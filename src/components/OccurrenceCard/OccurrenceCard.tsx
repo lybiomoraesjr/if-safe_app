@@ -2,6 +2,7 @@ import React from "react";
 import { CaretRight, Warning } from "phosphor-react-native";
 import { Text } from "react-native";
 import {
+  AlertView,
   Container,
   Date,
   Info,
@@ -9,6 +10,7 @@ import {
   NotificationView,
   NotifierCount,
   OccurrenceImage,
+  TextStatus,
   Title,
 } from "./OccurrenceCard.styles";
 import { formattedDate } from "@/utils/dateUtils";
@@ -40,13 +42,15 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
       />
 
       <Info>
+        <NotificationView>
+          <AlertView>
+            <Warning size={20} color="#8D8D99" />
+            <NotifierCount>{alert}</NotifierCount>
+          </AlertView>
+          <TextStatus>{status}</TextStatus>
+        </NotificationView>
         <Title>{title}</Title>
         {/* <Date>Publicado em {displayDate}</Date> */}
-        <NotificationView>
-          <Warning size={16} color="#8D8D99" />
-          <NotifierCount>{alert}</NotifierCount>
-          <Text>{status}</Text>
-        </NotificationView>
       </Info>
 
       <InteractButton onPress={onInteract}>
