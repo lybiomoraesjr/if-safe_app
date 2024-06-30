@@ -70,29 +70,19 @@ const NewOccurrence: React.FC = () => {
   const handlePublish = async (data: NewOccurrenceFormData) => {
     try {
       setIsLoading(true);
-<<<<<<< HEAD
-      const token = await storageAuthTokenGet();
-=======
       await handleCreateOccurrence(data, photoUri);
->>>>>>> c460832dc00e6a6ff13bb077bda454cb8afd6dbe
 
       setOccurrenceUpdated(true);
 
       Alert.alert("Sucesso", "Ocorrência criada com sucesso");
 
-
       handleResetForm();
     } catch (error) {
-<<<<<<< HEAD
-      console.error(error);
-      setIsLoading(false);
-=======
       console.error("Erro ao criar ocorrência:", error);
       Alert.alert(
         "Erro",
         "Não foi possível criar a ocorrência. Por favor, tente novamente."
       );
->>>>>>> c460832dc00e6a6ff13bb077bda454cb8afd6dbe
     } finally {
       setIsLoading(false);
     }
@@ -187,13 +177,7 @@ const NewOccurrence: React.FC = () => {
           <Button
             title="Publicar"
             isLoading={isLoading}
-<<<<<<< HEAD
-            onPress={handleSubmit((data) =>
-              handleCreateOccurrence(data, photoUri)
-            )}
-=======
             onPress={handleSubmit(handlePublish)}
->>>>>>> c460832dc00e6a6ff13bb077bda454cb8afd6dbe
           />
         </ButtonsContainer>
       </InputContainer>

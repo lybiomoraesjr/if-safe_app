@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Container, Title } from "./Home.styles";
+import {
+  Container,
+  OccurenceContainer,
+  Title,
+  TitleContainer,
+} from "./Home.styles";
 import HomeHeader from "../../components/HomeHeader";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
@@ -88,35 +93,25 @@ const Home: React.FC = () => {
   return (
     <Container>
       <HomeHeader />
-
-      <View>
+      <OccurenceContainer>
         <FlatList
           data={occurrenceKeys.filter(
             (item) => user.admin || item !== "cancelled"
           )}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
-<<<<<<< HEAD
-            <OccurrenceCard
-              image={item.image}
-              notifiersNumber={item.likes}
-              status={item.status}
-              title={item.title}
-              date={item.date}
-              onInteract={() => handleNavigateToOccurrence(item._id)}
-=======
             <Status
               name={OccurrenceFilter[item]}
               variant={activeFilter === item ? "active" : "inactive"}
               onPress={() => setActiveFilter(item)}
->>>>>>> c460832dc00e6a6ff13bb077bda454cb8afd6dbe
             />
           )}
           horizontal
           showsHorizontalScrollIndicator={false}
         />
-
-        <Title>Ocorrências:</Title>
+        <TitleContainer>
+          <Title>Ocorrências:</Title>
+        </TitleContainer>
 
         {isLoading ? (
           <Loading />
@@ -150,7 +145,7 @@ const Home: React.FC = () => {
             }
           />
         )}
-      </View>
+      </OccurenceContainer>
     </Container>
   );
 };

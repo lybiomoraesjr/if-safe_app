@@ -142,17 +142,6 @@ const Occurrence: React.FC = () => {
                   title="Cancelar"
                   style={{ backgroundColor: COLORS.CANCELED }}
                 />
-<<<<<<< HEAD
-              </TouchableOpacity>
-              <Text>{occurrence.likes}</Text>
-            </AlertSection>
-            <CommentSection>
-              <ChatCircle size={ICON_SIZE} />
-              <Text>{occurrence.comments.length}</Text>
-            </CommentSection>
-          </OccurrenceIcons>
-=======
->>>>>>> c460832dc00e6a6ff13bb077bda454cb8afd6dbe
 
                 <Button title="Resolver" />
               </View>
