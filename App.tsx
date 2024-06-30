@@ -25,7 +25,7 @@ export default function App() {
       <PhotoContextProvider>
         <SafeAreaProvider>
           <StatusBar
-            barStyle="dark-content"
+            barStyle="light-content"
             backgroundColor="transparent"
             translucent
           />
