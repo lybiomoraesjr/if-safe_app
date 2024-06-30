@@ -41,7 +41,7 @@ const NewOccurrence: React.FC = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
-  const { handleCreateOccurrence } = useOccurrence();
+  const { handleCreateOccurrence, setOccurrenceUpdated } = useOccurrence();
 
   const { selectedPhoto, setSelectedPhoto } = usePhoto();
 
@@ -72,7 +72,10 @@ const NewOccurrence: React.FC = () => {
       setIsLoading(true);
       await handleCreateOccurrence(data, photoUri);
 
+      setOccurrenceUpdated(true);
+
       Alert.alert("Sucesso", "Ocorrência criada com sucesso");
+
 
       handleResetForm();
     } catch (error) {

@@ -26,6 +26,8 @@ const Home: React.FC = () => {
     fetchOccurrenceCards,
     occurrenceCards,
     setPositionOfTheOccurrenceInTheArray,
+    occurrenceUpdated,
+    setOccurrenceUpdated,
   } = useOccurrence();
 
   const handleNavigateToOccurrence = (id: string, index: number) => {
@@ -62,6 +64,11 @@ const Home: React.FC = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    fetchData();
+    setOccurrenceUpdated(false);
+  }, [occurrenceUpdated]);
 
   const handleRefresh = async () => {
     try {

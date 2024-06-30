@@ -21,6 +21,9 @@ export type OccurrenceContextDataProps = {
   setPositionOfTheOccurrenceInTheArray: (
     positionOfTheOccurrenceInTheArray: number
   ) => void;
+
+  occurrenceUpdated: boolean;
+  setOccurrenceUpdated: (occurrenceUpdated: boolean) => void;
 };
 
 export const OccurrenceContext = createContext<OccurrenceContextDataProps>(
@@ -40,6 +43,8 @@ export const OccurrenceContextProvider = ({
   const [occurrence, setOccurrence] = useState<OccurrenceDTO>(
     {} as OccurrenceDTO
   );
+
+  const [occurrenceUpdated, setOccurrenceUpdated] = useState<boolean>(false);
 
   const [
     positionOfTheOccurrenceInTheArray,
@@ -138,6 +143,8 @@ export const OccurrenceContextProvider = ({
         handleLikeOccurrence,
         positionOfTheOccurrenceInTheArray,
         setPositionOfTheOccurrenceInTheArray,
+        occurrenceUpdated,
+        setOccurrenceUpdated
       }}
     >
       {children}

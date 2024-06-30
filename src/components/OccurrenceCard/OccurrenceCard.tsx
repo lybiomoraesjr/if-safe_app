@@ -14,7 +14,7 @@ import {
 import { formattedDate } from "@/utils/dateUtils";
 
 interface OccurrenceCardProps {
-  image: string;
+  image: string | null;
   alert: number;
   status: string;
   title: string;
