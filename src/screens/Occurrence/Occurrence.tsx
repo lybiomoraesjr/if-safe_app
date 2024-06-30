@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import {
   AlertSection,
   Container,
+  HeaderTitle,
+  HeaderTitleContainer,
+  IconsSection,
+  Infos,
   OccurrenceImage,
+  OccurrenceInfos,
+  OccurrenceInfosContainer,
+  OcurreceMainInfos,
   Title,
 } from "./Occurrence.styles";
 import ScreenHeader from "@/components/ScreenHeader";
@@ -17,6 +24,7 @@ import Button from "@/components/Button";
 import { useTheme } from "styled-components";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { useAuth } from "@/hooks/useAuth";
+import HomeHeader from "@/components/HomeHeader";
 
 type RouteParamsProps = {
   occurrenceId: string;
@@ -99,41 +107,54 @@ const Occurrence: React.FC = () => {
 
   return (
     <ScrollView>
-      <ScreenHeader title="Ocorrência" showBackButton />
+      <HomeHeader />
 
       {isLoading ? (
         <Loading />
       ) : (
         <Container>
-          <View style={{ flexDirection: "row" }}>
+          <HeaderTitleContainer>
+            <HeaderTitle>Detalhes da Ocorrência:</HeaderTitle>
+          </HeaderTitleContainer>
+
+          <OccurrenceInfosContainer>
             <OccurrenceImage source={{ uri: occurrence.image }} />
+            <OccurrenceInfos>
+              <Infos>
+                <IconsSection>
+                  <AlertSection>
+                    <Warning size={ICON_SIZE} color={COLORS.GRAY_800} />
+                    <Text>{occurrence.likes} Alertas</Text>
+                  </AlertSection>
 
-            <View>
-              <AlertSection>
-                <Warning size={ICON_SIZE} color={COLORS.GRAY_800} />
-                <Text>{occurrence.likes}</Text>
+                  <ChatCircle size={ICON_SIZE} />
+                </IconsSection>
 
-                <ChatCircle size={ICON_SIZE} />
-              </AlertSection>
+                {/* <Text>{occurrence.date}</Text> */}
+                <View>
+                  <Text>{occurrence.status}</Text>
+                </View>
 
-              {/* <Text>{occurrence.date}</Text> */}
-
-              <Text>{occurrence.status}</Text>
-
-              <Text>{occurrence.location}</Text>
-
-              <Text>Por {occurrence.authorName}</Text>
+                <View>
+                  <Text>{occurrence.location}</Text>
+                </View>
+                <View>
+                  <Text>Por {occurrence.authorName}</Text>
+                </View>
+              </Infos>
               <Button
                 title="Alertar!"
                 onPress={handleLikeWithLoading}
                 isLoading={isLikeLoading}
                 style={{ backgroundColor: COLORS.CANCELED }}
               />
-            </View>
-          </View>
+            </OccurrenceInfos>
+          </OccurrenceInfosContainer>
 
-          <Title>{occurrence.title}</Title>
-          <Text>{occurrence.description}</Text>
+          <OcurreceMainInfos>
+            <Title>{occurrence.title}</Title>
+            <Text>{occurrence.description}</Text>
+          </OcurreceMainInfos>
 
           {user.admin ? (
             <>
