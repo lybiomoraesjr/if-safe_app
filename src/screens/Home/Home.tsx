@@ -125,6 +125,7 @@ const Home: React.FC = () => {
                 status={item.status}
                 title={item.title}
                 date={item.date}
+                commentsNumber={item.comments.length}
                 onInteract={() => handleNavigateToOccurrence(item._id, index)}
               />
             )}

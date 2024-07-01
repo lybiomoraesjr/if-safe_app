@@ -1,6 +1,6 @@
 import React from "react";
-import { CaretRight, Warning } from "phosphor-react-native";
-import { Text } from "react-native";
+import { CaretRight, ChatCircle, Warning } from "phosphor-react-native";
+import { Text, View } from "react-native";
 import {
   AlertView,
   Container,
@@ -21,6 +21,7 @@ interface OccurrenceCardProps {
   status: string;
   title: string;
   date: Date;
+  commentsNumber: number;
   onInteract: () => void;
 }
 
@@ -29,11 +30,12 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
   alert,
   status,
   title,
-
+  commentsNumber,
   onInteract,
 }) => {
   // const displayDate = formattedDate(date);
 
+  const ICON_SIZE = 20;
   return (
     <Container>
       <OccurrenceImage
@@ -44,11 +46,17 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
       <Info>
         <NotificationView>
           <AlertView>
-            <Warning size={20} color="#8D8D99" />
+            <Warning size={ICON_SIZE} color="#8D8D99" />
             <NotifierCount>{alert}</NotifierCount>
           </AlertView>
-          <TextStatus>{status}</TextStatus>
+          <View
+            style={{ flexDirection: "row", alignItems: "center", columnGap: 3 }}
+          >
+            <ChatCircle size={ICON_SIZE} color="#8D8D99" />
+            <NotifierCount>{commentsNumber}</NotifierCount>
+          </View>
         </NotificationView>
+        <TextStatus>{status}</TextStatus>
         <Title>{title}</Title>
         {/* <Date>Publicado em {displayDate}</Date> */}
       </Info>

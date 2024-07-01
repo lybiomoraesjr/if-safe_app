@@ -26,7 +26,7 @@ export const IconsSection = styled.View`
 `;
 export const AlertSection = styled.View`
   flex-direction: row;
-  column-gap: 1px;
+  column-gap: 3px;
   align-items: center;
 `;
 

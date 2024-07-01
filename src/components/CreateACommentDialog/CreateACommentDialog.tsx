@@ -31,7 +31,7 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { handleMakeAComment } = useOccurrence();
+  const { handleMakeAComment, setOccurrenceUpdated } = useOccurrence();
 
   const { COLORS } = useTheme();
 
@@ -56,7 +56,7 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
       await handleMakeAComment(occurrenceId, data.comment);
 
       Alert.alert("Comentário publicado com sucesso.");
-
+      setOccurrenceUpdated(true);
       handleResetForm();
       onClose();
     } catch (error) {

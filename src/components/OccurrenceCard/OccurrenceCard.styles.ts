@@ -29,7 +29,7 @@ export const AlertView = styled.View`
 export const NotificationView = styled.View`
   flex-direction: row;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 15px;
 `;
 
 export const NotifierCount = styled.Text`

@@ -185,6 +185,13 @@ const Occurrence: React.FC = () => {
     fetchData();
   }, [occurrenceId]);
 
+  
+
+  // useEffect(() => {
+  //   fetchData();
+  //   setOccurrenceUpdated(false);
+  // }, [occurrenceUpdated]);
+
   return (
     <ScrollView>
       <HomeHeader />
@@ -207,7 +214,7 @@ const Occurrence: React.FC = () => {
                     <Text>{occurrence.likes}</Text>
                   </AlertSection>
 
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View style={{ flexDirection: "row", alignItems: "center", columnGap: 3 }}>
                     <ChatCircle size={ICON_SIZE} />
                     <Text>{commentsNumber}</Text>
                   </View>
