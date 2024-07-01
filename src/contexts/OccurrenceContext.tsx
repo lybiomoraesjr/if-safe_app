@@ -80,7 +80,7 @@ export const OccurrenceContextProvider = ({
 
       setOccurrence(response.data);
 
-      setCommentsNumber(occurrence.comments.length);
+      setCommentsNumber(response.data.comments.length);
     } catch (error) {
       throw error;
     }
