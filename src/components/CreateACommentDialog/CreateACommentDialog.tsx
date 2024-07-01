@@ -31,9 +31,9 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { COLORS } = useTheme();
-
   const { handleMakeAComment } = useOccurrence();
+
+  const { COLORS } = useTheme();
 
   const {
     control,

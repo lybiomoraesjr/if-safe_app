@@ -46,6 +46,7 @@ const Occurrence: React.FC = () => {
     occurrenceCards,
     setOccurrenceCards,
     handleStatusChange,
+    commentsNumber,
   } = useOccurrence();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -208,7 +209,7 @@ const Occurrence: React.FC = () => {
 
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <ChatCircle size={ICON_SIZE} />
-                    <Text>{occurrence.comments.length}</Text>
+                    <Text>{commentsNumber}</Text>
                   </View>
                 </IconsSection>
 
