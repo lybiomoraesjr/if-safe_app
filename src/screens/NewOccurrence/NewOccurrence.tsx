@@ -22,6 +22,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "@/routes/app.routes";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { NewOccurrenceFormData } from "@/types";
+import { AppError } from "@/utils/AppError";
 
 const profileSchema = yup.object({
   title: yup.string().required("Informe o título"),
@@ -78,11 +79,13 @@ const NewOccurrence: React.FC = () => {
 
       handleResetForm();
     } catch (error) {
-      console.error("Erro ao criar ocorrência:", error);
-      Alert.alert(
-        "Erro",
-        "Não foi possível criar a ocorrência. Por favor, tente novamente."
-      );
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.data
+        : "Não foi possível criar a ocorrência. Tente novamente mais tarde";
+
+      Alert.alert(title);
     } finally {
       setIsLoading(false);
     }

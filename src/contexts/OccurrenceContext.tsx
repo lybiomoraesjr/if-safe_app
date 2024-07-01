@@ -4,6 +4,7 @@ import { api } from "@/services/api";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
 import { NewOccurrenceFormData, OccurrenceStatusEnum } from "@/types";
 import { createContext, ReactNode, useState } from "react";
+import { set } from "react-hook-form";
 
 export type OccurrenceContextDataProps = {
   fetchOccurrenceCards: () => Promise<void>;
@@ -27,6 +28,7 @@ export type OccurrenceContextDataProps = {
     userId: string,
     status: OccurrenceStatusEnum
   ) => Promise<void>;
+  handleMakeAComment: (occurrenceId: string, comment: string) => Promise<void>;
 };
 
 export const OccurrenceContext = createContext<OccurrenceContextDataProps>(
@@ -118,7 +120,7 @@ export const OccurrenceContextProvider = ({
     }
   };
 
-  const HandleMakeAComment = async (occurrenceId: string, comment: string) => {
+  const handleMakeAComment = async (occurrenceId: string, comment: string) => {
     try {
       const token = await storageAuthTokenGet();
 
@@ -140,11 +142,15 @@ export const OccurrenceContextProvider = ({
     try {
       const token = await storageAuthTokenGet();
 
-      await api.put(`/status/${userId}`, {status}, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
+      await api.put(
+        `/status/${userId}`,
+        { status },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
     } catch (error) {
       throw error;
     }
@@ -166,6 +172,7 @@ export const OccurrenceContextProvider = ({
         occurrenceUpdated,
         setOccurrenceUpdated,
         handleStatusChange,
+        handleMakeAComment,
       }}
     >
       {children}
