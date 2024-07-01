@@ -2,8 +2,8 @@ import { OccurrenceCardDTO } from "@/dtos/OccurrenceCardDTO";
 import { OccurrenceDTO } from "@/dtos/OccurrenceDTO";
 import { api } from "@/services/api";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
-import { NewOccurrenceFormData } from "@/types";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { NewOccurrenceFormData, OccurrenceStatusEnum } from "@/types";
+import { createContext, ReactNode, useState } from "react";
 
 export type OccurrenceContextDataProps = {
   fetchOccurrenceCards: () => Promise<void>;
@@ -21,9 +21,12 @@ export type OccurrenceContextDataProps = {
   setPositionOfTheOccurrenceInTheArray: (
     positionOfTheOccurrenceInTheArray: number
   ) => void;
-
   occurrenceUpdated: boolean;
   setOccurrenceUpdated: (occurrenceUpdated: boolean) => void;
+  handleStatusChange: (
+    userId: string,
+    status: OccurrenceStatusEnum
+  ) => Promise<void>;
 };
 
 export const OccurrenceContext = createContext<OccurrenceContextDataProps>(
@@ -130,6 +133,23 @@ export const OccurrenceContextProvider = ({
     }
   };
 
+  const handleStatusChange = async (
+    userId: string,
+    status: OccurrenceStatusEnum
+  ) => {
+    try {
+      const token = await storageAuthTokenGet();
+
+      await api.put(`/status/${userId}`, {status}, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
     <OccurrenceContext.Provider
       value={{
@@ -144,7 +164,8 @@ export const OccurrenceContextProvider = ({
         positionOfTheOccurrenceInTheArray,
         setPositionOfTheOccurrenceInTheArray,
         occurrenceUpdated,
-        setOccurrenceUpdated
+        setOccurrenceUpdated,
+        handleStatusChange,
       }}
     >
       {children}

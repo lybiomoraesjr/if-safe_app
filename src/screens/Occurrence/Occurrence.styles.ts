@@ -62,7 +62,7 @@ export const Infos = styled.View`
   justify-content: center;
   row-gap: 10px;
 `;
-export const OcurreceMainInfos = styled.View`
+export const OccurrenceMainInfos = styled.View`
   margin-bottom: 20px;
   padding-bottom: 30px;
   border-bottom-width: 1px;

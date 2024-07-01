@@ -9,10 +9,9 @@ import {
   OccurrenceImage,
   OccurrenceInfos,
   OccurrenceInfosContainer,
-  OcurreceMainInfos,
+  OccurrenceMainInfos,
   Title,
 } from "./Occurrence.styles";
-import ScreenHeader from "@/components/ScreenHeader";
 import { Alert, ScrollView, Text, View } from "react-native";
 import { ChatCircle, Warning } from "phosphor-react-native";
 
@@ -25,6 +24,7 @@ import { useTheme } from "styled-components";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { useAuth } from "@/hooks/useAuth";
 import HomeHeader from "@/components/HomeHeader";
+import { OccurrenceStatusEnum } from "@/types";
 
 type RouteParamsProps = {
   occurrenceId: string;
@@ -44,8 +44,12 @@ const Occurrence: React.FC = () => {
     positionOfTheOccurrenceInTheArray,
     occurrenceCards,
     setOccurrenceCards,
+    handleStatusChange,
   } = useOccurrence();
   const [isLoading, setIsLoading] = useState(true);
+
+  const [isCancelLoading, setIsCancelLoading] = useState(false);
+  const [isSolveLoading, setIsSolveLoading] = useState(false);
 
   const [isLikeLoading, setIsLikeLoading] = useState(false);
 
@@ -74,11 +78,83 @@ const Occurrence: React.FC = () => {
         likes: occurrence.likes + 1,
       });
     } catch (error) {
-      setIsLikeLoading(false);
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.data
+        : "Não foi possível alertar a ocorrência.";
 
-      console.log(error);
+      Alert.alert("Erro", title);
+      setIsLikeLoading(false);
     } finally {
       setIsLikeLoading(false);
+    }
+  };
+
+  const handleResolveOccurrence = async (status: OccurrenceStatusEnum) => {
+    try {
+      setIsSolveLoading(true);
+      await handleStatusChange(user.id, status);
+
+      setOccurrenceCards(
+        occurrenceCards.map((occurrenceCard, index) => {
+          if (index === positionOfTheOccurrenceInTheArray) {
+            return {
+              ...occurrenceCard,
+              status,
+            };
+          }
+
+          return occurrenceCard;
+        })
+      );
+      setOccurrence({
+        ...occurrence,
+        status,
+      });
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.data
+        : "Não foi possível resolver a ocorrência.";
+
+      Alert.alert("Erro", title);
+      setIsSolveLoading(false);
+    } finally {
+      setIsSolveLoading(false);
+    }
+  };
+
+  const handleCancelOccurrence = async (status: OccurrenceStatusEnum) => {
+    try {
+      setIsCancelLoading(true);
+      await handleStatusChange(user.id, status);
+
+      setOccurrenceCards(
+        occurrenceCards.map((occurrenceCard, index) => {
+          if (index === positionOfTheOccurrenceInTheArray) {
+            return {
+              ...occurrenceCard,
+              status,
+            };
+          }
+
+          return occurrenceCard;
+        })
+      );
+      setOccurrence({
+        ...occurrence,
+        status,
+      });
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.data
+        : "Não foi possível resolver a ocorrência.";
+
+      Alert.alert("Erro", title);
+      setIsCancelLoading(false);
+    } finally {
+      setIsCancelLoading(false);
     }
   };
 
@@ -89,7 +165,6 @@ const Occurrence: React.FC = () => {
           setIsLoading(true);
           await fetchOccurrence(occurrenceId);
         } catch (error) {
-          console.log(error);
           const isAppError = error instanceof AppError;
           const title = isAppError
             ? error.data
@@ -151,20 +226,32 @@ const Occurrence: React.FC = () => {
             </OccurrenceInfos>
           </OccurrenceInfosContainer>
 
-          <OcurreceMainInfos>
+          <OccurrenceMainInfos>
             <Title>{occurrence.title}</Title>
             <Text>{occurrence.description}</Text>
-          </OcurreceMainInfos>
+          </OccurrenceMainInfos>
 
           {user.admin ? (
             <>
               <View style={{ flexDirection: "row" }}>
                 <Button
                   title="Cancelar"
+                  onPress={() =>
+                    handleCancelOccurrence(OccurrenceStatusEnum.CANCELLED)
+                  }
                   style={{ backgroundColor: COLORS.CANCELED }}
+                  isLoading={isCancelLoading}
+                  disabled={isSolveLoading}
                 />
 
-                <Button title="Resolver" />
+                <Button
+                  title="Resolver"
+                  onPress={() =>
+                    handleResolveOccurrence(OccurrenceStatusEnum.SOLVED)
+                  }
+                  isLoading={isSolveLoading}
+                  disabled={isCancelLoading}
+                />
               </View>
             </>
           ) : (
