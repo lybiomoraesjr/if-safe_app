@@ -1,2 +1,3 @@
-testando
-Quero dormir
+yarn
+npx expo start
+expo go
