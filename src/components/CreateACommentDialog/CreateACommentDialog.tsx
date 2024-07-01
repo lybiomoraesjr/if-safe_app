@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { AppError } from "@/utils/AppError";
+import { useTheme } from "styled-components";
 
 type CreateACommentDialogProps = {
   isVisible: boolean;
@@ -30,6 +31,8 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
+  const { COLORS } = useTheme();
+
   const { handleMakeAComment } = useOccurrence();
 
   const {
@@ -51,6 +54,11 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
     try {
       setIsLoading(true);
       await handleMakeAComment(occurrenceId, data.comment);
+
+      Alert.alert("Comentário publicado com sucesso.");
+
+      handleResetForm();
+      onClose();
     } catch (error) {
       const isAppError = error instanceof AppError;
 
@@ -59,7 +67,7 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
         : "Ocorreu um erro ao tentar fazer o comentário.";
 
       Alert.alert(title);
-      
+
       setIsLoading(false);
     } finally {
       setIsLoading(false);
@@ -67,7 +75,8 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
   };
 
   return (
-    <Dialog isVisible={isVisible} onBackdropPress={() => onClose}>
+    <Dialog isVisible={isVisible} onBackdropPress={onClose}>
+      <Dialog.Title title="Depoimento: " />
       <Controller
         control={control}
         name="comment"
@@ -77,6 +86,8 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
             onChangeText={onChange}
             value={value}
             errorMessage={errors.comment?.message}
+            returnKeyType="send"
+            onSubmitEditing={handleSubmit(handleMakeACommentWithLoading)}
           />
         )}
       />
@@ -84,7 +95,11 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
       <View style={{ flexDirection: "row" }}>
         <Button
           title="Descartar"
-          onPress={handleResetForm}
+          style={{ marginRight: 8, backgroundColor: COLORS.CANCELED }}
+          onPress={() => {
+            handleResetForm();
+            onClose();
+          }}
           disabled={isLoading}
         />
 

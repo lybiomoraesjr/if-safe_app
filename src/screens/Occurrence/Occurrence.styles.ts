@@ -21,7 +21,7 @@ export const Title = styled.Text`
 
 export const IconsSection = styled.View`
   flex-direction: row;
-  justify-content: space-between;
+  column-gap: 15px;
   align-items: center;
 `;
 export const AlertSection = styled.View`

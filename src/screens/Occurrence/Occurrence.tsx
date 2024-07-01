@@ -25,6 +25,7 @@ import { useOccurrence } from "@/hooks/useOccurrence";
 import { useAuth } from "@/hooks/useAuth";
 import HomeHeader from "@/components/HomeHeader";
 import { OccurrenceStatusEnum } from "@/types";
+import CreateACommentDialog from "@/components/CreateACommentDialog";
 
 type RouteParamsProps = {
   occurrenceId: string;
@@ -47,6 +48,9 @@ const Occurrence: React.FC = () => {
     handleStatusChange,
   } = useOccurrence();
   const [isLoading, setIsLoading] = useState(true);
+
+  const [isCreateACommentDialogVisible, setIsCreateACommentDialogVisible] =
+    useState(false);
 
   const [isCancelLoading, setIsCancelLoading] = useState(false);
   const [isSolveLoading, setIsSolveLoading] = useState(false);
@@ -199,10 +203,13 @@ const Occurrence: React.FC = () => {
                 <IconsSection>
                   <AlertSection>
                     <Warning size={ICON_SIZE} color={COLORS.GRAY_800} />
-                    <Text>{occurrence.likes} Alertas</Text>
+                    <Text>{occurrence.likes}</Text>
                   </AlertSection>
 
-                  <ChatCircle size={ICON_SIZE} />
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <ChatCircle size={ICON_SIZE} />
+                    <Text>{occurrence.comments.length}</Text>
+                  </View>
                 </IconsSection>
 
                 {/* <Text>{occurrence.date}</Text> */}
@@ -255,8 +262,17 @@ const Occurrence: React.FC = () => {
               </View>
             </>
           ) : (
-            <Button title="Adicionar Depoimento" />
+            <Button
+              title="Adicionar Depoimento"
+              onPress={() => setIsCreateACommentDialogVisible(true)}
+            />
           )}
+
+          <CreateACommentDialog
+            occurrenceId={occurrenceId}
+            isVisible={isCreateACommentDialogVisible}
+            onClose={() => setIsCreateACommentDialogVisible(false)}
+          />
         </Container>
       )}
     </ScrollView>
