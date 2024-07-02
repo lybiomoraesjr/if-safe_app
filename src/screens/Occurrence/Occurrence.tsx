@@ -26,6 +26,7 @@ import { useAuth } from "@/hooks/useAuth";
 import HomeHeader from "@/components/HomeHeader";
 import { OccurrenceStatusEnum } from "@/types";
 import CreateACommentDialog from "@/components/CreateACommentDialog";
+import { formattedDate } from "@/utils/dateUtils";
 
 type RouteParamsProps = {
   occurrenceId: string;
@@ -187,6 +188,7 @@ const Occurrence: React.FC = () => {
     fetchData();
   }, [occurrenceId]);
 
+  const displayDate = formattedDate(occurrence.date);
   return (
     <ScrollView>
       <HomeHeader />
@@ -215,7 +217,7 @@ const Occurrence: React.FC = () => {
                   </View>
                 </IconsSection>
 
-                {/* <Text>{occurrence.date}</Text> */}
+                <Text>{displayDate}</Text>
                 <View>
                   <Text>{occurrence.status}</Text>
                 </View>
