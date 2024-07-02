@@ -11,6 +11,7 @@ export const Title = styled.Text`
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `;
 export const OccurrenceContainer = styled.View`
+  flex: 1;
   padding: 20px;
   background-color: ${({ theme }) => theme.COLORS.WHITE};
 `;

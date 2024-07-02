@@ -116,35 +116,35 @@ const Home: React.FC = () => {
         {isLoading ? (
           <Loading />
         ) : (
-          <FlatList
-            data={occurrenceCards}
-            renderItem={({ item, index }) => (
-              <OccurrenceCard
-                image={item.image}
-                alert={item.likes}
-                status={item.status}
-                title={item.title}
-                date={item.date}
-                commentsNumber={item.comments.length}
-                onInteract={() => handleNavigateToOccurrence(item._id, index)}
-              />
-            )}
-            ListEmptyComponent={() => (
-              <View>
-                <Text>Não há ocorrências disponíveis no momento.</Text>
-              </View>
-            )}
-            showsVerticalScrollIndicator={false}
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={handleRefresh}
-                colors={[COLORS.BRAND_LIGHT]}
-              />
-            }
-          />
+            <FlatList
+              data={occurrenceCards}
+              renderItem={({ item, index }) => (
+                <OccurrenceCard
+                  image={item.image}
+                  alert={item.likes}
+                  status={item.status}
+                  title={item.title}
+                  date={item.date}
+                  commentsNumber={item.comments.length}
+                  onInteract={() => handleNavigateToOccurrence(item._id, index)}
+                />
+              )}
+              ListEmptyComponent={() => (
+                <View>
+                  <Text>Não há ocorrências disponíveis no momento.</Text>
+                </View>
+              )}
+              showsVerticalScrollIndicator={false}
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={handleRefresh}
+                  colors={[COLORS.BRAND_LIGHT]}
+                />
+              }
+            />
         )}
       </OccurrenceContainer>
     </Container>
