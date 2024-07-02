@@ -141,21 +141,18 @@ export const OccurrenceContextProvider = ({
   };
 
   const handleStatusChange = async (
-    userId: string,
+    occurrenceId: string,
     status: OccurrenceStatusEnum
   ) => {
     try {
       const token = await storageAuthTokenGet();
 
-      await api.put(
-        `/status/${userId}`,
-        { status },
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
+      await api.put(`/posts/status/${occurrenceId}`, {
+        status,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
     } catch (error) {
       throw error;
     }

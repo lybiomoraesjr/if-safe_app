@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Container,
-  OccurenceContainer,
+  OccurrenceContainer,
   Title,
   TitleContainer,
 } from "./Home.styles";
@@ -93,7 +93,7 @@ const Home: React.FC = () => {
   return (
     <Container>
       <HomeHeader />
-      <OccurenceContainer>
+      <OccurrenceContainer>
         <FlatList
           data={occurrenceKeys.filter(
             (item) => user.admin || item !== "cancelled"
@@ -146,7 +146,7 @@ const Home: React.FC = () => {
             }
           />
         )}
-      </OccurenceContainer>
+      </OccurrenceContainer>
     </Container>
   );
 };

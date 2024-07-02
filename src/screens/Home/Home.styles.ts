@@ -10,7 +10,7 @@ export const Title = styled.Text`
   font-size: ${({ theme }) => theme.FONT_SIZE.XXL}px;
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `;
-export const OccurenceContainer = styled.View`
+export const OccurrenceContainer = styled.View`
   padding: 20px;
   background-color: ${({ theme }) => theme.COLORS.WHITE};
 `;

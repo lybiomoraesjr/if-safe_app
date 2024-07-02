@@ -98,7 +98,8 @@ const Occurrence: React.FC = () => {
   const handleResolveOccurrence = async (status: OccurrenceStatusEnum) => {
     try {
       setIsSolveLoading(true);
-      await handleStatusChange(user.id, status);
+
+      await handleStatusChange(occurrenceId, status);
 
       setOccurrenceCards(
         occurrenceCards.map((occurrenceCard, index) => {
@@ -132,7 +133,7 @@ const Occurrence: React.FC = () => {
   const handleCancelOccurrence = async (status: OccurrenceStatusEnum) => {
     try {
       setIsCancelLoading(true);
-      await handleStatusChange(user.id, status);
+      await handleStatusChange(occurrenceId, status);
 
       setOccurrenceCards(
         occurrenceCards.map((occurrenceCard, index) => {
@@ -151,6 +152,7 @@ const Occurrence: React.FC = () => {
         status,
       });
     } catch (error) {
+      
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.data
@@ -184,13 +186,6 @@ const Occurrence: React.FC = () => {
 
     fetchData();
   }, [occurrenceId]);
-
-  
-
-  // useEffect(() => {
-  //   fetchData();
-  //   setOccurrenceUpdated(false);
-  // }, [occurrenceUpdated]);
 
   return (
     <ScrollView>

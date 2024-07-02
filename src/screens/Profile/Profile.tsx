@@ -126,7 +126,11 @@ const Profile: React.FC = () => {
 
       Alert.alert("Sucesso", "Foto de perfil atualizada com sucesso");
     } catch (error) {
-      console.log(error);
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.data
+        : "Erro na atualização da foto de perfil";
+      Alert.alert(title);
     } finally {
       setPhotoIsLoading(false);
     }

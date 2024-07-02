@@ -30,10 +30,11 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
   alert,
   status,
   title,
+  date,
   commentsNumber,
   onInteract,
 }) => {
-  // const displayDate = formattedDate(date);
+  const displayDate = formattedDate(date);
 
   const ICON_SIZE = 20;
   return (
@@ -58,7 +59,7 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
         </NotificationView>
         <TextStatus>{status}</TextStatus>
         <Title>{title}</Title>
-        {/* <Date>Publicado em {displayDate}</Date> */}
+        <Date>Publicado em {displayDate}</Date>
       </Info>
 
       <InteractButton onPress={onInteract}>
