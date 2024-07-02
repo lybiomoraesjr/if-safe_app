@@ -25,7 +25,7 @@ import { useOccurrence } from "@/hooks/useOccurrence";
 import { useAuth } from "@/hooks/useAuth";
 import HomeHeader from "@/components/HomeHeader";
 import { OccurrenceStatusEnum } from "@/types";
-import CreateACommentDialog from "@/components/CreateACommentDialog";
+import CreateACommentDialog from "@/components/CommentDialog";
 import { formattedDate } from "@/utils/dateUtils";
 
 type RouteParamsProps = {
@@ -48,6 +48,8 @@ const Occurrence: React.FC = () => {
     setOccurrenceCards,
     handleStatusChange,
     commentsNumber,
+    handleMakeAComment,
+    setOccurrenceUpdated,
   } = useOccurrence();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -153,7 +155,6 @@ const Occurrence: React.FC = () => {
         status,
       });
     } catch (error) {
-      
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.data
@@ -211,7 +212,13 @@ const Occurrence: React.FC = () => {
                     <Text>{occurrence.likes}</Text>
                   </AlertSection>
 
-                  <View style={{ flexDirection: "row", alignItems: "center", columnGap: 3 }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      columnGap: 3,
+                    }}
+                  >
                     <ChatCircle size={ICON_SIZE} />
                     <Text>{commentsNumber}</Text>
                   </View>
@@ -277,6 +284,10 @@ const Occurrence: React.FC = () => {
             occurrenceId={occurrenceId}
             isVisible={isCreateACommentDialogVisible}
             onClose={() => setIsCreateACommentDialogVisible(false)}
+            onInteraction={async (comment) => {
+              await handleMakeAComment(occurrenceId, comment);
+              setOccurrenceUpdated(true);
+            }}
           />
         </Container>
       )}

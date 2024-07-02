@@ -6,14 +6,14 @@ import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
-import { useOccurrence } from "@/hooks/useOccurrence";
 import { AppError } from "@/utils/AppError";
 import { useTheme } from "styled-components";
 
-type CreateACommentDialogProps = {
+type CommentDialogProps = {
   isVisible: boolean;
   onClose: () => void;
   occurrenceId: string;
+  onInteraction: (comment: string) => Promise<void>;
 };
 
 type FormDataProps = {
@@ -24,14 +24,12 @@ const CreateACommentDialogSchema = yup.object({
   comment: yup.string().required("Digite um comentário."),
 });
 
-const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
+const CommentDialog: React.FC<CommentDialogProps> = ({
   isVisible,
   onClose,
-  occurrenceId,
+  onInteraction,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  const { handleMakeAComment, setOccurrenceUpdated } = useOccurrence();
 
   const { COLORS } = useTheme();
 
@@ -53,10 +51,9 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
   const handleMakeACommentWithLoading = async (data: FormDataProps) => {
     try {
       setIsLoading(true);
-      await handleMakeAComment(occurrenceId, data.comment);
+      await onInteraction(data.comment);
 
       Alert.alert("Comentário publicado com sucesso.");
-      setOccurrenceUpdated(true);
       handleResetForm();
       onClose();
     } catch (error) {
@@ -113,4 +110,4 @@ const CreateACommentDialog: React.FC<CreateACommentDialogProps> = ({
   );
 };
 
-export default CreateACommentDialog;
+export default CommentDialog;
