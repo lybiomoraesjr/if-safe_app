@@ -24,8 +24,9 @@ export type OccurrenceContextDataProps = {
   occurrenceUpdated: boolean;
   setOccurrenceUpdated: (occurrenceUpdated: boolean) => void;
   handleStatusChange: (
-    userId: string,
-    status: OccurrenceStatusEnum
+    occurrenceId: string,
+    status: OccurrenceStatusEnum,
+    comment: string
   ) => Promise<void>;
   handleMakeAComment: (occurrenceId: string, comment: string) => Promise<void>;
   commentsNumber: number;
@@ -62,13 +63,13 @@ export const OccurrenceContextProvider = ({
     try {
       const token = await storageAuthTokenGet();
 
-      const response = await api.get(`posts/`, {
+      const { data } = await api.get(`posts/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      setOccurrenceCards(response.data);
+      setOccurrenceCards(data.reverse());
     } catch (error) {
       throw error;
     }
@@ -76,11 +77,11 @@ export const OccurrenceContextProvider = ({
 
   const fetchOccurrence = async (occurrenceId: string) => {
     try {
-      const response = await api.get(`posts/${occurrenceId}`);
+      const { data } = await api.get(`posts/${occurrenceId}`);
 
-      setOccurrence(response.data);
+      setOccurrence(data);
 
-      setCommentsNumber(response.data.comments.length);
+      setCommentsNumber(data.comments.length);
     } catch (error) {
       throw error;
     }
@@ -142,13 +143,15 @@ export const OccurrenceContextProvider = ({
 
   const handleStatusChange = async (
     occurrenceId: string,
-    status: OccurrenceStatusEnum
+    status: OccurrenceStatusEnum,
+    comment: string
   ) => {
     try {
       const token = await storageAuthTokenGet();
 
       await api.put(`/posts/status/${occurrenceId}`, {
         status,
+        comment,
         headers: {
           Authorization: "Bearer " + token,
         },
