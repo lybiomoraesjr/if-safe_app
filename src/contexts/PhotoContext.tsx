@@ -1,7 +1,8 @@
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import * as ImageManipulator from "expo-image-manipulator";
 import { ChooseImageEnum } from "@/types/enums";
 import { PhotoInfo } from "@/types";
 
@@ -30,6 +31,15 @@ export const PhotoContextProvider = ({
     try {
       let result;
       if (source === ChooseImageEnum.OPEN_CAMERA) {
+        const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
+
+        if (!cameraStatus.granted) {
+          return Alert.alert(
+            "Erro",
+            "Precisamos de permissão para acessar a câmera"
+          );
+        }
+
         result = await ImagePicker.launchCameraAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
           quality: 1,
@@ -37,6 +47,16 @@ export const PhotoContextProvider = ({
           allowsEditing: true,
         });
       } else {
+        const libraryStatus =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (!libraryStatus.granted) {
+          return Alert.alert(
+            "Erro",
+            "Precisamos de permissão para acessar a galeria"
+          );
+        }
+
         result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
           quality: 1,
@@ -58,11 +78,26 @@ export const PhotoContextProvider = ({
 
         const fileExtension = uri.split(".").pop();
 
+        // const _rotate90andFlip = async () => {
+        //   const manipResult = await manipulateAsync(
+        //     image.localUri || image.uri,
+        //     [{ rotate: 90 }, { flip: FlipType.Vertical }],
+        //     { compress: 1, format: SaveFormat.PNG }
+        //   );
+        //   setImage(manipResult);
+        // };
+
         const base64Image = await FileSystem.readAsStringAsync(uri, {
           encoding: FileSystem.EncodingType.Base64,
         });
 
         const encodedUserPhoto = `data:image/${fileExtension};base64,${base64Image}`;
+
+        // const manipulatedImage = await ImageManipulator.manipulateAsync(
+        //   uri,
+        //   saveOptions: { base64: true, }
+
+        // );
 
         setSelectedPhoto({ uri: encodedUserPhoto, caller });
       }
