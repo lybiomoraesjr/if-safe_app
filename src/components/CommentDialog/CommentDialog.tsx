@@ -48,24 +48,16 @@ const CommentDialog: React.FC<CommentDialogProps> = ({
     });
   };
 
-  const handleMakeACommentWithLoading = async (data: FormDataProps) => {
+  const handleMakeACommentWithLoading = async ({ comment }: FormDataProps) => {
     try {
       setIsLoading(true);
-      await onInteraction(data.comment);
+      await onInteraction(comment);
 
-      Alert.alert("Comentário publicado com sucesso.");
       handleResetForm();
       onClose();
     } catch (error) {
-      const isAppError = error instanceof AppError;
-
-      const title = isAppError
-        ? error.data
-        : "Ocorreu um erro ao tentar fazer o comentário.";
-
-      Alert.alert(title);
-
       setIsLoading(false);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +65,7 @@ const CommentDialog: React.FC<CommentDialogProps> = ({
 
   return (
     <Dialog isVisible={isVisible} onBackdropPress={onClose}>
-      <Dialog.Title title="Depoimento: " />
+      <Dialog.Title title="Comentário: " />
       <Controller
         control={control}
         name="comment"

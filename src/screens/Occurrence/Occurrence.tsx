@@ -53,11 +53,15 @@ const Occurrence: React.FC = () => {
   } = useOccurrence();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [isCreateACommentDialogVisible, setIsCreateACommentDialogVisible] =
-    useState(false);
+  const [chosenFunction, setChosenFunction] = useState<ChooseFunctionEnum>(
+    {} as ChooseFunctionEnum
+  );
 
-  const [isCancelLoading, setIsCancelLoading] = useState(false);
-  const [isSolveLoading, setIsSolveLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [isStatusLoading, setIsStatusLoading] = useState<OccurrenceStatusEnum>(
+    {} as OccurrenceStatusEnum
+  );
 
   const [isLikeLoading, setIsLikeLoading] = useState(false);
 
@@ -98,47 +102,11 @@ const Occurrence: React.FC = () => {
     }
   };
 
-  const handleResolveOccurrence = async (status: OccurrenceStatusEnum, comment: string) => {
-    try {
-      setIsSolveLoading(true);
-
-      await handleStatusChange(occurrenceId, status, comment);
-
-      setOccurrenceCards(
-        occurrenceCards.map((occurrenceCard, index) => {
-          if (index === positionOfTheOccurrenceInTheArray) {
-            return {
-              ...occurrenceCard,
-              status,
-            };
-          }
-
-          return occurrenceCard;
-        })
-      );
-      setOccurrence({
-        ...occurrence,
-        status,
-      });
-    } catch (error) {
-      const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível resolver a ocorrência.";
-
-      Alert.alert("Erro", title);
-      setIsSolveLoading(false);
-    } finally {
-      setIsSolveLoading(false);
-    }
-  };
-
-  const handleCancelOccurrence = async (
+  const handleStatusChangeWithLoading = async (
     status: OccurrenceStatusEnum,
     comment: string
   ) => {
     try {
-      setIsCancelLoading(true);
       await handleStatusChange(occurrenceId, status, comment);
 
       setOccurrenceCards(
@@ -157,16 +125,37 @@ const Occurrence: React.FC = () => {
         ...occurrence,
         status,
       });
+
+      Alert.alert("Sucesso", "Status alterado com sucesso.");
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.data
-        : "Não foi possível resolver a ocorrência.";
+        : "Não foi possível alterar o status da ocorrência.";
 
       Alert.alert("Erro", title);
-      setIsCancelLoading(false);
+      setIsStatusLoading({} as OccurrenceStatusEnum);
     } finally {
-      setIsCancelLoading(false);
+      setIsStatusLoading({} as OccurrenceStatusEnum);
+    }
+  };
+
+  const handleMakeACommentWithLoading = async (comment: string) => {
+    try {
+      await handleMakeAComment(occurrenceId, comment);
+      Alert.alert("Sucesso", "Comentário feito com sucesso.");
+
+      setOccurrenceUpdated(true);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.data
+        : "Não foi possível comentar a ocorrência.";
+
+      Alert.alert("Erro", title);
+      setIsStatusLoading({} as OccurrenceStatusEnum);
+    } finally {
+      setIsStatusLoading({} as OccurrenceStatusEnum);
     }
   };
 
@@ -190,6 +179,7 @@ const Occurrence: React.FC = () => {
     };
 
     fetchData();
+    setOccurrenceUpdated(true);
   }, [occurrenceId]);
 
   const displayDate = formattedDate(occurrence.date);
@@ -201,18 +191,18 @@ const Occurrence: React.FC = () => {
   }
 
   const ChooseFunction = {
-    [ChooseFunctionEnum.HANDLE_COMMENT]: (params: {
-      occurrenceId: string;
-      comment: string;
-    }) => handleMakeAComment(params.occurrenceId, params.comment),
-    [ChooseFunctionEnum.HANDLE_CANCEL]: (params: {
-      comment: string;
-      status: OccurrenceStatusEnum;
-    }) => handleCancelOccurrence(params.status, params.comment),
-    [ChooseFunctionEnum.HANDLE_RESOLVE]: (params: {
-      comment: string;
-      status: OccurrenceStatusEnum;
-    }) => handleResolveOccurrence(params.status, params.comment),
+    [ChooseFunctionEnum.HANDLE_COMMENT]: (params: { comment: string }) =>
+      handleMakeACommentWithLoading(params.comment),
+    [ChooseFunctionEnum.HANDLE_CANCEL]: (params: { comment: string }) =>
+      handleStatusChangeWithLoading(
+        OccurrenceStatusEnum.CANCELLED,
+        params.comment
+      ),
+    [ChooseFunctionEnum.HANDLE_RESOLVE]: (params: { comment: string }) =>
+      handleStatusChangeWithLoading(
+        OccurrenceStatusEnum.SOLVED,
+        params.comment
+      ),
   };
 
   return (
@@ -265,6 +255,7 @@ const Occurrence: React.FC = () => {
                 title="Alertar!"
                 onPress={handleLikeWithLoading}
                 isLoading={isLikeLoading}
+                disabled={isLikeLoading}
                 style={{ backgroundColor: COLORS.CANCELED }}
               />
             </OccurrenceInfos>
@@ -280,38 +271,60 @@ const Occurrence: React.FC = () => {
               <View style={{ flexDirection: "row" }}>
                 <Button
                   title="Cancelar"
-                  onPress={() =>
-                    handleCancelOccurrence(OccurrenceStatusEnum.CANCELLED)
-                  }
+                  onPress={() => {
+                    setIsStatusLoading(OccurrenceStatusEnum.CANCELLED);
+                    setChosenFunction(ChooseFunctionEnum.HANDLE_CANCEL);
+                    setIsModalVisible(true);
+                  }}
                   style={{ backgroundColor: COLORS.CANCELED }}
-                  isLoading={isCancelLoading}
-                  disabled={isSolveLoading}
+                  isLoading={
+                    isStatusLoading === OccurrenceStatusEnum.CANCELLED &&
+                    isModalVisible
+                  }
+                  disabled={
+                    (isStatusLoading === OccurrenceStatusEnum.CANCELLED ||
+                      isStatusLoading === OccurrenceStatusEnum.SOLVED) &&
+                    isModalVisible
+                  }
                 />
 
                 <Button
                   title="Resolver"
-                  onPress={() =>
-                    handleResolveOccurrence(OccurrenceStatusEnum.SOLVED)
+                  onPress={() => {
+                    setIsStatusLoading(OccurrenceStatusEnum.SOLVED);
+                    setChosenFunction(ChooseFunctionEnum.HANDLE_RESOLVE);
+                    setIsModalVisible(true);
+                  }}
+                  isLoading={
+                    isStatusLoading === OccurrenceStatusEnum.SOLVED &&
+                    isModalVisible
                   }
-                  isLoading={isSolveLoading}
-                  disabled={isCancelLoading}
+                  disabled={
+                    (isStatusLoading === OccurrenceStatusEnum.SOLVED ||
+                      isStatusLoading === OccurrenceStatusEnum.CANCELLED) &&
+                    isModalVisible
+                  }
                 />
               </View>
             </>
           ) : (
             <Button
-              title="Adicionar Depoimento"
-              onPress={() => setIsCreateACommentDialogVisible(true)}
+              title="Comentar"
+              onPress={() => {
+                setChosenFunction(ChooseFunctionEnum.HANDLE_COMMENT);
+                setIsModalVisible(true);
+              }}
+              isLoading={isModalVisible}
+              disabled={isModalVisible}
             />
           )}
 
           <CreateACommentDialog
             occurrenceId={occurrenceId}
-            isVisible={isCreateACommentDialogVisible}
-            onClose={() => setIsCreateACommentDialogVisible(false)}
+            isVisible={isModalVisible}
+            onClose={() => setIsModalVisible(false)}
             onInteraction={async (comment) => {
-              await handleMakeAComment(occurrenceId, comment);
-              setOccurrenceUpdated(true);
+              await ChooseFunction[chosenFunction]({ comment });
             }}
           />
         </Container>

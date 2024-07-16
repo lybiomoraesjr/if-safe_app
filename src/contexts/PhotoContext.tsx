@@ -2,7 +2,6 @@ import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import * as ImageManipulator from "expo-image-manipulator";
 import { ChooseImageEnum } from "@/types/enums";
 import { PhotoInfo } from "@/types";
 

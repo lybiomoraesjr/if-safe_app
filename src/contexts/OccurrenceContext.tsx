@@ -63,13 +63,13 @@ export const OccurrenceContextProvider = ({
     try {
       const token = await storageAuthTokenGet();
 
-      const response = await api.get(`posts/`, {
+      const { data } = await api.get(`posts/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      setOccurrenceCards(response.data);
+      setOccurrenceCards(data.reverse());
     } catch (error) {
       throw error;
     }
@@ -77,11 +77,11 @@ export const OccurrenceContextProvider = ({
 
   const fetchOccurrence = async (occurrenceId: string) => {
     try {
-      const response = await api.get(`posts/${occurrenceId}`);
+      const { data } = await api.get(`posts/${occurrenceId}`);
 
-      setOccurrence(response.data);
+      setOccurrence(data);
 
-      setCommentsNumber(response.data.comments.length);
+      setCommentsNumber(data.comments.length);
     } catch (error) {
       throw error;
     }
