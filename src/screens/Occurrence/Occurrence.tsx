@@ -98,11 +98,11 @@ const Occurrence: React.FC = () => {
     }
   };
 
-  const handleResolveOccurrence = async (status: OccurrenceStatusEnum) => {
+  const handleResolveOccurrence = async (status: OccurrenceStatusEnum, comment: string) => {
     try {
       setIsSolveLoading(true);
 
-      await handleStatusChange(occurrenceId, status);
+      await handleStatusChange(occurrenceId, status, comment);
 
       setOccurrenceCards(
         occurrenceCards.map((occurrenceCard, index) => {
@@ -133,10 +133,13 @@ const Occurrence: React.FC = () => {
     }
   };
 
-  const handleCancelOccurrence = async (status: OccurrenceStatusEnum) => {
+  const handleCancelOccurrence = async (
+    status: OccurrenceStatusEnum,
+    comment: string
+  ) => {
     try {
       setIsCancelLoading(true);
-      await handleStatusChange(occurrenceId, status);
+      await handleStatusChange(occurrenceId, status, comment);
 
       setOccurrenceCards(
         occurrenceCards.map((occurrenceCard, index) => {
@@ -190,6 +193,28 @@ const Occurrence: React.FC = () => {
   }, [occurrenceId]);
 
   const displayDate = formattedDate(occurrence.date);
+
+  enum ChooseFunctionEnum {
+    HANDLE_COMMENT = "handleComment",
+    HANDLE_CANCEL = "handleCancel",
+    HANDLE_RESOLVE = "handleResolve",
+  }
+
+  const ChooseFunction = {
+    [ChooseFunctionEnum.HANDLE_COMMENT]: (params: {
+      occurrenceId: string;
+      comment: string;
+    }) => handleMakeAComment(params.occurrenceId, params.comment),
+    [ChooseFunctionEnum.HANDLE_CANCEL]: (params: {
+      comment: string;
+      status: OccurrenceStatusEnum;
+    }) => handleCancelOccurrence(params.status, params.comment),
+    [ChooseFunctionEnum.HANDLE_RESOLVE]: (params: {
+      comment: string;
+      status: OccurrenceStatusEnum;
+    }) => handleResolveOccurrence(params.status, params.comment),
+  };
+
   return (
     <ScrollView>
       <HomeHeader />

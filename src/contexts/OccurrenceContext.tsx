@@ -24,8 +24,9 @@ export type OccurrenceContextDataProps = {
   occurrenceUpdated: boolean;
   setOccurrenceUpdated: (occurrenceUpdated: boolean) => void;
   handleStatusChange: (
-    userId: string,
-    status: OccurrenceStatusEnum
+    occurrenceId: string,
+    status: OccurrenceStatusEnum,
+    comment: string
   ) => Promise<void>;
   handleMakeAComment: (occurrenceId: string, comment: string) => Promise<void>;
   commentsNumber: number;
@@ -142,13 +143,15 @@ export const OccurrenceContextProvider = ({
 
   const handleStatusChange = async (
     occurrenceId: string,
-    status: OccurrenceStatusEnum
+    status: OccurrenceStatusEnum,
+    comment: string
   ) => {
     try {
       const token = await storageAuthTokenGet();
 
       await api.put(`/posts/status/${occurrenceId}`, {
         status,
+        comment,
         headers: {
           Authorization: "Bearer " + token,
         },
