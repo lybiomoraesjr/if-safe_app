@@ -1,34 +1,30 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
 import { Container } from "./CommentCard.styles";
-import { DotsThree } from "phosphor-react-native";
-import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
-import UserPhoto from "../UserPhoto";
+import { formattedDate } from "@/utils/dateUtils";
+import { Divider } from "@rneui/themed";
 
 type CommentCardProps = {
-  avatar?: string;
   name: string;
   text: string;
+  date: Date;
 };
 
-const CommentCard: React.FC<CommentCardProps> = ({ avatar, name, text }) => {
+const CommentCard: React.FC<CommentCardProps> = ({ date, name, text }) => {
+  const displayDate = formattedDate(date);
   return (
     <Container>
-      <UserPhoto
-        size={54}
-        source={avatar ? { uri: avatar } : defaultUserPhotoImg}
-      />
-      <View style={{ flex: 1 }}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text>{name}</Text>
+      <Divider />
 
-          <TouchableOpacity>
-            <DotsThree size={16} />
-          </TouchableOpacity>
+      <View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text>Por {name}</Text>
+          <Text>{displayDate}</Text>
         </View>
 
         <Text>{text}</Text>
       </View>
+      <Divider />
     </Container>
   );
 };

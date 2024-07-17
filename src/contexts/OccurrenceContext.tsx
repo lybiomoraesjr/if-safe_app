@@ -81,6 +81,8 @@ export const OccurrenceContextProvider = ({
 
       setOccurrence(data);
 
+      console.log(data);
+
       setCommentsNumber(data.comments.length);
     } catch (error) {
       throw error;
@@ -151,7 +153,7 @@ export const OccurrenceContextProvider = ({
 
       await api.put(`/posts/status/${occurrenceId}`, {
         status,
-        comment,
+        statusComment: comment,
         headers: {
           Authorization: "Bearer " + token,
         },

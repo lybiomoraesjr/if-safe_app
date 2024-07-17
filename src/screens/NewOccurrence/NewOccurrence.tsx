@@ -23,6 +23,7 @@ import { AppNavigatorRoutesProps } from "@/routes/app.routes";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { NewOccurrenceFormData } from "@/types";
 import { AppError } from "@/utils/AppError";
+import ScreenHeader from "@/components/ScreenHeader";
 
 const profileSchema = yup.object({
   title: yup.string().required("Informe o título"),
@@ -99,9 +100,7 @@ const NewOccurrence: React.FC = () => {
 
   return (
     <Container>
-      <TitleContainer>
-        <TitleText>Nova Ocorrência:</TitleText>
-      </TitleContainer>
+     <ScreenHeader title="Nova ocorrência" />
       <InputContainer>
         <Controller
           control={control}

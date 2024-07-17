@@ -23,10 +23,12 @@ import Button from "@/components/Button";
 import { useTheme } from "styled-components";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { useAuth } from "@/hooks/useAuth";
-import HomeHeader from "@/components/HomeHeader";
 import { OccurrenceStatusEnum } from "@/types";
-import CreateACommentDialog from "@/components/CommentDialog";
+import CommentDialog from "@/components/CommentDialog";
 import { formattedDate } from "@/utils/dateUtils";
+import ScreenHeader from "@/components/ScreenHeader";
+import CommentsListDialog from "@/components/CommentListDialog";
+import CommentListDialog from "@/components/CommentListDialog";
 
 type RouteParamsProps = {
   occurrenceId: string;
@@ -57,7 +59,10 @@ const Occurrence: React.FC = () => {
     {} as ChooseFunctionEnum
   );
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
+
+  const [isCommentListModalVisible, setIsCommentListModalVisible] =
+    useState(false);
 
   const [isStatusLoading, setIsStatusLoading] = useState<OccurrenceStatusEnum>(
     {} as OccurrenceStatusEnum
@@ -207,16 +212,12 @@ const Occurrence: React.FC = () => {
 
   return (
     <ScrollView>
-      <HomeHeader />
+      <ScreenHeader title="Detalhes da Ocorrência" showBackButton />
 
       {isLoading ? (
         <Loading />
       ) : (
         <Container>
-          <HeaderTitleContainer>
-            <HeaderTitle>Detalhes da Ocorrência:</HeaderTitle>
-          </HeaderTitleContainer>
-
           <OccurrenceInfosContainer>
             <OccurrenceImage source={{ uri: occurrence.image }} />
             <OccurrenceInfos>
@@ -274,17 +275,17 @@ const Occurrence: React.FC = () => {
                   onPress={() => {
                     setIsStatusLoading(OccurrenceStatusEnum.CANCELLED);
                     setChosenFunction(ChooseFunctionEnum.HANDLE_CANCEL);
-                    setIsModalVisible(true);
+                    setIsCommentModalVisible(true);
                   }}
                   style={{ backgroundColor: COLORS.CANCELED }}
                   isLoading={
                     isStatusLoading === OccurrenceStatusEnum.CANCELLED &&
-                    isModalVisible
+                    isCommentModalVisible
                   }
                   disabled={
                     (isStatusLoading === OccurrenceStatusEnum.CANCELLED ||
                       isStatusLoading === OccurrenceStatusEnum.SOLVED) &&
-                    isModalVisible
+                    isCommentModalVisible
                   }
                 />
 
@@ -293,36 +294,52 @@ const Occurrence: React.FC = () => {
                   onPress={() => {
                     setIsStatusLoading(OccurrenceStatusEnum.SOLVED);
                     setChosenFunction(ChooseFunctionEnum.HANDLE_RESOLVE);
-                    setIsModalVisible(true);
+                    setIsCommentModalVisible(true);
                   }}
                   isLoading={
                     isStatusLoading === OccurrenceStatusEnum.SOLVED &&
-                    isModalVisible
+                    isCommentModalVisible
                   }
                   disabled={
                     (isStatusLoading === OccurrenceStatusEnum.SOLVED ||
                       isStatusLoading === OccurrenceStatusEnum.CANCELLED) &&
-                    isModalVisible
+                    isCommentModalVisible
                   }
                 />
               </View>
             </>
           ) : (
-            <Button
-              title="Comentar"
-              onPress={() => {
-                setChosenFunction(ChooseFunctionEnum.HANDLE_COMMENT);
-                setIsModalVisible(true);
-              }}
-              isLoading={isModalVisible}
-              disabled={isModalVisible}
-            />
+            <>
+              <Button
+                title="Comentar"
+                onPress={() => {
+                  setChosenFunction(ChooseFunctionEnum.HANDLE_COMMENT);
+                  setIsCommentModalVisible(true);
+                }}
+                isLoading={isCommentModalVisible}
+                disabled={isCommentModalVisible || isCommentListModalVisible}
+              />
+
+              <Button
+                title="Ver Comentários"
+                onPress={() => {
+                  setIsCommentListModalVisible(true);
+                }}
+                isLoading={isCommentListModalVisible}
+                disabled={isCommentModalVisible || isCommentListModalVisible}
+              />
+            </>
           )}
 
-          <CreateACommentDialog
+          <CommentListDialog
+            comments={occurrence.comments}
+            isVisible={isCommentListModalVisible}
+            onClose={() => setIsCommentListModalVisible(false)}
+          />
+          <CommentDialog
             occurrenceId={occurrenceId}
-            isVisible={isModalVisible}
-            onClose={() => setIsModalVisible(false)}
+            isVisible={isCommentModalVisible}
+            onClose={() => setIsCommentModalVisible(false)}
             onInteraction={async (comment) => {
               await ChooseFunction[chosenFunction]({ comment });
             }}

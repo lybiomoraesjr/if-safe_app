@@ -1,12 +1,11 @@
 import { Dialog } from "@rneui/themed";
 import Input from "../Input";
 import Button from "../Button";
-import { Alert, View } from "react-native";
+import { View } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
-import { AppError } from "@/utils/AppError";
 import { useTheme } from "styled-components";
 
 type CommentDialogProps = {
