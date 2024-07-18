@@ -1,15 +1,16 @@
-import React from "react";
-import { ImageProps } from "react-native";
-import { StyledImage } from "./UserPhoto.styles";
+import React, { ComponentProps } from "react";
+import { Image } from "@gluestack-ui/themed";
 
-type UserPhotoProps = ImageProps & {
-  size: number;
-};
+type UserPhotoProps = ComponentProps<typeof Image>
 
-const UserPhoto: React.FC<UserPhotoProps> = ({ size, style, ...rest }) => {
+const UserPhoto: React.FC<UserPhotoProps> = ({...rest}) => {
   return (
-    <StyledImage
-      style={[{ width: size, height: size, borderRadius: size / 2 }, style]}
+    <Image
+      rounded="$full"
+      borderWidth="$2"
+      borderColor="$gray400"
+      backgroundColor="$gray500"
+      alt="Foto do usuário"
       {...rest}
     />
   );

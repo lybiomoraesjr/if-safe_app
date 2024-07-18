@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native";
 
@@ -11,6 +11,7 @@ import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 import { SignOut } from "phosphor-react-native";
 import { useTheme } from "styled-components";
 import UserPhoto from "../UserPhoto";
+import ConfirmationDialog from "../ConfirmationDialog";
 
 const HomeHeader: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -21,6 +22,8 @@ const HomeHeader: React.FC = () => {
   const paddingTop = insets.top + 32;
 
   const firstName = user.name.split(" ")[0];
+
+  const [isVisible, setIsVisible] = useState(false);
 
   return (
     <LinearGradient
@@ -35,10 +38,16 @@ const HomeHeader: React.FC = () => {
           <Message>Olá,</Message>
           <Name>{firstName}</Name>
         </Greeting>
-        <TouchableOpacity onPress={signOut}>
+        <TouchableOpacity onPress={() => setIsVisible(true)}>
           <SignOut size={32} color={COLORS.WHITE} />
         </TouchableOpacity>
       </Container>
+
+      <ConfirmationDialog
+        isVisible={isVisible}
+        onClose={() => setIsVisible(false)}
+        onConfirm={signOut}
+      />
     </LinearGradient>
   );
 };

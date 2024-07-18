@@ -1,8 +1,6 @@
 import React from "react";
-import { Text, View } from "react-native";
-import { Container } from "./CommentCard.styles";
 import { formattedDate } from "@/utils/dateUtils";
-import { Divider } from "@rneui/themed";
+import { Box, HStack, Text, VStack } from "@gluestack-ui/themed";
 
 type CommentCardProps = {
   name: string;
@@ -13,19 +11,46 @@ type CommentCardProps = {
 const CommentCard: React.FC<CommentCardProps> = ({ date, name, text }) => {
   const displayDate = formattedDate(date);
   return (
-    <Container>
-      <Divider />
+    <Box
+      borderBottomWidth="$1"
+      borderColor="$trueGray800"
+      $dark-borderColor="$trueGray100"
+      $base-pl={0}
+      $base-pr={0}
+      $sm-pl="$4"
+      $sm-pr="$5"
+      py="$2"
+    >
+      <VStack>
+        <HStack justifyContent="space-between">
+          <Text
+            fontSize="$xs"
+            color="$coolGray800"
+            alignSelf="flex-start"
+            $dark-color="$warmGray100"
+          >
+            Por {name}
+          </Text>
+          <Text
+            fontSize="$xs"
+            color="$coolGray800"
+            alignSelf="flex-start"
+            $dark-color="$warmGray100"
+          >
+            {displayDate}
+          </Text>
+        </HStack>
 
-      <View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text>Por {name}</Text>
-          <Text>{displayDate}</Text>
-        </View>
-
-        <Text>{text}</Text>
-      </View>
-      <Divider />
-    </Container>
+        <Text
+          fontSize="$xs"
+          color="$coolGray800"
+          alignSelf="flex-start"
+          $dark-color="$warmGray100"
+        >
+          {text}
+        </Text>
+      </VStack>
+    </Box>
   );
 };
 

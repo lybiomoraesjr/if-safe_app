@@ -10,13 +10,15 @@ import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
 import { Alert, FlatList, RefreshControl, Text, View } from "react-native";
 import { OccurrenceStatusEnum } from "@/types";
-import Status from "../../components/Status";
+import Status from "../../components/StatusButton";
 import OccurrenceCard from "@/components/OccurrenceCard";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/hooks/useAuth";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { AppError } from "@/utils/AppError";
 import { useTheme } from "styled-components";
+import { Heading, HStack, VStack } from "@gluestack-ui/themed";
+import StatusButton from "../../components/StatusButton";
 
 const Home: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
@@ -91,63 +93,70 @@ const Home: React.FC = () => {
   };
 
   return (
-    <Container>
+    <VStack flex={1} backgroundColor="$white">
       <HomeHeader />
-      <OccurrenceContainer>
-        <FlatList
-          data={occurrenceKeys.filter(
-            (item) => user.admin || item !== "cancelled"
-          )}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => (
-            <Status
-              name={OccurrenceFilter[item]}
-              variant={activeFilter === item ? "active" : "inactive"}
-              onPress={() => setActiveFilter(item)}
-            />
-          )}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        />
-        <TitleContainer>
-          <Title>Ocorrências:</Title>
-        </TitleContainer>
 
+      <FlatList
+        data={occurrenceKeys.filter(
+          (item) => user.admin || item !== "cancelled"
+        )}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <StatusButton
+            name={OccurrenceFilter[item]}
+            isActive={activeFilter === item}
+            onPress={() => setActiveFilter(item)}
+          />
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 32 }}
+        style={{ marginVertical: 40, maxHeight: 44, minHeight: 44 }}
+      />
+
+      <HStack justifyContent="space-between" mb="$5" alignItems="center">
+        <Heading color="$secondary200" fontSize="$md" fontFamily="$heading">
+          Ocorrências:
+        </Heading>
+      </HStack>
+
+      <VStack px="$8" flex={1}>
         {isLoading ? (
           <Loading />
         ) : (
-            <FlatList
-              data={occurrenceCards}
-              renderItem={({ item, index }) => (
-                <OccurrenceCard
-                  image={item.image}
-                  alert={item.likes}
-                  status={item.status}
-                  title={item.title}
-                  date={item.date}
-                  commentsNumber={item.comments.length}
-                  onInteract={() => handleNavigateToOccurrence(item._id, index)}
-                />
-              )}
-              ListEmptyComponent={() => (
-                <View>
-                  <Text>Não há ocorrências disponíveis no momento.</Text>
-                </View>
-              )}
-              showsVerticalScrollIndicator={false}
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={handleRefresh}
-                  colors={[COLORS.BRAND_LIGHT]}
-                />
-              }
-            />
+          <FlatList
+            data={occurrenceCards}
+            renderItem={({ item, index }) => (
+              <OccurrenceCard
+                image={item.image}
+                alert={item.likes}
+                status={item.status}
+                title={item.title}
+                date={item.date}
+                commentsNumber={item.comments.length}
+                onInteract={() => handleNavigateToOccurrence(item._id, index)}
+              />
+            )}
+            ListEmptyComponent={() => (
+              <View>
+                <Text>Não há ocorrências disponíveis no momento.</Text>
+              </View>
+            )}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+                colors={[COLORS.BRAND_LIGHT]}
+              />
+            }
+          />
         )}
-      </OccurrenceContainer>
-    </Container>
+      </VStack>
+    </VStack>
   );
 };
 

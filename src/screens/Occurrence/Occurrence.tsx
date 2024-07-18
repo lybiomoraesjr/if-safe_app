@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   AlertSection,
   Container,
-  HeaderTitle,
-  HeaderTitleContainer,
   IconsSection,
   Infos,
   OccurrenceImage,
@@ -24,11 +22,12 @@ import { useTheme } from "styled-components";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { useAuth } from "@/hooks/useAuth";
 import { OccurrenceStatusEnum } from "@/types";
-import CommentDialog from "@/components/CommentDialog";
+import CommentDialog from "@/components/CommentModal";
 import { formattedDate } from "@/utils/dateUtils";
 import ScreenHeader from "@/components/ScreenHeader";
-import CommentsListDialog from "@/components/CommentListDialog";
-import CommentListDialog from "@/components/CommentListDialog";
+import CommentListModal from "@/components/CommentListModal";
+import CommentModal from "@/components/CommentModal";
+import IconWithTooltip from "@/components/IconWithTooltip/IconWithTooltip";
 
 type RouteParamsProps = {
   occurrenceId: string;
@@ -331,15 +330,15 @@ const Occurrence: React.FC = () => {
             </>
           )}
 
-          <CommentListDialog
+          <CommentListModal
             comments={occurrence.comments}
-            isVisible={isCommentListModalVisible}
-            onClose={() => setIsCommentListModalVisible(false)}
+            showModal={isCommentListModalVisible}
+            closeModal={() => setIsCommentListModalVisible(false)}
           />
-          <CommentDialog
+          <CommentModal
             occurrenceId={occurrenceId}
-            isVisible={isCommentModalVisible}
-            onClose={() => setIsCommentModalVisible(false)}
+            showModal={isCommentModalVisible}
+            closeModal={() => setIsCommentModalVisible(false)}
             onInteraction={async (comment) => {
               await ChooseFunction[chosenFunction]({ comment });
             }}

@@ -14,6 +14,9 @@ import { Routes } from "./src/routes";
 import { AuthContextProvider } from "./src/contexts/AuthContext";
 import { PhotoContextProvider } from "@/contexts/PhotoContext";
 
+import { GluestackUIProvider} from "@gluestack-ui/themed";
+import { config } from "./config/gluestack-ui.config"
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
@@ -22,18 +25,20 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <PhotoContextProvider>
-        <SafeAreaProvider>
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="transparent"
-            translucent
-          />
-          <AuthContextProvider>
-            {fontsLoaded ? <Routes /> : <Loading />}
-          </AuthContextProvider>
-        </SafeAreaProvider>
-      </PhotoContextProvider>
+      <GluestackUIProvider config={config}>
+        <PhotoContextProvider>
+          <SafeAreaProvider>
+            <StatusBar
+              barStyle="light-content"
+              backgroundColor="transparent"
+              translucent
+            />
+            <AuthContextProvider>
+              {fontsLoaded ? <Routes /> : <Loading />}
+            </AuthContextProvider>
+          </SafeAreaProvider>
+        </PhotoContextProvider>
+      </GluestackUIProvider>
     </ThemeProvider>
   );
 }

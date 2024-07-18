@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -15,8 +20,12 @@ import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 import UserPhoto from "@/components/UserPhoto";
 import PhotoPickerModal from "@/components/PhotoPickerModal";
 import { usePhoto } from "@/hooks/usePhoto";
-import { Skeleton } from "@rneui/base";
-import { Container } from "./Profile.styles";
+
+import ContentLoader, { Circle, Rect } from "react-content-loader/native";
+
+import { Center, ScrollView, useToast, VStack } from "@gluestack-ui/themed";
+import ToastMessage from "@/components/ToastMessage";
+import { Skeleton } from "@rneui/themed";
 
 type FormDataProps = {
   name: string;
@@ -40,14 +49,12 @@ const profileSchema = yup.object({
     .oneOf([yup.ref("password"), null], "A confirmação de senha não confere."),
 });
 
-
-
 const Profile: React.FC = () => {
   const CALLER = "profile";
 
-  const PHOTO_SIZE = 100;
-
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
+
+  const toast = useToast();
 
   const [isUpdating, setIsUpdating] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -94,11 +101,36 @@ const Profile: React.FC = () => {
 
       await updateUserProfile({ ...user, name: data.name });
 
-      Alert.alert("Sucesso", "Perfil atualizado com sucesso");
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Sucesso"
+            description="Perfil atualizado com sucesso."
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError ? error.data : "Erro na atualização do perfil";
       Alert.alert(title);
+
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Sucesso"
+            description={
+              isAppError ? error.data : "Erro na atualização do perfil"
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } finally {
       setIsUpdating(false);
     }
@@ -126,29 +158,59 @@ const Profile: React.FC = () => {
 
       setSelectedPhoto({ uri: "", caller: "" });
 
-      Alert.alert("Sucesso", "Foto de perfil atualizada com sucesso");
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Sucesso"
+            description="Foto de perfil atualizada com sucesso."
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Erro na atualização da foto de perfil";
-      Alert.alert(title);
+
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Sucesso"
+            description={
+              isAppError ? error.data : "Erro na atualização da foto de perfil"
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } finally {
       setPhotoIsLoading(false);
     }
   };
 
   return (
-    <Container>
+    <VStack flex={1}>
       <ScreenHeader title="Perfil" />
-      <ScrollView style={{ paddingHorizontal: 20, marginTop: 15 }}>
-        <View style={{ alignItems: "center", marginBottom: 20 }}>
+
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 36 }}
+        backgroundColor="$white"
+      >
+        <Center mt="$6" px="$10">
           {photoIsLoading ? (
-            <Skeleton width={PHOTO_SIZE} height={PHOTO_SIZE} circle />
+            <Skeleton
+              width={100}
+              height={100}
+              style={{ borderRadius: 50 }}
+            />
           ) : (
             <UserPhoto
-              size={PHOTO_SIZE}
               source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
+              alt="Foto de perfil"
+              size="xl"
             />
           )}
 
@@ -166,96 +228,96 @@ const Profile: React.FC = () => {
               Alterar foto
             </Text>
           </TouchableOpacity>
-        </View>
 
-        <Controller
-          control={control}
-          name="name"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              placeholder="Nome"
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.name?.message}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="email"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              placeholder="E-mail"
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.email?.message}
-              editable={false}
-              autoCapitalize="none"
-            />
-          )}
-        />
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Nome"
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.name?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="E-mail"
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.email?.message}
+                editable={false}
+                autoCapitalize="none"
+              />
+            )}
+          />
 
-        <Text
-          style={{
-            marginTop: 15,
-            marginBottom: 5,
-            fontFamily: FONT_FAMILY.BOLD,
-            fontSize: FONT_SIZE.SM,
-          }}
-        >
-          Alterar senha
-        </Text>
-        <Controller
-          control={control}
-          name="old_password"
-          render={({ field: { onChange } }) => (
-            <Input
-              placeholder="Senha atual"
-              onChangeText={onChange}
-              errorMessage={errors.old_password?.message}
-              secureTextEntry
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
-          render={({ field: { onChange } }) => (
-            <Input
-              placeholder="Nova senha"
-              onChangeText={onChange}
-              errorMessage={errors.password?.message}
-              secureTextEntry
-            />
-          )}
-        />
+          <Text
+            style={{
+              marginTop: 15,
+              marginBottom: 5,
+              fontFamily: FONT_FAMILY.BOLD,
+              fontSize: FONT_SIZE.SM,
+            }}
+          >
+            Alterar senha
+          </Text>
+          <Controller
+            control={control}
+            name="old_password"
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder="Senha atual"
+                onChangeText={onChange}
+                errorMessage={errors.old_password?.message}
+                secureTextEntry
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder="Nova senha"
+                onChangeText={onChange}
+                errorMessage={errors.password?.message}
+                secureTextEntry
+              />
+            )}
+          />
 
-        <Controller
-          control={control}
-          name="confirm_password"
-          render={({ field: { onChange } }) => (
-            <Input
-              placeholder="Confirme a nova senha"
-              onChangeText={onChange}
-              errorMessage={errors.confirm_password?.message}
-              secureTextEntry
-            />
-          )}
-        />
+          <Controller
+            control={control}
+            name="confirm_password"
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder="Confirme a nova senha"
+                onChangeText={onChange}
+                errorMessage={errors.confirm_password?.message}
+                secureTextEntry
+              />
+            )}
+          />
 
-        <Button
-          title="Atualizar"
-          onPress={handleSubmit(handleProfileUpdate)}
-          isLoading={isUpdating}
-          style={{ marginTop: 10 }}
-        />
+          <Button
+            title="Atualizar"
+            onPress={handleSubmit(handleProfileUpdate)}
+            isLoading={isUpdating}
+            style={{ marginTop: 10 }}
+          />
+        </Center>
       </ScrollView>
       <PhotoPickerModal
-        isVisible={isModalVisible}
+        showModal={isModalVisible}
         caller={CALLER}
-        onClose={() => setModalVisible(false)}
+        closeModal={() => setModalVisible(false)}
       />
-    </Container>
+    </VStack>
   );
 };
 

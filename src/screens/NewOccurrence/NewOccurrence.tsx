@@ -1,12 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-  ButtonsContainer,
-  Container,
-  InputContainer,
-  PhotoContainer,
-  TitleContainer,
-  TitleText,
-} from "./NewOccurrence.styles";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -24,6 +16,7 @@ import { useOccurrence } from "@/hooks/useOccurrence";
 import { NewOccurrenceFormData } from "@/types";
 import { AppError } from "@/utils/AppError";
 import ScreenHeader from "@/components/ScreenHeader";
+import { Center, ScrollView, VStack } from "@gluestack-ui/themed";
 
 const profileSchema = yup.object({
   title: yup.string().required("Informe o título"),
@@ -99,97 +92,99 @@ const NewOccurrence: React.FC = () => {
   }, [selectedPhoto.uri]);
 
   return (
-    <Container>
-     <ScreenHeader title="Nova ocorrência" />
-      <InputContainer>
-        <Controller
-          control={control}
-          name="title"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              placeholder="Título"
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.title?.message}
-            />
-          )}
-        />
+    <VStack flex={1} backgroundColor="$white">
+      <ScreenHeader title="Nova ocorrência" />
 
-        <Controller
-          control={control}
-          name="location"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              placeholder="Localização"
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.location?.message}
+      <ScrollView>
+        <VStack flex={1} px="$10" pb="$16">
+          <Center gap="$2" flex={1}>
+            <Controller
+              control={control}
+              name="title"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Título"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.title?.message}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          control={control}
-          name="description"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              placeholder="Descrição"
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.description?.message}
-            />
-          )}
-        />
-        <PhotoContainer>
-          {photoUri ? (
-            <OccurrencePhoto size={PHOTO_SIZE} source={{ uri: photoUri }} />
-          ) : (
-            <Skeleton
-              animation="none"
-              width={PHOTO_SIZE}
-              height={PHOTO_SIZE}
-              style={{ borderRadius: 10 }}
-            />
-          )}
-        </PhotoContainer>
 
-        <View style={{ alignItems: "center", marginBottom: 12 }}>
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={{ marginTop: 2 }}
-          >
-            <Text
-              style={{
-                color: COLORS.BRAND_MID,
-                fontFamily: FONT_FAMILY.BOLD,
-                fontSize: FONT_SIZE.SM,
-              }}
-            >
-              Escolher foto
-            </Text>
-          </TouchableOpacity>
-        </View>
+            <Controller
+              control={control}
+              name="location"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Localização"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.location?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="description"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Descrição"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.description?.message}
+                />
+              )}
+            />
 
-        <ButtonsContainer>
-          <Button
-            title="Descartar"
-            onPress={handleResetForm}
-            style={{ backgroundColor: COLORS.CANCELED }}
-            disabled={isLoading}
-          />
+            {photoUri ? (
+              <OccurrencePhoto size={PHOTO_SIZE} source={{ uri: photoUri }} />
+            ) : (
+              <Skeleton
+                animation="none"
+                width={PHOTO_SIZE}
+                height={PHOTO_SIZE}
+                style={{ borderRadius: 10 }}
+              />
+            )}
+
+            <View style={{ alignItems: "center", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(true)}
+                style={{ marginTop: 2 }}
+              >
+                <Text
+                  style={{
+                    color: COLORS.BRAND_MID,
+                    fontFamily: FONT_FAMILY.BOLD,
+                    fontSize: FONT_SIZE.SM,
+                  }}
+                >
+                  Escolher foto
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <Button
+              title="Descartar"
+              onPress={handleResetForm}
+              style={{ backgroundColor: COLORS.CANCELED }}
+              disabled={isLoading}
+            />
+          </Center>
           <Button
             title="Publicar"
             isLoading={isLoading}
             onPress={handleSubmit(handlePublish)}
           />
-        </ButtonsContainer>
-      </InputContainer>
+        </VStack>
+      </ScrollView>
 
       <PhotoPickerModal
-        isVisible={isModalVisible}
+        showModal={isModalVisible}
         caller={CALLER}
-        onClose={() => setModalVisible(false)}
+        closeModal={() => setModalVisible(false)}
       />
-    </Container>
+    </VStack>
   );
 };
 

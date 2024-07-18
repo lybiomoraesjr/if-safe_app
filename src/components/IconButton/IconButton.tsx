@@ -1,31 +1,24 @@
 import { IconProps } from "phosphor-react-native";
-import React from "react";
-import { TouchableOpacityProps } from "react-native";
-import { Container } from "./IconButton.styles";
+import React, { ComponentProps } from "react";
 import Loading from "../Loading";
+import { Button, ButtonIcon } from "@gluestack-ui/themed";
 
-interface IconButtonProps extends TouchableOpacityProps {
+type IconButtonProps = ComponentProps<typeof ButtonIcon> & {
   icon: React.FC<IconProps>;
   isLoading?: boolean;
-  iconColor?: string;
-  iconSize?: number;
-}
+  onPress?: () => Promise<void> | void;
+};
 
 const IconButton: React.FC<IconButtonProps> = ({
-  icon: Icon,
+  icon,
   isLoading,
-  iconColor,
-  iconSize,
+  onPress,
   ...rest
 }) => {
   return (
-    <Container {...rest}>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <Icon size={iconSize} weight="fill" color={iconColor} />
-      )}
-    </Container>
+    <Button onPress={onPress} bgColor="$green700">
+      {isLoading ? <Loading /> : <ButtonIcon as={icon} size="2xs" {...rest} />}
+    </Button>
   );
 };
 
