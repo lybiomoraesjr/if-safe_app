@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { ArrowLeft } from "phosphor-react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Box, Button, Center, Heading, HStack } from "@gluestack-ui/themed";
+import { Button, Center, Heading } from "@gluestack-ui/themed";
 import { ButtonIcon } from "@gluestack-ui/themed";
 
 type ScreenHeaderProps = {
