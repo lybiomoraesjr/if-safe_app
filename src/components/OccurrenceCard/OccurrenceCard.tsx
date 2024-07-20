@@ -1,22 +1,23 @@
 import React from "react";
 import { CaretRight, ChatCircle, Warning } from "phosphor-react-native";
-import { Text, View } from "react-native";
-import {
-  AlertView,
-  Container,
-  Date,
-  Info,
-  InteractButton,
-  NotificationView,
-  NotifierCount,
-  OccurrenceImage,
-  TextStatus,
-  Title,
-} from "./OccurrenceCard.styles";
-import { formattedDate } from "@/utils/dateUtils";
+import { TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 
-interface OccurrenceCardProps {
-  image: string | null;
+import { formattedDate } from "@/utils/dateUtils";
+import {
+  Badge,
+  BadgeText,
+  Box,
+  Center,
+  Heading,
+  HStack,
+  Image,
+  Text,
+  VStack,
+} from "@gluestack-ui/themed";
+import { Icon } from "@gluestack-ui/themed";
+
+interface OccurrenceCardProps extends TouchableOpacityProps {
+  image: string;
   alert: number;
   status: string;
   title: string;
@@ -33,39 +34,61 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
   date,
   commentsNumber,
   onInteract,
+  ...rest
 }) => {
   const displayDate = formattedDate(date);
 
   const ICON_SIZE = 20;
   return (
-    <Container>
-      <OccurrenceImage
-        source={{ uri: image }}
-        placeholder="L184i9ofbHof00ayjsay~qj[ayj@"
-      />
+    <TouchableOpacity onPress={onInteract} {...rest}>
+      <HStack
+        bg="$secondary50"
+        alignItems="center"
+        p="$2"
+        pr="$4"
+        rounded="$md"
+        mb="$3"
+      >
+        <Image
+          source={{ uri: image }}
+          alt="Imagem da ocorrência"
+          size="xl"
+          borderRadius={8}
+          mr="$2"
+        />
+        <VStack flex={1} gap="$2">
+          <Heading fontSize="$lg" color="$black">
+            {title}
+          </Heading>
 
-      <Info>
-        <NotificationView>
-          <AlertView>
-            <Warning size={ICON_SIZE} color="#8D8D99" />
-            <NotifierCount>{alert}</NotifierCount>
-          </AlertView>
-          <View
-            style={{ flexDirection: "row", alignItems: "center", columnGap: 3 }}
-          >
-            <ChatCircle size={ICON_SIZE} color="#8D8D99" />
-            <NotifierCount>{commentsNumber}</NotifierCount>
-          </View>
-        </NotificationView>
-        <TextStatus>{status}</TextStatus>
-        <Title>{title}</Title>
-        <Date>Publicado em {displayDate}</Date>
-      </Info>
+          <Text fontSize="$sm">{displayDate}</Text>
 
-      <InteractButton onPress={onInteract}>
-        <CaretRight size={32} color="#8D8D99" />
-      </InteractButton>
-    </Container>
+          <Box>
+            <Badge
+              size="md"
+              variant="outline"
+              borderRadius="$sm"
+              action="success"
+            >
+              <BadgeText>{status}</BadgeText>
+            </Badge>
+          </Box>
+
+          <HStack>
+            <HStack pr="$2">
+              <Icon as={Warning} color="$gray500" />
+              <Text>{alert}</Text>
+            </HStack>
+
+            <HStack >
+              <Icon as={ChatCircle} color="#gray500" />
+              <Text>{commentsNumber}</Text>
+            </HStack>
+          </HStack>
+        </VStack>
+        <CaretRight size={32} color="#gray500" />
+      </HStack>
+    </TouchableOpacity>
   );
 };
 

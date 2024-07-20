@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  OccurrenceContainer,
-  Title,
-  TitleContainer,
-} from "./Home.styles";
+
 import HomeHeader from "../../components/HomeHeader";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
-import { Alert, FlatList, RefreshControl, Text, View } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import { OccurrenceStatusEnum } from "@/types";
-import Status from "../../components/Status";
 import OccurrenceCard from "@/components/OccurrenceCard";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/hooks/useAuth";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { AppError } from "@/utils/AppError";
-import { useTheme } from "styled-components";
+import {
+  Box,
+  Heading,
+  HStack,
+  Text,
+  useToast,
+  useToken,
+  VStack,
+} from "@gluestack-ui/themed";
+import StatusButton from "../../components/StatusButton";
+import ToastMessage from "@/components/ToastMessage";
 
 const Home: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
@@ -24,7 +28,10 @@ const Home: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { navigate } = useNavigation<AppNavigatorRoutesProps>();
 
-  const { COLORS } = useTheme();
+  const toast = useToast();
+
+  const resolvedBrandLight = useToken("colors", "brandLight");
+
   const { user } = useAuth();
 
   const {
@@ -57,10 +64,22 @@ const Home: React.FC = () => {
       await fetchOccurrenceCards();
     } catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível carregar as ocorrências";
-      Alert.alert("Erro", title);
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Erro!"
+            description={
+              isAppError
+                ? error.data
+                : "Não foi possível carregar as ocorrências. Tente novamente mais tarde."
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } finally {
       setIsLoading(false);
     }
@@ -81,73 +100,97 @@ const Home: React.FC = () => {
       await fetchOccurrenceCards();
     } catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível carregar as ocorrências";
-      Alert.alert("Erro", title);
+
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Erro!"
+            description={
+              isAppError
+                ? error.data
+                : "Não foi possível carregar as ocorrências. Tente novamente mais tarde."
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } finally {
       setRefreshing(false);
     }
   };
 
   return (
-    <Container>
+    <VStack flex={1} backgroundColor="$white">
       <HomeHeader />
-      <OccurrenceContainer>
-        <FlatList
-          data={occurrenceKeys.filter(
-            (item) => user.admin || item !== "cancelled"
-          )}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => (
-            <Status
-              name={OccurrenceFilter[item]}
-              variant={activeFilter === item ? "active" : "inactive"}
-              onPress={() => setActiveFilter(item)}
-            />
-          )}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        />
-        <TitleContainer>
-          <Title>Ocorrências:</Title>
-        </TitleContainer>
 
+      <Heading color="$black" fontSize="$md" fontFamily="$heading">
+        Filtros:
+      </Heading>
+      <FlatList
+        data={occurrenceKeys.filter(
+          (item) => user.admin || item !== OccurrenceStatusEnum.CANCELLED
+        )}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <StatusButton
+            name={OccurrenceFilter[item]}
+            isActive={activeFilter === item}
+            onPress={() => setActiveFilter(item)}
+          />
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 24 }}
+        style={{ marginVertical: 10, maxHeight: 44, minHeight: 44 }}
+      />
+
+      <Heading color="$black" fontSize="$md" fontFamily="$heading">
+        Ocorrências:
+      </Heading>
+
+      <VStack flex={1}>
         {isLoading ? (
           <Loading />
         ) : (
-            <FlatList
-              data={occurrenceCards}
-              renderItem={({ item, index }) => (
-                <OccurrenceCard
-                  image={item.image}
-                  alert={item.likes}
-                  status={item.status}
-                  title={item.title}
-                  date={item.date}
-                  commentsNumber={item.comments.length}
-                  onInteract={() => handleNavigateToOccurrence(item._id, index)}
-                />
-              )}
-              ListEmptyComponent={() => (
-                <View>
-                  <Text>Não há ocorrências disponíveis no momento.</Text>
-                </View>
-              )}
-              showsVerticalScrollIndicator={false}
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={handleRefresh}
-                  colors={[COLORS.BRAND_LIGHT]}
-                />
-              }
-            />
+          <FlatList
+            data={occurrenceCards.filter(
+              (item) =>
+                user.admin || item.status !== OccurrenceStatusEnum.CANCELLED
+            )}
+            renderItem={({ item, index }) => (
+              <OccurrenceCard
+                image={item.image}
+                alert={item.likes}
+                status={item.status}
+                title={item.title}
+                date={item.date}
+                commentsNumber={item.comments.length}
+                onInteract={() => handleNavigateToOccurrence(item._id, index)}
+              />
+            )}
+            ListEmptyComponent={() => (
+              <Box>
+                <Text>Não há ocorrências disponíveis no momento.</Text>
+              </Box>
+            )}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+                colors={[resolvedBrandLight]}
+              />
+            }
+          />
         )}
-      </OccurrenceContainer>
-    </Container>
+      </VStack>
+    </VStack>
   );
 };
 

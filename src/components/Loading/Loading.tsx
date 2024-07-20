@@ -1,11 +1,16 @@
 import React from "react";
-import { Container, LoadIndicator } from "./Loading.styles";
+import { Center, Spinner } from "@gluestack-ui/themed";
 
-const Loading: React.FC = () => {
+type LoadingProps = {
+  bgColor?: string;
+  color?: string;
+};
+
+const Loading: React.FC<LoadingProps> = ({ bgColor = "$white", color="$brandLight" }) => {
   return (
-    <Container>
-      <LoadIndicator />
-    </Container>
+    <Center flex={1} bg={bgColor}>
+      <Spinner color={color} />
+    </Center>
   );
 };
 

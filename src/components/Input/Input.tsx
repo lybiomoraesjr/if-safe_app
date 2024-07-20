@@ -1,17 +1,59 @@
-import React from "react";
-import { Container } from "./Input.styles";
+import React, { ComponentProps } from "react";
 import {
-  InputProps as InputReactNativeElementsProps,
-  Input as InputReactNativeElements,
-} from "@rneui/themed";
+  Input as GluestackInput,
+  InputField,
+  FormControl,
+  FormControlError,
+  FormControlErrorText,
+} from "@gluestack-ui/themed";
 
-type InputProps = InputReactNativeElementsProps & {};
+type InputProps = ComponentProps<typeof InputField> & {
+  errorMessage?: string | null;
+  isInvalid?: boolean;
+  isReadOnly?: boolean;
+};
 
-const Input: React.FC<InputProps> = ({ ...rest }) => {
+const Input: React.FC<InputProps> = ({
+  isReadOnly = false,
+  errorMessage = null,
+  isInvalid = false,
+  ...rest
+}) => {
+  const invalid = !!errorMessage || isInvalid;
+
   return (
-    <Container>
-      <InputReactNativeElements {...rest} />
-    </Container>
+    <FormControl isInvalid={invalid} mb="$3" w="$full">
+      <GluestackInput
+        isInvalid={isInvalid}
+        h="$14"
+        borderWidth="$0"
+        borderRadius="$md"
+        $invalid={{
+          borderBottomWidth: 1,
+          borderColor: "$canceled",
+        }}
+        $focus={{
+          borderBottomWidth: 1,
+          borderColor: invalid ? "$canceled" : "$brandLight",
+        }}
+        isReadOnly={isReadOnly}
+        opacity={isReadOnly ? 0.5 : 1}
+        variant="underlined"
+      >
+        <InputField
+          px="$4"
+          color="$black"
+          placeholderTextColor="$gray400"
+          {...rest}
+        />
+      </GluestackInput>
+
+      <FormControlError>
+        <FormControlErrorText color="$canceled">
+          {errorMessage}
+        </FormControlErrorText>
+      </FormControlError>
+    </FormControl>
   );
 };
 

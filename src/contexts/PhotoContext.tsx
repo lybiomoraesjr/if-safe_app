@@ -4,9 +4,11 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { ChooseImageEnum } from "@/types/enums";
 import { PhotoInfo } from "@/types";
+import { useToast } from "@gluestack-ui/themed";
+import ToastMessage from "@/components/ToastMessage";
 
 export type PhotoContextDataProps = {
-  chooseImage: (source: ChooseImageEnum, caller: string) => Promise<void>;
+  chooseImage: (source: ChooseImageEnum, caller: string) => Promise<void | string>;
   selectedPhoto: PhotoInfo;
   setSelectedPhoto: (photo: PhotoInfo) => void;
 };
@@ -26,6 +28,8 @@ export const PhotoContextProvider = ({
     {} as PhotoInfo
   );
 
+  const toast = useToast();
+
   const chooseImage = async (source: ChooseImageEnum, caller: string) => {
     try {
       let result;
@@ -34,7 +38,7 @@ export const PhotoContextProvider = ({
 
         if (!cameraStatus.granted) {
           return Alert.alert(
-            "Erro",
+            "Erro!",
             "Precisamos de permissão para acessar a câmera"
           );
         }
@@ -50,10 +54,18 @@ export const PhotoContextProvider = ({
           await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (!libraryStatus.granted) {
-          return Alert.alert(
-            "Erro",
-            "Precisamos de permissão para acessar a galeria"
-          );
+          return toast.show({
+            placement: "top",
+            render: ({ id }) => (
+              <ToastMessage
+                id={id}
+                action="error"
+                title="Erro!"
+                description="Precisamos de permissão para acessar a galeria"
+                onClose={() => toast.close(id)}
+              />
+            ),
+          });
         }
 
         result = await ImagePicker.launchImageLibraryAsync({
@@ -72,7 +84,18 @@ export const PhotoContextProvider = ({
         const { uri, fileSize } = result.assets[0];
 
         if (fileSize && fileSize / 1024 / 1024 > 2) {
-          return Alert.alert("Erro", "A imagem deve ter no máximo 2MB");
+          return toast.show({
+            placement: "top",
+            render: ({ id }) => (
+              <ToastMessage
+                id={id}
+                action="error"
+                title="Erro!"
+                description="A imagem deve ter no máximo 2MB"
+                onClose={() => toast.close(id)}
+              />
+            ),
+          });
         }
 
         const fileExtension = uri.split(".").pop();

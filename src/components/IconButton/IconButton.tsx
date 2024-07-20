@@ -1,31 +1,44 @@
 import { IconProps } from "phosphor-react-native";
-import React from "react";
-import { TouchableOpacityProps } from "react-native";
-import { Container } from "./IconButton.styles";
+import React, { ComponentProps, ElementType } from "react";
 import Loading from "../Loading";
+import { Button, ButtonIcon, ButtonText } from "@gluestack-ui/themed";
 
-interface IconButtonProps extends TouchableOpacityProps {
-  icon: React.FC<IconProps>;
+type IconButtonProps = ComponentProps<typeof ButtonIcon> & {
+  icon: ElementType<IconProps>;
   isLoading?: boolean;
-  iconColor?: string;
-  iconSize?: number;
-}
+  onPress?: () => Promise<void> | void;
+  bgColor?: string;
+  activeBgColor?: string;
+  text?: string;
+};
 
 const IconButton: React.FC<IconButtonProps> = ({
-  icon: Icon,
+  icon,
   isLoading,
-  iconColor,
-  iconSize,
+  onPress,
+  bgColor = "$brandMid",
+  activeBgColor = "$brandLight",
+  text,
   ...rest
 }) => {
   return (
-    <Container {...rest}>
+    <Button
+      onPress={onPress}
+      bgColor={bgColor}
+      isDisabled={isLoading}
+      $active-backgroundColor={activeBgColor}
+      h="$14"
+      minWidth="$14"
+      gap={isLoading ? "$4" : "$1"}
+    >
+      <ButtonIcon as={icon} size="xl" {...rest} />
+
       {isLoading ? (
-        <Loading />
+        <Loading bgColor="transparent" color="$white" />
       ) : (
-        <Icon size={iconSize} weight="fill" color={iconColor} />
+        text && <ButtonText>{text}</ButtonText>
       )}
-    </Container>
+    </Button>
   );
 };
 

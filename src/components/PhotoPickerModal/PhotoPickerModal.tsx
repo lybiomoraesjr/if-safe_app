@@ -1,76 +1,85 @@
-import React, { useState } from "react";
-import { Modal, TouchableWithoutFeedback } from "react-native";
-import { ModalContainer, ModalContent } from "./PhotoPickerModal.styles";
+import React, { useState, useRef } from "react";
 import IconButton from "../IconButton";
 import { Camera, Image, X } from "phosphor-react-native";
-import { useTheme } from "styled-components/native";
 import { usePhoto } from "@/hooks/usePhoto";
 import { ChooseImageEnum } from "@/types/enums";
 import Loading from "../Loading";
+import {
+  HStack,
+  Icon,
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalHeader,
+  ModalCloseButton,
+  Heading,
+  ModalContent,
+  ModalFooter,
+  VStack,
+} from "@gluestack-ui/themed";
+import { Text } from "@gluestack-ui/themed";
 
 type PhotoPickerModalProps = {
-  isVisible: boolean;
+  showModal: boolean;
   caller: string;
-  onClose: () => void;
+  closeModal: () => void;
 };
 
 const PhotoPickerModal: React.FC<PhotoPickerModalProps> = ({
-  isVisible,
+  showModal,
   caller,
-  onClose,
+  closeModal,
 }) => {
-  const { COLORS } = useTheme();
   const { chooseImage } = usePhoto();
-
   const [isLoading, setIsLoading] = useState(false);
+  const ref = useRef(null);
 
   return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={isVisible}
-      onRequestClose={onClose}
-    >
-      <TouchableWithoutFeedback onPress={onClose}>
-        <ModalContainer>
-          <ModalContent>
-            {isLoading ? (
-              <Loading />
-            ) : (
-              <>
+    <Modal isOpen={showModal} onClose={closeModal} finalFocusRef={ref}>
+      <ModalBackdrop />
+      <ModalContent h="$48" justifyContent="center">
+        {isLoading ? (
+          <VStack flex={1} justifyContent="center" alignItems="center">
+            <Loading bgColor="transparent" />
+          </VStack>
+        ) : (
+          <>
+            <ModalHeader>
+              <Heading size="lg">Selecione uma Foto</Heading>
+              <ModalCloseButton>
+                <Icon as={X} />
+              </ModalCloseButton>
+            </ModalHeader>
+
+            <ModalBody>
+              <Text>Escolha uma opção para adicionar uma foto.</Text>
+            </ModalBody>
+
+            <ModalFooter justifyContent="center">
+              <HStack gap="$4" >
                 <IconButton
                   icon={Camera}
                   onPress={async () => {
                     setIsLoading(true);
                     await chooseImage(ChooseImageEnum.OPEN_CAMERA, caller);
-                    onClose();
+                    closeModal();
                     setIsLoading(false);
                   }}
-                  iconColor={COLORS.BRAND_MID}
-                  iconSize={32}
                 />
                 <IconButton
                   icon={Image}
                   onPress={async () => {
                     setIsLoading(true);
                     await chooseImage(ChooseImageEnum.OPEN_GALLERY, caller);
-                    onClose();
+                    closeModal();
                     setIsLoading(false);
                   }}
-                  iconColor={COLORS.BRAND_MID}
-                  iconSize={32}
                 />
-                <IconButton
-                  icon={X}
-                  onPress={onClose}
-                  iconColor={COLORS.BRAND_MID}
-                  iconSize={32}
-                />
-              </>
-            )}
-          </ModalContent>
-        </ModalContainer>
-      </TouchableWithoutFeedback>
+              </HStack>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
     </Modal>
   );
 };

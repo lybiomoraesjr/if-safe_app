@@ -1,32 +1,33 @@
 import React, { useEffect, useState } from "react";
-import {
-  ButtonsContainer,
-  Container,
-  InputContainer,
-  PhotoContainer,
-  TitleContainer,
-  TitleText,
-} from "./NewOccurrence.styles";
 import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import PhotoPickerModal from "@/components/PhotoPickerModal";
 import { usePhoto } from "@/hooks/usePhoto";
-import OccurrencePhoto from "@/components/OccurrencePhoto/OccurrencePhoto";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
-import { useTheme } from "styled-components";
+import { TouchableOpacity, View } from "react-native";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Skeleton } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "@/routes/app.routes";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { NewOccurrenceFormData } from "@/types";
 import { AppError } from "@/utils/AppError";
 import ScreenHeader from "@/components/ScreenHeader";
+import {
+  Box,
+  Center,
+  HStack,
+  Image,
+  ScrollView,
+  Text,
+  useToast,
+  VStack,
+} from "@gluestack-ui/themed";
+import ToastMessage from "@/components/ToastMessage";
+import Textarea from "@/components/Textarea/Textarea";
 
 const profileSchema = yup.object({
-  title: yup.string().required("Informe o título"),
+  title: yup.string().required("Informe o título").min(3, "A título deve ter pelo menos 3 dígitos.").max(25, "O títilo deve ter no máximo 25 dígitos."),
   location: yup.string().required("Informe a localização"),
   description: yup.string().required("Informe a descrição"),
 });
@@ -38,7 +39,7 @@ const NewOccurrence: React.FC = () => {
 
   const CALLER = "newOccurrence";
 
-  const PHOTO_SIZE = 200;
+  const toast = useToast();
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
@@ -47,7 +48,6 @@ const NewOccurrence: React.FC = () => {
 
   const { selectedPhoto, setSelectedPhoto } = usePhoto();
 
-  const { COLORS, FONT_FAMILY, FONT_SIZE } = useTheme();
   const {
     control,
     handleSubmit,
@@ -76,17 +76,38 @@ const NewOccurrence: React.FC = () => {
 
       setOccurrenceUpdated(true);
 
-      Alert.alert("Sucesso", "Ocorrência criada com sucesso");
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Sucesso!"
+            description="Ocorrência criada com sucesso."
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
 
       handleResetForm();
     } catch (error) {
       const isAppError = error instanceof AppError;
 
-      const title = isAppError
-        ? error.data
-        : "Não foi possível criar a ocorrência. Tente novamente mais tarde";
-
-      Alert.alert(title);
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Erro!"
+            description={
+              isAppError
+                ? error.data
+                : "Não foi possível criar a ocorrência. Tente novamente mais tarde"
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } finally {
       setIsLoading(false);
     }
@@ -99,97 +120,102 @@ const NewOccurrence: React.FC = () => {
   }, [selectedPhoto.uri]);
 
   return (
-    <Container>
-     <ScreenHeader title="Nova ocorrência" />
-      <InputContainer>
-        <Controller
-          control={control}
-          name="title"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              placeholder="Título"
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.title?.message}
-            />
-          )}
-        />
+    <VStack flex={1} backgroundColor="$white">
+      <ScreenHeader title="Nova ocorrência" />
 
-        <Controller
-          control={control}
-          name="location"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              placeholder="Localização"
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.location?.message}
+      <ScrollView>
+        <VStack flex={1} px="$8" py="$4">
+          <Center gap="$2" flex={1}>
+            <Controller
+              control={control}
+              name="title"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Título"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.title?.message}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          control={control}
-          name="description"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              placeholder="Descrição"
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.description?.message}
-            />
-          )}
-        />
-        <PhotoContainer>
-          {photoUri ? (
-            <OccurrencePhoto size={PHOTO_SIZE} source={{ uri: photoUri }} />
-          ) : (
-            <Skeleton
-              animation="none"
-              width={PHOTO_SIZE}
-              height={PHOTO_SIZE}
-              style={{ borderRadius: 10 }}
-            />
-          )}
-        </PhotoContainer>
 
-        <View style={{ alignItems: "center", marginBottom: 12 }}>
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={{ marginTop: 2 }}
-          >
-            <Text
-              style={{
-                color: COLORS.BRAND_MID,
-                fontFamily: FONT_FAMILY.BOLD,
-                fontSize: FONT_SIZE.SM,
-              }}
-            >
-              Escolher foto
-            </Text>
-          </TouchableOpacity>
-        </View>
+            <Controller
+              control={control}
+              name="location"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Localização"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.location?.message}
+                />
+              )}
+            />
 
-        <ButtonsContainer>
-          <Button
-            title="Descartar"
-            onPress={handleResetForm}
-            style={{ backgroundColor: COLORS.CANCELED }}
-            disabled={isLoading}
-          />
-          <Button
-            title="Publicar"
-            isLoading={isLoading}
-            onPress={handleSubmit(handlePublish)}
-          />
-        </ButtonsContainer>
-      </InputContainer>
+            <Controller
+              control={control}
+              name="description"
+              render={({ field: { onChange, value } }) => (
+                <Textarea
+                  placeholder="Descrição"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.description?.message}
+                />
+              )}
+            />
+
+            {photoUri ? (
+              <Image
+                w="$full"
+                h="$80"
+                source={{ uri: photoUri }}
+                alt="Imagem da ocorrência."
+                resizeMode="cover"
+                rounded="$lg"
+              />
+            ) : (
+              <Box w="$full" h="$80" bg="$gray200" rounded="$lg" />
+            )}
+
+            <View style={{ alignItems: "center", marginBottom: 12 }}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(true)}
+                style={{ marginTop: 2 }}
+              >
+                <Text color="$brandMid" fontSize="$sm" fontWeight="$bold">
+                  Escolher foto
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <HStack gap="$5">
+              <Button
+                title="Descartar"
+                onPress={handleResetForm}
+                disabled={isLoading}
+                bg="$canceled"
+                $active-backgroundColor="$red300"
+                w="$7/15"
+              />
+
+              <Button
+                title="Publicar"
+                isLoading={isLoading}
+                onPress={handleSubmit(handlePublish)}
+                w="$7/15"
+              />
+            </HStack>
+          </Center>
+        </VStack>
+      </ScrollView>
 
       <PhotoPickerModal
-        isVisible={isModalVisible}
+        showModal={isModalVisible}
         caller={CALLER}
-        onClose={() => setModalVisible(false)}
+        closeModal={() => setModalVisible(false)}
       />
-    </Container>
+    </VStack>
   );
 };
 

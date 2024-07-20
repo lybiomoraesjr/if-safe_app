@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Container, ImgContainer, TextQuest } from "./SignIn.styles";
-import { Alert, Image, StatusBar, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "@/routes/auth.routes";
 import { Controller, useForm } from "react-hook-form";
@@ -9,8 +7,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "@/hooks/useAuth";
 import Button from "@/components/Button/Button";
 import Input from "@/components/Input/Input";
-import { useTheme } from "styled-components";
 import { AppError } from "@/utils/AppError";
+import { Image, ScrollView, useToast, VStack } from "@gluestack-ui/themed";
+import { Center } from "@gluestack-ui/themed";
+import { Heading } from "@gluestack-ui/themed";
+import { StatusBar } from "@gluestack-ui/themed";
+import { Text } from "@gluestack-ui/themed";
+import ToastMessage from "@/components/ToastMessage";
 
 type FormDataProps = {
   email: string;
@@ -26,11 +29,11 @@ const signInSchema = yup.object({
 });
 
 const SignIn: React.FC = () => {
-  const { FONT_SIZE, FONT_FAMILY } = useTheme();
-
   const [isLoading, setIsLoading] = useState(false);
 
   const { signIn } = useAuth();
+
+  const toast = useToast();
 
   const {
     control,
@@ -50,83 +53,120 @@ const SignIn: React.FC = () => {
     try {
       setIsLoading(true);
       await signIn(email, password);
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Sucesso!"
+            description="Entrou com sucesso."
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } catch (error) {
       const isAppError = error instanceof AppError;
 
-      const title = isAppError
-        ? error.data
-        : "Não foi possível entrar. Tente novamente mais tarde.";
-
       setIsLoading(false);
-      Alert.alert(title);
+
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Erro!"
+            description={
+              isAppError
+                ? error.data
+                : "Não foi possível entrar. Tente novamente mais tarde."
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     }
   };
 
   return (
-    <Container>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      showsVerticalScrollIndicator={false}
+      backgroundColor="$white"
+    >
       <StatusBar
         barStyle="dark-content"
         backgroundColor="transparent"
         translucent
       />
-      <ImgContainer>
-        <Image source={require("@/assets/ifsafe-logo.png")} />
-      </ImgContainer>
+      <VStack pt={48}>
+        <Image
+          w="$full"
+          h="$32"
+          source={require("@/assets/ifsafe-logo.png")}
+          defaultSource={require("@/assets/ifsafe-logo.png")}
+          alt="Logo IfSafe"
+        />
 
-      <Text
-        style={{
-          textAlign: "center",
-          fontSize: FONT_SIZE.LG,
-          fontFamily: FONT_FAMILY.BOLD,
-          paddingBottom: 15,
-        }}
-      >
-        Acesse sua conta
-      </Text>
-      <Controller
-        control={control}
-        name="email"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            placeholder="E-mail"
-            onChangeText={onChange}
-            value={value}
-            errorMessage={errors.email?.message}
-            autoCapitalize="none"
-          />
-        )}
-      />
+        <VStack px="$8" pt={48} pb={18}>
+          <Center gap="$2" mb={24}>
+            <Heading color="$black">Acesse a conta</Heading>
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="E-mail"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.email?.message}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              )}
+            />
 
-      <Controller
-        control={control}
-        name="password"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            placeholder="Senha"
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry
-            errorMessage={errors.password?.message}
-            returnKeyType="send"
-            onSubmitEditing={handleSubmit(handleSignIn)}
-          />
-        )}
-      />
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Senha"
+                  onChangeText={onChange}
+                  value={value}
+                  secureTextEntry
+                  errorMessage={errors.password?.message}
+                  returnKeyType="send"
+                  onSubmitEditing={handleSubmit(handleSignIn)}
+                />
+              )}
+            />
 
-      <Button
-        title="Acessar"
-        isLoading={isLoading}
-        onPress={handleSubmit(handleSignIn)}
-      />
+            <Button
+              title="Acessar"
+              isLoading={isLoading}
+              onPress={handleSubmit(handleSignIn)}
+            />
+          </Center>
+          <Center>
+            <Text
+              color="$secondary950"
+              fontSize="$sm"
+              mb="$3"
+              fontFamily="$body"
+            >
+              Ainda não tem acesso?
+            </Text>
 
-      <TextQuest>Ainda não tem acesso?</TextQuest>
-
-      <Button
-        variant="outline"
-        title="Criar Conta"
-        onPress={handleNewAccount}
-      />
-    </Container>
+            <Button
+              variant="outline"
+              title="Criar Conta"
+              onPress={handleNewAccount}
+            />
+          </Center>
+        </VStack>
+      </VStack>
+    </ScrollView>
   );
 };
 

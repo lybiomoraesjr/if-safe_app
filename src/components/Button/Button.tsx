@@ -1,9 +1,12 @@
-import React from "react";
-import { TouchableOpacityProps } from "react-native";
-import { useTheme } from "styled-components/native";
-import { Container, Loading, Title } from "./Button.styles";
+import React, { ComponentProps } from "react";
 
-type ButtonProps = TouchableOpacityProps & {
+import {
+  Button as GluestackButton,
+  Text,
+  ButtonSpinner,
+} from "@gluestack-ui/themed";
+
+type ButtonProps = ComponentProps<typeof GluestackButton> & {
   title: string;
   isLoading?: boolean;
   variant?: "solid" | "outline";
@@ -11,38 +14,37 @@ type ButtonProps = TouchableOpacityProps & {
 
 const Button: React.FC<ButtonProps> = ({
   title,
-  isLoading,
+  isLoading = false,
   variant,
   style,
   ...rest
 }) => {
-  const { COLORS } = useTheme();
   return (
-    <Container
-      style={[
-        {
-          backgroundColor:
-            variant === "outline" ? "transparent" : COLORS.BRAND_MID,
-
-          borderWidth: variant === "outline" ? 1 : 0,
-        },
-        style,
-      ]}
+    <GluestackButton
+      w="$full"
+      h="$14"
+      bg={variant === "outline" ? "transparent" : "$brandMid"}
+      borderWidth={variant === "outline" ? "$1" : "$0"}
+      borderColor="$brandLight"
+      rounded="$sm"
+      $active-backgroundColor={
+        variant === "outline" ? "$green50" : "$brandLight"
+      }
       disabled={isLoading}
       {...rest}
     >
       {isLoading ? (
-        <Loading />
+        <ButtonSpinner color="$white" />
       ) : (
-        <Title
-          style={{
-            color: variant === "outline" ? COLORS.BRAND_LIGHT : COLORS.WHITE,
-          }}
+        <Text
+          color={variant === "outline" ? "$brandLight" : "$white"}
+          fontFamily="$heading"
+          fontSize="$sm"
         >
           {title}
-        </Title>
+        </Text>
       )}
-    </Container>
+    </GluestackButton>
   );
 };
 

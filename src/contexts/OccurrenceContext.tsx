@@ -81,8 +81,6 @@ export const OccurrenceContextProvider = ({
 
       setOccurrence(data);
 
-      console.log(data);
-
       setCommentsNumber(data.comments.length);
     } catch (error) {
       throw error;

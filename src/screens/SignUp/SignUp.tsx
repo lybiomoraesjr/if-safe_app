@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Alert, StatusBar } from "react-native";
-import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import Input from "@/components/Input";
@@ -9,8 +8,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "@/services/api";
 import { useAuth } from "@/hooks/useAuth";
 import Button from "@/components/Button";
-import { Container, ImageContainer, Register } from "./SignUp.styles";
 import { AppError } from "@/utils/AppError";
+import { Heading } from "@gluestack-ui/themed";
+import { ScrollView } from "@gluestack-ui/themed";
+import { Image } from "@gluestack-ui/themed";
+import { VStack } from "@gluestack-ui/themed";
+import { Center } from "@gluestack-ui/themed";
 
 type FormDataProps = {
   name: string;
@@ -70,88 +73,102 @@ const SignUn: React.FC = () => {
   };
 
   return (
-    <Container>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      showsVerticalScrollIndicator={false}
+      backgroundColor="$white"
+    >
       <StatusBar
         barStyle="dark-content"
         backgroundColor="transparent"
         translucent
       />
-      <ImageContainer>
-        <Image source={require("@/assets/ifsafe-logo.png")} />
-      </ImageContainer>
+      <VStack pt={48}>
+        <Image
+          w="$full"
+          h="$32"
+          source={require("@/assets/ifsafe-logo.png")}
+          defaultSource={require("@/assets/ifsafe-logo.png")}
+          alt="Logo IfSafe"
+        />
 
-      <Register>Crie sua conta</Register>
+        <VStack px="$8" pb={18} pt={48}>
+          <Center gap="$2" mb={24}>
+            <Heading color="$black">Crie sua conta</Heading>
 
-      <Controller
-        control={control}
-        name="name"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            placeholder="Nome"
-            onChangeText={onChange}
-            value={value}
-            errorMessage={errors.name?.message}
-          />
-        )}
-      />
+            <Controller
+              control={control}
+              name="name"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Nome"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.name?.message}
+                />
+              )}
+            />
 
-      <Controller
-        control={control}
-        name="email"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            placeholder="E-mail"
-            onChangeText={onChange}
-            value={value}
-            errorMessage={errors.email?.message}
-            autoCapitalize="none"
-          />
-        )}
-      />
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="E-mail"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.email?.message}
+                  autoCapitalize="none"
+                />
+              )}
+            />
 
-      <Controller
-        control={control}
-        name="password"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            placeholder="Senha"
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry
-            errorMessage={errors.password?.message}
-          />
-        )}
-      />
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Senha"
+                  onChangeText={onChange}
+                  value={value}
+                  secureTextEntry
+                  errorMessage={errors.password?.message}
+                />
+              )}
+            />
 
-      <Controller
-        control={control}
-        name="password_confirm"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            placeholder="Confirme a Senha"
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry
-            onSubmitEditing={handleSubmit(handleSignUp)}
-            returnKeyType="send"
-            errorMessage={errors.password_confirm?.message}
-          />
-        )}
-      />
+            <Controller
+              control={control}
+              name="password_confirm"
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Confirme a Senha"
+                  onChangeText={onChange}
+                  value={value}
+                  secureTextEntry
+                  onSubmitEditing={handleSubmit(handleSignUp)}
+                  returnKeyType="send"
+                  errorMessage={errors.password_confirm?.message}
+                />
+              )}
+            />
 
-      <Button
-        isLoading={isLoading}
-        title="Criar e acessar"
-        onPress={handleSubmit(handleSignUp)}
-        style={{ marginBottom: 40 }}
-      />
-
-      <Button
-        variant="outline"
-        title="Voltar para o Login"
-        onPress={handleGoBack}
-      />
-    </Container>
+            <Button
+              isLoading={isLoading}
+              title="Criar e acessar"
+              onPress={handleSubmit(handleSignUp)}
+            />
+          </Center>
+        
+            <Button
+              variant="outline"
+              title="Voltar para o Login"
+              onPress={handleGoBack}
+              
+            />
+        </VStack>
+      </VStack>
+    </ScrollView>
   );
 };
 

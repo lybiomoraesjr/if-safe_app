@@ -4,7 +4,7 @@ import { CommentDTO } from "./CommentDTO";
 export type OccurrenceCardDTO = {
   _id: string;
   title: string;
-  image: string | null;
+  image: string;
   likes: number;
   status: OccurrenceStatusEnum;
   comments: CommentDTO[];
