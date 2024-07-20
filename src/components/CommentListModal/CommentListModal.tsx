@@ -8,11 +8,13 @@ import {
   ModalCloseButton,
   ModalHeader,
   ScrollView,
+  Text,
 } from "@gluestack-ui/themed";
 import { ModalContent } from "@gluestack-ui/themed";
 import { X } from "phosphor-react-native";
 import React from "react";
 import { ModalBackdrop } from "@gluestack-ui/themed";
+import { Divider } from "@gluestack-ui/themed";
 
 type CommentListModalProps = {
   showModal: boolean;
@@ -38,15 +40,23 @@ const CommentListModal: React.FC<CommentListModalProps> = ({
           </ModalCloseButton>
         </ModalHeader>
         <ModalBody>
+          <Divider borderBottomWidth="$1" borderColor="$trueGray800" />
+
           <ScrollView>
-            {comments.map((comment) => (
-              <CommentCard
-                key={comment.commentId}
-                name={comment.userName}
-                text={comment.comment}
-                date={comment.commentDate}
-              />
-            ))}
+            {/* {comments.length === 0 || comments.length === null ? (
+              <Text my="$2" size="md">
+                Nenhum comentário
+              </Text>
+            ) : (
+              comments.map((comment) => (
+                <CommentCard
+                  key={comment.commentId}
+                  name={comment.userName}
+                  text={comment.comment}
+                  date={comment.commentDate}
+                />
+              ))
+            )} */}
           </ScrollView>
         </ModalBody>
       </ModalContent>

@@ -3,12 +3,13 @@ import { Center, Spinner } from "@gluestack-ui/themed";
 
 type LoadingProps = {
   bgColor?: string;
+  color?: string;
 };
 
-const Loading: React.FC<LoadingProps> = ({ bgColor = "$white" }) => {
+const Loading: React.FC<LoadingProps> = ({ bgColor = "$white", color="$brandLight" }) => {
   return (
     <Center flex={1} bg={bgColor}>
-      <Spinner color="$green500" />
+      <Spinner color={color} />
     </Center>
   );
 };

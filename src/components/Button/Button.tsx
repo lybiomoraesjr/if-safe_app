@@ -9,7 +9,7 @@ import {
 type ButtonProps = ComponentProps<typeof GluestackButton> & {
   title: string;
   isLoading?: boolean;
-  variant?: "solid" | "outline" | "cancel";
+  variant?: "solid" | "outline";
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -22,12 +22,14 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <GluestackButton
       w="$full"
-      h="$16"
-      bg={variant === "outline" ? "transparent" : "$green700"}
+      h="$14"
+      bg={variant === "outline" ? "transparent" : "$brandMid"}
       borderWidth={variant === "outline" ? "$1" : "$0"}
-      borderColor="$green500"
+      borderColor="$brandLight"
       rounded="$sm"
-      $active-backgroundColor={variant === "outline" ? "$gray500" : "$green500"}
+      $active-backgroundColor={
+        variant === "outline" ? "$green50" : "$brandLight"
+      }
       disabled={isLoading}
       {...rest}
     >
@@ -35,7 +37,7 @@ const Button: React.FC<ButtonProps> = ({
         <ButtonSpinner color="$white" />
       ) : (
         <Text
-          color={variant === "outline" ? "$green500" : "$white"}
+          color={variant === "outline" ? "$brandLight" : "$white"}
           fontFamily="$heading"
           fontSize="$sm"
         >

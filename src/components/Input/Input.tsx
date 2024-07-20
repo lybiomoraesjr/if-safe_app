@@ -22,35 +22,34 @@ const Input: React.FC<InputProps> = ({
   const invalid = !!errorMessage || isInvalid;
 
   return (
-    <FormControl isInvalid={invalid} mb="$4" w="$full">
+    <FormControl isInvalid={invalid} mb="$3" w="$full">
       <GluestackInput
         isInvalid={isInvalid}
-        h="$16"
+        h="$14"
         borderWidth="$0"
         borderRadius="$md"
         $invalid={{
-          borderWidth: 1,
-          borderColor: "$red500",
+          borderBottomWidth: 1,
+          borderColor: "$canceled",
         }}
         $focus={{
-          borderWidth: 1,
-          borderColor: invalid ? "$red500" : "$green500",
+          borderBottomWidth: 1,
+          borderColor: invalid ? "$canceled" : "$brandLight",
         }}
         isReadOnly={isReadOnly}
         opacity={isReadOnly ? 0.5 : 1}
+        variant="underlined"
       >
         <InputField
           px="$4"
-          bg="$secondary50"
-          color="$secondary950"
-          fontFamily="$body"
-          placeholderTextColor="$secondary500"
+          color="$black"
+          placeholderTextColor="$gray400"
           {...rest}
         />
       </GluestackInput>
 
       <FormControlError>
-        <FormControlErrorText color="$red500">
+        <FormControlErrorText color="$canceled">
           {errorMessage}
         </FormControlErrorText>
       </FormControlError>

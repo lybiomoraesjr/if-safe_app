@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Alert,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-} from "react-native";
+import { TouchableOpacity } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -21,9 +16,13 @@ import UserPhoto from "@/components/UserPhoto";
 import PhotoPickerModal from "@/components/PhotoPickerModal";
 import { usePhoto } from "@/hooks/usePhoto";
 
-import ContentLoader, { Circle, Rect } from "react-content-loader/native";
-
-import { Center, ScrollView, useToast, VStack } from "@gluestack-ui/themed";
+import {
+  Center,
+  ScrollView,
+  Text,
+  useToast,
+  VStack,
+} from "@gluestack-ui/themed";
 import ToastMessage from "@/components/ToastMessage";
 import { Skeleton } from "@rneui/themed";
 
@@ -106,7 +105,7 @@ const Profile: React.FC = () => {
         render: ({ id }) => (
           <ToastMessage
             id={id}
-            title="Sucesso"
+            title="Sucesso!"
             description="Perfil atualizado com sucesso."
             onClose={() => toast.close(id)}
           />
@@ -114,8 +113,6 @@ const Profile: React.FC = () => {
       });
     } catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError ? error.data : "Erro na atualização do perfil";
-      Alert.alert(title);
 
       toast.show({
         placement: "top",
@@ -123,7 +120,7 @@ const Profile: React.FC = () => {
           <ToastMessage
             id={id}
             action="error"
-            title="Sucesso"
+            title="Erro!"
             description={
               isAppError ? error.data : "Erro na atualização do perfil"
             }
@@ -163,7 +160,7 @@ const Profile: React.FC = () => {
         render: ({ id }) => (
           <ToastMessage
             id={id}
-            title="Sucesso"
+            title="Sucesso!"
             description="Foto de perfil atualizada com sucesso."
             onClose={() => toast.close(id)}
           />
@@ -178,7 +175,7 @@ const Profile: React.FC = () => {
           <ToastMessage
             id={id}
             action="error"
-            title="Sucesso"
+            title="Erro!"
             description={
               isAppError ? error.data : "Erro na atualização da foto de perfil"
             }
@@ -199,35 +196,29 @@ const Profile: React.FC = () => {
         contentContainerStyle={{ paddingBottom: 36 }}
         backgroundColor="$white"
       >
-        <Center mt="$6" px="$10">
-          {photoIsLoading ? (
-            <Skeleton
-              width={100}
-              height={100}
-              style={{ borderRadius: 50 }}
-            />
-          ) : (
-            <UserPhoto
-              source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
-              alt="Foto de perfil"
-              size="xl"
-            />
-          )}
+        <VStack mt="$6" px="$10" gap="$2">
+          <Center>
+            {photoIsLoading ? (
+              <Skeleton width={100} height={100} style={{ borderRadius: 50 }} />
+            ) : (
+              <UserPhoto
+                source={
+                  user.avatar ? { uri: user.avatar } : defaultUserPhotoImg
+                }
+                alt="Foto de perfil"
+                size="xl"
+              />
+            )}
 
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={{ marginTop: 5 }}
-          >
-            <Text
-              style={{
-                color: COLORS.BRAND_MID,
-                fontFamily: FONT_FAMILY.BOLD,
-                fontSize: FONT_SIZE.SM,
-              }}
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              style={{ marginTop: 5 }}
             >
-              Alterar foto
-            </Text>
-          </TouchableOpacity>
+              <Text color="$brandMid" fontWeight="$bold" fontSize="$sm">
+                Alterar foto
+              </Text>
+            </TouchableOpacity>
+          </Center>
 
           <Controller
             control={control}
@@ -256,14 +247,7 @@ const Profile: React.FC = () => {
             )}
           />
 
-          <Text
-            style={{
-              marginTop: 15,
-              marginBottom: 5,
-              fontFamily: FONT_FAMILY.BOLD,
-              fontSize: FONT_SIZE.SM,
-            }}
-          >
+          <Text fontWeight="$bold" fontSize="$sm" mt="$4" color="$black">
             Alterar senha
           </Text>
           <Controller
@@ -308,10 +292,11 @@ const Profile: React.FC = () => {
             title="Atualizar"
             onPress={handleSubmit(handleProfileUpdate)}
             isLoading={isUpdating}
-            style={{ marginTop: 10 }}
+            mt="$6"
           />
-        </Center>
+        </VStack>
       </ScrollView>
+
       <PhotoPickerModal
         showModal={isModalVisible}
         caller={CALLER}

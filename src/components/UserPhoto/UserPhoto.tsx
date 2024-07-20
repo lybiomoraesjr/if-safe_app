@@ -7,9 +7,9 @@ const UserPhoto: React.FC<UserPhotoProps> = ({...rest}) => {
   return (
     <Image
       rounded="$full"
-      borderWidth="$2"
-      borderColor="$gray400"
-      backgroundColor="$gray500"
+      borderWidth="$1"
+      borderColor="$brandMid"
+      backgroundColor="$white"
       alt="Foto do usuário"
       {...rest}
     />

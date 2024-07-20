@@ -1,41 +1,40 @@
 import React, { useEffect, useState } from "react";
-import {
-  AlertSection,
-  Container,
-  IconsSection,
-  Infos,
-  OccurrenceImage,
-  OccurrenceInfos,
-  OccurrenceInfosContainer,
-  OccurrenceMainInfos,
-  Title,
-} from "./Occurrence.styles";
-import { Alert, ScrollView, Text, View } from "react-native";
-import { ChatCircle, Warning } from "phosphor-react-native";
+import { ChatCircle, Check, Warning, X } from "phosphor-react-native";
 
 import { useRoute } from "@react-navigation/native";
 import { AppError } from "@/utils/AppError";
 import Loading from "@/components/Loading";
 
 import Button from "@/components/Button";
-import { useTheme } from "styled-components";
+
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { useAuth } from "@/hooks/useAuth";
 import { OccurrenceStatusEnum } from "@/types";
-import CommentDialog from "@/components/CommentModal";
 import { formattedDate } from "@/utils/dateUtils";
 import ScreenHeader from "@/components/ScreenHeader";
 import CommentListModal from "@/components/CommentListModal";
 import CommentModal from "@/components/CommentModal";
-import IconWithTooltip from "@/components/IconWithTooltip/IconWithTooltip";
+import ToastMessage from "@/components/ToastMessage";
+import {
+  Badge,
+  BadgeText,
+  Center,
+  Heading,
+  HStack,
+  Image,
+  ScrollView,
+  Text,
+  useToast,
+} from "@gluestack-ui/themed";
+import { VStack } from "@gluestack-ui/themed";
+import IconButton from "@/components/IconButton";
 
 type RouteParamsProps = {
   occurrenceId: string;
 };
 
 const Occurrence: React.FC = () => {
-  const ICON_SIZE = 24;
-  const { COLORS } = useTheme();
+  const toast = useToast();
 
   const { user } = useAuth();
 
@@ -62,10 +61,6 @@ const Occurrence: React.FC = () => {
 
   const [isCommentListModalVisible, setIsCommentListModalVisible] =
     useState(false);
-
-  const [isStatusLoading, setIsStatusLoading] = useState<OccurrenceStatusEnum>(
-    {} as OccurrenceStatusEnum
-  );
 
   const [isLikeLoading, setIsLikeLoading] = useState(false);
 
@@ -95,11 +90,21 @@ const Occurrence: React.FC = () => {
       });
     } catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível alertar a ocorrência.";
 
-      Alert.alert("Erro", title);
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Erro!"
+            description={
+              isAppError ? error.data : "Não foi possível alertar a ocorrência."
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
       setIsLikeLoading(false);
     } finally {
       setIsLikeLoading(false);
@@ -130,36 +135,75 @@ const Occurrence: React.FC = () => {
         status,
       });
 
-      Alert.alert("Sucesso", "Status alterado com sucesso.");
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Sucesso"
+            description="Status alterado com sucesso."
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível alterar o status da ocorrência.";
 
-      Alert.alert("Erro", title);
-      setIsStatusLoading({} as OccurrenceStatusEnum);
-    } finally {
-      setIsStatusLoading({} as OccurrenceStatusEnum);
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Erro!"
+            description={
+              isAppError
+                ? error.data
+                : "Não foi possível alterar o status da ocorrência."
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     }
   };
 
   const handleMakeACommentWithLoading = async (comment: string) => {
     try {
       await handleMakeAComment(occurrenceId, comment);
-      Alert.alert("Sucesso", "Comentário feito com sucesso.");
+
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Sucesso"
+            description="Comentário feito com sucesso."
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
 
       setOccurrenceUpdated(true);
     } catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível comentar a ocorrência.";
 
-      Alert.alert("Erro", title);
-      setIsStatusLoading({} as OccurrenceStatusEnum);
-    } finally {
-      setIsStatusLoading({} as OccurrenceStatusEnum);
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Erro!"
+            description={
+              isAppError
+                ? error.data
+                : "Não foi possível comentar a ocorrência."
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     }
   };
 
@@ -171,11 +215,23 @@ const Occurrence: React.FC = () => {
           await fetchOccurrence(occurrenceId);
         } catch (error) {
           const isAppError = error instanceof AppError;
-          const title = isAppError
-            ? error.data
-            : "Não foi possível carregar os detalhes da ocorrência.";
 
-          Alert.alert("Erro", title);
+          toast.show({
+            placement: "top",
+            render: ({ id }) => (
+              <ToastMessage
+                id={id}
+                action="error"
+                title="Erro!"
+                description={
+                  isAppError
+                    ? error.data
+                    : "Não foi possível carregar os detalhes da ocorrência."
+                }
+                onClose={() => toast.close(id)}
+              />
+            ),
+          });
         } finally {
           setIsLoading(false);
         }
@@ -210,142 +266,110 @@ const Occurrence: React.FC = () => {
   };
 
   return (
-    <ScrollView>
+    <VStack flex={1} bgColor="$white">
       <ScreenHeader title="Detalhes da Ocorrência" showBackButton />
 
       {isLoading ? (
-        <Loading />
+        <VStack flex={1} justifyContent="center" alignItems="center">
+          <Loading />
+        </VStack>
       ) : (
-        <Container>
-          <OccurrenceInfosContainer>
-            <OccurrenceImage source={{ uri: occurrence.image }} />
-            <OccurrenceInfos>
-              <Infos>
-                <IconsSection>
-                  <AlertSection>
-                    <Warning size={ICON_SIZE} color={COLORS.GRAY_800} />
-                    <Text>{occurrence.likes}</Text>
-                  </AlertSection>
+        <ScrollView>
+          <VStack px="$8" py="$4">
+            <HStack justifyContent="space-between">
+              <Text>{occurrence.authorName}</Text>
+              <Text>{displayDate}</Text>
+            </HStack>
 
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      columnGap: 3,
-                    }}
-                  >
-                    <ChatCircle size={ICON_SIZE} />
-                    <Text>{commentsNumber}</Text>
-                  </View>
-                </IconsSection>
+            <Center>
+              <Image
+                source={{ uri: occurrence.image }}
+                alt="Imagem da Ocorrência."
+                w="$full"
+                h="$80"
+                resizeMode="cover"
+                rounded="$lg"
+                my="$3"
+              />
+            </Center>
+            <Heading>{occurrence.title}</Heading>
+            <Badge
+              size="md"
+              variant="outline"
+              borderRadius="$sm"
+              action="success"
+            >
+              <BadgeText>{occurrence.status}</BadgeText>
+            </Badge>
 
-                <Text>{displayDate}</Text>
-                <View>
-                  <Text>{occurrence.status}</Text>
-                </View>
+            <Text>{occurrence.location}</Text>
 
-                <View>
-                  <Text>{occurrence.location}</Text>
-                </View>
-                <View>
-                  <Text>Por {occurrence.authorName}</Text>
-                </View>
-              </Infos>
-              <Button
-                title="Alertar!"
+            <Text>{occurrence.description}</Text>
+
+            <HStack>
+              <IconButton
+                icon={Warning}
                 onPress={handleLikeWithLoading}
                 isLoading={isLikeLoading}
-                disabled={isLikeLoading}
-                style={{ backgroundColor: COLORS.CANCELED }}
-              />
-            </OccurrenceInfos>
-          </OccurrenceInfosContainer>
-
-          <OccurrenceMainInfos>
-            <Title>{occurrence.title}</Title>
-            <Text>{occurrence.description}</Text>
-          </OccurrenceMainInfos>
-
-          {user.admin ? (
-            <>
-              <View style={{ flexDirection: "row" }}>
-                <Button
-                  title="Cancelar"
-                  onPress={() => {
-                    setIsStatusLoading(OccurrenceStatusEnum.CANCELLED);
-                    setChosenFunction(ChooseFunctionEnum.HANDLE_CANCEL);
-                    setIsCommentModalVisible(true);
-                  }}
-                  style={{ backgroundColor: COLORS.CANCELED }}
-                  isLoading={
-                    isStatusLoading === OccurrenceStatusEnum.CANCELLED &&
-                    isCommentModalVisible
-                  }
-                  disabled={
-                    (isStatusLoading === OccurrenceStatusEnum.CANCELLED ||
-                      isStatusLoading === OccurrenceStatusEnum.SOLVED) &&
-                    isCommentModalVisible
-                  }
-                />
-
-                <Button
-                  title="Resolver"
-                  onPress={() => {
-                    setIsStatusLoading(OccurrenceStatusEnum.SOLVED);
-                    setChosenFunction(ChooseFunctionEnum.HANDLE_RESOLVE);
-                    setIsCommentModalVisible(true);
-                  }}
-                  isLoading={
-                    isStatusLoading === OccurrenceStatusEnum.SOLVED &&
-                    isCommentModalVisible
-                  }
-                  disabled={
-                    (isStatusLoading === OccurrenceStatusEnum.SOLVED ||
-                      isStatusLoading === OccurrenceStatusEnum.CANCELLED) &&
-                    isCommentModalVisible
-                  }
-                />
-              </View>
-            </>
-          ) : (
-            <>
-              <Button
-                title="Comentar"
-                onPress={() => {
-                  setChosenFunction(ChooseFunctionEnum.HANDLE_COMMENT);
-                  setIsCommentModalVisible(true);
-                }}
-                isLoading={isCommentModalVisible}
-                disabled={isCommentModalVisible || isCommentListModalVisible}
+                bgColor="$warning300"
+                activeBgColor="$warning200"
+                text={occurrence.likes.toString()}
               />
 
-              <Button
-                title="Ver Comentários"
+              <IconButton
+                icon={ChatCircle}
                 onPress={() => {
                   setIsCommentListModalVisible(true);
                 }}
-                isLoading={isCommentListModalVisible}
-                disabled={isCommentModalVisible || isCommentListModalVisible}
+                text={commentsNumber.toString()}
               />
-            </>
-          )}
 
-          <CommentListModal
-            comments={occurrence.comments}
-            showModal={isCommentListModalVisible}
-            closeModal={() => setIsCommentListModalVisible(false)}
-          />
-          <CommentModal
-            occurrenceId={occurrenceId}
-            showModal={isCommentModalVisible}
-            closeModal={() => setIsCommentModalVisible(false)}
-            onInteraction={async (comment) => {
-              await ChooseFunction[chosenFunction]({ comment });
-            }}
-          />
-        </Container>
+              {user.admin && (
+                <HStack>
+                  <IconButton
+                    icon={Check}
+                    onPress={() => {
+                      setChosenFunction(ChooseFunctionEnum.HANDLE_RESOLVE);
+                      setIsCommentModalVisible(true);
+                    }}
+                  />
+                  <IconButton
+                    icon={X}
+                    onPress={() => {
+                      setChosenFunction(ChooseFunctionEnum.HANDLE_CANCEL);
+                      setIsCommentModalVisible(true);
+                    }}
+                    bgColor="$canceled"
+                    activeBgColor="$red300"
+                  />
+                </HStack>
+              )}
+            </HStack>
+
+            <Button
+              title="Adicionar Comentário"
+              onPress={() => {
+                setChosenFunction(ChooseFunctionEnum.HANDLE_COMMENT);
+                setIsCommentModalVisible(true);
+              }}
+            />
+          </VStack>
+        </ScrollView>
       )}
-    </ScrollView>
+      <CommentListModal
+        comments={occurrence.comments}
+        showModal={isCommentListModalVisible}
+        closeModal={() => setIsCommentListModalVisible(false)}
+      />
+      <CommentModal
+        occurrenceId={occurrenceId}
+        showModal={isCommentModalVisible}
+        closeModal={() => setIsCommentModalVisible(false)}
+        onInteraction={async (comment) => {
+          await ChooseFunction[chosenFunction]({ comment });
+        }}
+      />
+    </VStack>
   );
 };
 export default Occurrence;

@@ -14,39 +14,19 @@ const CommentCard: React.FC<CommentCardProps> = ({ date, name, text }) => {
     <Box
       borderBottomWidth="$1"
       borderColor="$trueGray800"
-      $dark-borderColor="$trueGray100"
-      $base-pl={0}
-      $base-pr={0}
-      $sm-pl="$4"
-      $sm-pr="$5"
       py="$2"
     >
       <VStack>
         <HStack justifyContent="space-between">
-          <Text
-            fontSize="$xs"
-            color="$coolGray800"
-            alignSelf="flex-start"
-            $dark-color="$warmGray100"
-          >
+          <Text fontSize="$md" color="$gray800" fontWeight="$bold">
             Por {name}
           </Text>
-          <Text
-            fontSize="$xs"
-            color="$coolGray800"
-            alignSelf="flex-start"
-            $dark-color="$warmGray100"
-          >
+          <Text fontSize="$md" color="$gray800" fontWeight="$bold">
             {displayDate}
           </Text>
         </HStack>
 
-        <Text
-          fontSize="$xs"
-          color="$coolGray800"
-          alignSelf="flex-start"
-          $dark-color="$warmGray100"
-        >
+        <Text fontSize="$md" color="$gray800">
           {text}
         </Text>
       </VStack>

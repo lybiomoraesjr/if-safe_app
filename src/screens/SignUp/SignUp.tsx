@@ -83,18 +83,18 @@ const SignUn: React.FC = () => {
         backgroundColor="transparent"
         translucent
       />
-      <VStack flex={1}>
+      <VStack pt={48}>
         <Image
           w="$full"
-          h="$40"
+          h="$32"
           source={require("@/assets/ifsafe-logo.png")}
           defaultSource={require("@/assets/ifsafe-logo.png")}
           alt="Logo IfSafe"
         />
 
-        <VStack flex={1} px="$10" pb="$16">
-          <Center gap="$2" flex={1}>
-            <Heading color="$secondary950">Crie sua conta</Heading>
+        <VStack px="$8" pb={18} pt={48}>
+          <Center gap="$2" mb={24}>
+            <Heading color="$black">Crie sua conta</Heading>
 
             <Controller
               control={control}
@@ -157,14 +157,15 @@ const SignUn: React.FC = () => {
               isLoading={isLoading}
               title="Criar e acessar"
               onPress={handleSubmit(handleSignUp)}
-              style={{ marginBottom: 40 }}
             />
           </Center>
-          <Button
-            variant="outline"
-            title="Voltar para o Login"
-            onPress={handleGoBack}
-          />
+        
+            <Button
+              variant="outline"
+              title="Voltar para o Login"
+              onPress={handleGoBack}
+              
+            />
         </VStack>
       </VStack>
     </ScrollView>

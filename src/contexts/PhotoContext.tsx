@@ -38,7 +38,7 @@ export const PhotoContextProvider = ({
 
         if (!cameraStatus.granted) {
           return Alert.alert(
-            "Erro",
+            "Erro!",
             "Precisamos de permissão para acessar a câmera"
           );
         }
@@ -60,7 +60,7 @@ export const PhotoContextProvider = ({
               <ToastMessage
                 id={id}
                 action="error"
-                title="Erro"
+                title="Erro!"
                 description="Precisamos de permissão para acessar a galeria"
                 onClose={() => toast.close(id)}
               />
@@ -90,7 +90,7 @@ export const PhotoContextProvider = ({
               <ToastMessage
                 id={id}
                 action="error"
-                title="Erro"
+                title="Erro!"
                 description="A imagem deve ter no máximo 2MB"
                 onClose={() => toast.close(id)}
               />

@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  OccurrenceContainer,
-  Title,
-  TitleContainer,
-} from "./Home.styles";
+
 import HomeHeader from "../../components/HomeHeader";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
-import { Alert, FlatList, RefreshControl, Text, View } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import { OccurrenceStatusEnum } from "@/types";
-import Status from "../../components/StatusButton";
 import OccurrenceCard from "@/components/OccurrenceCard";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/hooks/useAuth";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { AppError } from "@/utils/AppError";
-import { useTheme } from "styled-components";
-import { Heading, HStack, VStack } from "@gluestack-ui/themed";
+import {
+  Box,
+  Heading,
+  HStack,
+  Text,
+  useToast,
+  useToken,
+  VStack,
+} from "@gluestack-ui/themed";
 import StatusButton from "../../components/StatusButton";
+import ToastMessage from "@/components/ToastMessage";
 
 const Home: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
@@ -26,7 +28,10 @@ const Home: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { navigate } = useNavigation<AppNavigatorRoutesProps>();
 
-  const { COLORS } = useTheme();
+  const toast = useToast();
+
+  const resolvedBrandLight = useToken("colors", "brandLight");
+
   const { user } = useAuth();
 
   const {
@@ -59,10 +64,22 @@ const Home: React.FC = () => {
       await fetchOccurrenceCards();
     } catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível carregar as ocorrências";
-      Alert.alert("Erro", title);
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Erro!"
+            description={
+              isAppError
+                ? error.data
+                : "Não foi possível carregar as ocorrências. Tente novamente mais tarde."
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } finally {
       setIsLoading(false);
     }
@@ -83,10 +100,23 @@ const Home: React.FC = () => {
       await fetchOccurrenceCards();
     } catch (error) {
       const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.data
-        : "Não foi possível carregar as ocorrências";
-      Alert.alert("Erro", title);
+
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Erro!"
+            description={
+              isAppError
+                ? error.data
+                : "Não foi possível carregar as ocorrências. Tente novamente mais tarde."
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } finally {
       setRefreshing(false);
     }
@@ -96,9 +126,12 @@ const Home: React.FC = () => {
     <VStack flex={1} backgroundColor="$white">
       <HomeHeader />
 
+      <Heading color="$black" fontSize="$md" fontFamily="$heading">
+        Filtros:
+      </Heading>
       <FlatList
         data={occurrenceKeys.filter(
-          (item) => user.admin || item !== "cancelled"
+          (item) => user.admin || item !== OccurrenceStatusEnum.CANCELLED
         )}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
@@ -110,22 +143,23 @@ const Home: React.FC = () => {
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 32 }}
-        style={{ marginVertical: 40, maxHeight: 44, minHeight: 44 }}
+        contentContainerStyle={{ paddingHorizontal: 24 }}
+        style={{ marginVertical: 10, maxHeight: 44, minHeight: 44 }}
       />
 
-      <HStack justifyContent="space-between" mb="$5" alignItems="center">
-        <Heading color="$secondary200" fontSize="$md" fontFamily="$heading">
-          Ocorrências:
-        </Heading>
-      </HStack>
+      <Heading color="$black" fontSize="$md" fontFamily="$heading">
+        Ocorrências:
+      </Heading>
 
-      <VStack px="$8" flex={1}>
+      <VStack flex={1}>
         {isLoading ? (
           <Loading />
         ) : (
           <FlatList
-            data={occurrenceCards}
+            data={occurrenceCards.filter(
+              (item) =>
+                user.admin || item.status !== OccurrenceStatusEnum.CANCELLED
+            )}
             renderItem={({ item, index }) => (
               <OccurrenceCard
                 image={item.image}
@@ -138,9 +172,9 @@ const Home: React.FC = () => {
               />
             )}
             ListEmptyComponent={() => (
-              <View>
+              <Box>
                 <Text>Não há ocorrências disponíveis no momento.</Text>
-              </View>
+              </Box>
             )}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}
@@ -150,7 +184,7 @@ const Home: React.FC = () => {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
-                colors={[COLORS.BRAND_LIGHT]}
+                colors={[resolvedBrandLight]}
               />
             }
           />

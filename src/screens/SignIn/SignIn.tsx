@@ -99,18 +99,18 @@ const SignIn: React.FC = () => {
         backgroundColor="transparent"
         translucent
       />
-      <VStack flex={1}>
+      <VStack pt={48}>
         <Image
           w="$full"
-          h="$40"
+          h="$32"
           source={require("@/assets/ifsafe-logo.png")}
           defaultSource={require("@/assets/ifsafe-logo.png")}
           alt="Logo IfSafe"
         />
 
-        <VStack flex={1} px="$10" pb="$16">
-          <Center gap="$2">
-            <Heading color="$secondary950">Acesse a conta</Heading>
+        <VStack px="$8" pt={48} pb={18}>
+          <Center gap="$2" mb={24}>
+            <Heading color="$black">Acesse a conta</Heading>
             <Controller
               control={control}
               name="email"
@@ -148,7 +148,7 @@ const SignIn: React.FC = () => {
               onPress={handleSubmit(handleSignIn)}
             />
           </Center>
-          <Center flex={1} justifyContent="flex-end" mt="$4">
+          <Center>
             <Text
               color="$secondary950"
               fontSize="$sm"

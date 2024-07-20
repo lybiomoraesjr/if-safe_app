@@ -71,7 +71,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
       <ModalBackdrop />
       <ModalContent>
         <ModalHeader>
-          <Heading size="lg">Comentário:</Heading>
+          <Heading size="lg">Justificativa:</Heading>
 
           <ModalCloseButton>
             <Icon as={X} />
@@ -83,7 +83,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
             name="comment"
             render={({ field: { onChange, value } }) => (
               <Input
-                placeholder="Digite seu comentário"
+                placeholder="Digite sua Justificativa"
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.comment?.message}
@@ -95,7 +95,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
         </ModalBody>
 
         <ModalFooter>
-          <HStack justifyContent="space-between">
+          <HStack gap="$4">
             <Button
               title="Descartar"
               onPress={() => {
@@ -103,12 +103,16 @@ const CommentModal: React.FC<CommentModalProps> = ({
                 closeModal();
               }}
               disabled={isLoading}
+              bg="$canceled"
+              $active-backgroundColor="$red300"
+              w="$7/15"
             />
 
             <Button
               title="Publicar"
               onPress={handleSubmit(handleMakeACommentWithLoading)}
               isLoading={isLoading}
+              w="$7/15"
             />
           </HStack>
         </ModalFooter>

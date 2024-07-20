@@ -14,6 +14,7 @@ import {
   Text,
   VStack,
 } from "@gluestack-ui/themed";
+import { Icon } from "@gluestack-ui/themed";
 
 interface OccurrenceCardProps extends TouchableOpacityProps {
   image: string;
@@ -51,24 +52,16 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
         <Image
           source={{ uri: image }}
           alt="Imagem da ocorrência"
-          size="lg"
+          size="xl"
           borderRadius={8}
+          mr="$2"
         />
-        <VStack flex={1}>
-          <Heading fontSize="$lg" color="$secondary950" fontFamily="$heading">
+        <VStack flex={1} gap="$2">
+          <Heading fontSize="$lg" color="$black">
             {title}
           </Heading>
-          <HStack>
-            <HStack>
-              <Warning size={ICON_SIZE} color="#8D8D99" />
-              <Text>{alert}</Text>
-            </HStack>
 
-            <HStack>
-              <ChatCircle size={ICON_SIZE} color="#8D8D99" />
-              <Text>{commentsNumber}</Text>
-            </HStack>
-          </HStack>
+          <Text fontSize="$sm">{displayDate}</Text>
 
           <Box>
             <Badge
@@ -81,11 +74,19 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
             </Badge>
           </Box>
 
-          <Text fontSize="$sm" mt="$1">
-            {displayDate}
-          </Text>
+          <HStack>
+            <HStack pr="$2">
+              <Icon as={Warning} color="$gray500" />
+              <Text>{alert}</Text>
+            </HStack>
+
+            <HStack >
+              <Icon as={ChatCircle} color="#gray500" />
+              <Text>{commentsNumber}</Text>
+            </HStack>
+          </HStack>
         </VStack>
-        <CaretRight size={32} color="#8D8D99" />
+        <CaretRight size={32} color="#gray500" />
       </HStack>
     </TouchableOpacity>
   );
