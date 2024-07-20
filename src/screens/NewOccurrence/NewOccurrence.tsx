@@ -46,7 +46,11 @@ const NewOccurrence: React.FC = () => {
 
   const toast = useToast();
 
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isPhotoPickerModalVisible, setIsPhotoPickerModalVisible] =
+    useState(false);
+  const [isConfirmationModalVisible, setIsConfirmationModalVisible] =
+    useState(false);
+
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
   const { handleCreateOccurrence, setOccurrenceUpdated } = useOccurrence();
@@ -57,6 +61,7 @@ const NewOccurrence: React.FC = () => {
     control,
     handleSubmit,
     reset,
+    trigger,
     formState: { errors },
   } = useForm<NewOccurrenceFormData>({
     resolver: yupResolver(profileSchema),
@@ -80,6 +85,7 @@ const NewOccurrence: React.FC = () => {
       await handleCreateOccurrence(data, photoUri);
 
       setOccurrenceUpdated(true);
+      setIsConfirmationModalVisible(false)
 
       toast.show({
         placement: "top",
@@ -95,6 +101,7 @@ const NewOccurrence: React.FC = () => {
 
       handleResetForm();
     } catch (error) {
+      setIsConfirmationModalVisible(false)
       const isAppError = error instanceof AppError;
 
       toast.show({
@@ -115,6 +122,7 @@ const NewOccurrence: React.FC = () => {
       });
     } finally {
       setIsLoading(false);
+      setIsConfirmationModalVisible(false)
     }
   };
 
@@ -123,6 +131,13 @@ const NewOccurrence: React.FC = () => {
       setPhotoUri(selectedPhoto.uri);
     }
   }, [selectedPhoto.uri]);
+
+  const handleConfirm = async () => {
+    const isValid = await trigger();
+    if (isValid) {
+      setIsConfirmationModalVisible(true);
+    }
+  };
 
   return (
     <VStack flex={1} backgroundColor="$white">
@@ -185,7 +200,7 @@ const NewOccurrence: React.FC = () => {
 
             <View style={{ alignItems: "center", marginBottom: 12 }}>
               <TouchableOpacity
-                onPress={() => setModalVisible(true)}
+                onPress={() => setIsPhotoPickerModalVisible(true)}
                 style={{ marginTop: 2 }}
               >
                 <Text color="$brandMid" fontSize="$sm" fontWeight="$bold">
@@ -206,8 +221,8 @@ const NewOccurrence: React.FC = () => {
 
               <Button
                 title="Publicar"
-                
                 w="$7/15"
+                onPress={handleConfirm}
               />
             </HStack>
           </Center>
@@ -215,18 +230,17 @@ const NewOccurrence: React.FC = () => {
       </ScrollView>
 
       <PhotoPickerModal
-        showModal={isModalVisible}
+        showModal={isPhotoPickerModalVisible}
         caller={CALLER}
-        closeModal={() => setModalVisible(false)}
+        closeModal={() => setIsPhotoPickerModalVisible(false)}
       />
 
-      {/* <ConfirmationModal
-        showModal={isVisible}
-        closeModal={() => setIsVisible(false)}
+      <ConfirmationModal
+        showModal={isConfirmationModalVisible}
+        closeModal={() => setIsConfirmationModalVisible(false)}
         description="Deseja sair da sua conta?"
-        onPress={}
-        onConfirm={async () => await signOut()}
-      /> */}
+        onConfirm={handleSubmit(handlePublish)}
+      />
     </VStack>
   );
 };
