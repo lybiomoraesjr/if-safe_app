@@ -94,7 +94,7 @@ const SignUn: React.FC = () => {
 
         <VStack px="$8" pb={18} pt={48}>
           <Center gap="$2" mb={24}>
-            <Heading color="$black">Crie sua conta</Heading>
+            <Heading color="$gray700">Crie sua conta</Heading>
 
             <Controller
               control={control}

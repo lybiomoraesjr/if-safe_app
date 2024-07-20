@@ -7,16 +7,17 @@ import { useAuth } from "@/hooks/useAuth";
 
 import defaultUserPhotoImg from "@/assets/userPhotoDefault.png";
 import { SignOut } from "phosphor-react-native";
-import { useTheme } from "styled-components";
 import UserPhoto from "../UserPhoto";
-import { Heading, HStack, Text } from "@gluestack-ui/themed";
+import { Heading, HStack, Text, useToken } from "@gluestack-ui/themed";
 import { VStack } from "@gluestack-ui/themed";
 import ConfirmationModal from "../ConfirmationModal";
 
 const HomeHeader: React.FC = () => {
   const { user, signOut } = useAuth();
-  const { COLORS } = useTheme();
 
+  const white = useToken("colors", "white");
+  const greenGradientStart = useToken("colors", "greenGradientStart");
+  const greenGradientEnd = useToken("colors", "greenGradientEnd");
   const insets = useSafeAreaInsets();
 
   const paddingTop = insets.top + 32;
@@ -26,7 +27,7 @@ const HomeHeader: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
-    <LinearGradient colors={["#00856F", "#21B59D"]}>
+    <LinearGradient colors={[greenGradientStart, greenGradientEnd]}>
       <HStack pt={paddingTop} pb={32} px={32} alignItems="center">
         <UserPhoto
           source={user.avatar ? { uri: user.avatar } : defaultUserPhotoImg}
@@ -42,7 +43,7 @@ const HomeHeader: React.FC = () => {
           </Heading>
         </VStack>
         <TouchableOpacity onPress={() => setIsVisible(true)}>
-          <SignOut size={32} color={COLORS.WHITE} />
+          <SignOut size={32} color={white} />
         </TouchableOpacity>
       </HStack>
 

@@ -22,13 +22,14 @@ const StatusButton: React.FC<StatusProps> = ({
       rounded="$md"
       justifyContent="center"
       alignItems="center"
-      borderColor={isActive ? "$green600" : "$secondary600"}
-      borderWidth="$2"
+      borderColor={"$brandLight"}
+      borderWidth={isActive ? 1: 0}
+      bgColor={isActive ? "$white" : "$gray200"}
       onPress={onPress}
       {...rest}
     >
       <Text
-        color={isActive ? "$green600" : "$secondary600"}
+        color={isActive ? "$brandLight" : "$gray700"}
         textTransform="uppercase"
         fontSize="$xs"
         fontFamily="$heading"

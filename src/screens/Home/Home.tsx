@@ -126,9 +126,6 @@ const Home: React.FC = () => {
     <VStack flex={1} backgroundColor="$white">
       <HomeHeader />
 
-      <Heading color="$black" fontSize="$md" fontFamily="$heading">
-        Filtros:
-      </Heading>
       <FlatList
         data={occurrenceKeys.filter(
           (item) => user.admin || item !== OccurrenceStatusEnum.CANCELLED
@@ -144,14 +141,14 @@ const Home: React.FC = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 24 }}
-        style={{ marginVertical: 10, maxHeight: 44, minHeight: 44 }}
+        style={{ marginVertical: 30, maxHeight: 44, minHeight: 44 }}
       />
 
-      <Heading color="$black" fontSize="$md" fontFamily="$heading">
+      <Heading color="$gray700" fontSize="$lg" ml="$8" mb="$2">
         Ocorrências:
       </Heading>
 
-      <VStack flex={1}>
+      <VStack flex={1} mx="$6">
         {isLoading ? (
           <Loading />
         ) : (
@@ -178,8 +175,6 @@ const Home: React.FC = () => {
             )}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}

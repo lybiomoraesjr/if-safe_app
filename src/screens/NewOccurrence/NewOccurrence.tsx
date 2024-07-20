@@ -25,9 +25,14 @@ import {
 } from "@gluestack-ui/themed";
 import ToastMessage from "@/components/ToastMessage";
 import Textarea from "@/components/Textarea/Textarea";
+import ConfirmationModal from "@/components/ConfirmationModal";
 
 const profileSchema = yup.object({
-  title: yup.string().required("Informe o título").min(3, "A título deve ter pelo menos 3 dígitos.").max(25, "O títilo deve ter no máximo 25 dígitos."),
+  title: yup
+    .string()
+    .required("Informe o título")
+    .min(3, "A título deve ter pelo menos 3 dígitos.")
+    .max(25, "O títilo deve ter no máximo 25 dígitos."),
   location: yup.string().required("Informe a localização"),
   description: yup.string().required("Informe a descrição"),
 });
@@ -201,8 +206,7 @@ const NewOccurrence: React.FC = () => {
 
               <Button
                 title="Publicar"
-                isLoading={isLoading}
-                onPress={handleSubmit(handlePublish)}
+                
                 w="$7/15"
               />
             </HStack>
@@ -215,6 +219,14 @@ const NewOccurrence: React.FC = () => {
         caller={CALLER}
         closeModal={() => setModalVisible(false)}
       />
+
+      {/* <ConfirmationModal
+        showModal={isVisible}
+        closeModal={() => setIsVisible(false)}
+        description="Deseja sair da sua conta?"
+        onPress={}
+        onConfirm={async () => await signOut()}
+      /> */}
     </VStack>
   );
 };

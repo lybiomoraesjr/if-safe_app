@@ -38,11 +38,10 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
 }) => {
   const displayDate = formattedDate(date);
 
-  const ICON_SIZE = 20;
   return (
     <TouchableOpacity onPress={onInteract} {...rest}>
       <HStack
-        bg="$secondary50"
+        bg="$gray100"
         alignItems="center"
         p="$2"
         pr="$4"
@@ -52,12 +51,13 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
         <Image
           source={{ uri: image }}
           alt="Imagem da ocorrência"
-          size="xl"
+          size="lg"
           borderRadius={8}
           mr="$2"
+          resizeMode="cover"
         />
-        <VStack flex={1} gap="$2">
-          <Heading fontSize="$lg" color="$black">
+        <VStack flex={1} rowGap="$1">
+          <Heading fontSize="$md" color="$gray700">
             {title}
           </Heading>
 
@@ -69,24 +69,27 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
               variant="outline"
               borderRadius="$sm"
               action="success"
+              w="$32"
             >
-              <BadgeText>{status}</BadgeText>
+              <BadgeText textAlign="center">{status}</BadgeText>
             </Badge>
           </Box>
 
           <HStack>
-            <HStack pr="$2">
+            <HStack pr="$2" alignItems="center">
               <Icon as={Warning} color="$gray500" />
               <Text>{alert}</Text>
             </HStack>
 
-            <HStack >
+            <HStack alignItems="center" pr="$2">
               <Icon as={ChatCircle} color="#gray500" />
               <Text>{commentsNumber}</Text>
             </HStack>
           </HStack>
         </VStack>
-        <CaretRight size={32} color="#gray500" />
+
+        <Icon as={CaretRight} color="#gray500" />
+
       </HStack>
     </TouchableOpacity>
   );

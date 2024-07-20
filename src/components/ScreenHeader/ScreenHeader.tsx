@@ -1,9 +1,8 @@
-import { useTheme } from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { ArrowLeft } from "phosphor-react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Button, Center, Heading } from "@gluestack-ui/themed";
+import { Button, Center, Heading, useToken } from "@gluestack-ui/themed";
 import { ButtonIcon } from "@gluestack-ui/themed";
 
 type ScreenHeaderProps = {
@@ -15,10 +14,12 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   title,
   showBackButton,
 }) => {
-  const { COLORS } = useTheme();
   const { goBack } = useNavigation();
 
   const insets = useSafeAreaInsets();
+
+  const greenGradientStart = useToken("colors", "greenGradientStart");
+  const greenGradientEnd = useToken("colors", "greenGradientEnd");
 
   const paddingTop = insets.top + 42;
 
@@ -27,12 +28,15 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   };
 
   return (
-    <LinearGradient
-      colors={[COLORS.GREEN_GRADIENT_START, COLORS.GREEN_GRADIENT_END]}
-    >
+    <LinearGradient colors={[greenGradientStart, greenGradientEnd]}>
       <Center flexDirection="row" pt={paddingTop} pb={32}>
         {showBackButton && (
-          <Button size="lg" onPress={handleGoBack} bg="transparent" alignSelf="flex-start">
+          <Button
+            size="lg"
+            onPress={handleGoBack}
+            bg="transparent"
+            alignSelf="flex-start"
+          >
             <ButtonIcon as={ArrowLeft} size="xl" color="$white" />
           </Button>
         )}

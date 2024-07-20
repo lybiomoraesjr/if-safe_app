@@ -244,7 +244,7 @@ const Profile: React.FC = () => {
             )}
           />
 
-          <Text fontWeight="$bold" fontSize="$sm" mt="$4" color="$black">
+          <Text fontWeight="$bold" fontSize="$sm" mt="$4" color="$gray700">
             Alterar senha
           </Text>
           <Controller

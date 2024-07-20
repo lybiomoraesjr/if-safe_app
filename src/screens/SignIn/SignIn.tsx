@@ -110,7 +110,7 @@ const SignIn: React.FC = () => {
 
         <VStack px="$8" pt={48} pb={18}>
           <Center gap="$2" mb={24}>
-            <Heading color="$black">Acesse a conta</Heading>
+            <Heading color="$gray700">Acesse a conta</Heading>
             <Controller
               control={control}
               name="email"
