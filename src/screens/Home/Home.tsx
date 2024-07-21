@@ -11,18 +11,15 @@ import { useAuth } from "@/hooks/useAuth";
 import { useOccurrence } from "@/hooks/useOccurrence";
 import { AppError } from "@/utils/AppError";
 import {
-  Box,
   Heading,
-  HStack,
   Text,
   useToast,
   useToken,
   VStack,
 } from "@gluestack-ui/themed";
-import StatusButton from "../../components/StatusButton";
+import FilterButton from "../../components/FilterButton";
 import ToastMessage from "@/components/ToastMessage";
 import { OccurrenceCardDTO } from "@/dtos/OccurrenceCardDTO";
-import { OccurrenceDTO } from "@/dtos/OccurrenceDTO";
 
 const Home: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterEnum>(FilterEnum.ALL);
@@ -174,7 +171,7 @@ const Home: React.FC = () => {
         )}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
-          <StatusButton
+          <FilterButton
             name={OccurrenceFilter[item as FilterEnum]}
             isActive={activeFilter === item}
             onPress={() => setActiveFilter(item as FilterEnum)}
@@ -211,9 +208,9 @@ const Home: React.FC = () => {
               />
             )}
             ListEmptyComponent={() => (
-              <Box>
+              <VStack>
                 <Text>Não há ocorrências disponíveis no momento.</Text>
-              </Box>
+              </VStack>
             )}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}

@@ -7,7 +7,7 @@ type StatusProps = {
   onPress?: () => void;
 };
 
-const StatusButton: React.FC<StatusProps> = ({
+const FilterButton: React.FC<StatusProps> = ({
   name,
   isActive,
   onPress,
@@ -40,4 +40,4 @@ const StatusButton: React.FC<StatusProps> = ({
   );
 };
 
-export default StatusButton;
+export default FilterButton;

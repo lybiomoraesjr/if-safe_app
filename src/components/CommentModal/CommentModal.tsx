@@ -71,7 +71,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
       <ModalBackdrop />
       <ModalContent>
         <ModalHeader>
-          <Heading size="lg">Justificativa:</Heading>
+          <Heading size="lg">Comentário:</Heading>
 
           <ModalCloseButton>
             <Icon as={X} />
@@ -83,7 +83,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
             name="comment"
             render={({ field: { onChange, value } }) => (
               <Input
-                placeholder="Digite sua Justificativa"
+                placeholder="Digite seu comentário"
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.comment?.message}
