@@ -239,7 +239,6 @@ const Occurrence: React.FC = () => {
     };
 
     fetchData();
-    setOccurrenceUpdated(true);
   }, [occurrenceId]);
 
   const displayDate = formattedDate(occurrence.date);

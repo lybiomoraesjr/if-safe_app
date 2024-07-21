@@ -85,7 +85,7 @@ const NewOccurrence: React.FC = () => {
       await handleCreateOccurrence(data, photoUri);
 
       setOccurrenceUpdated(true);
-      setIsConfirmationModalVisible(false)
+      setIsConfirmationModalVisible(false);
 
       toast.show({
         placement: "top",
@@ -101,7 +101,7 @@ const NewOccurrence: React.FC = () => {
 
       handleResetForm();
     } catch (error) {
-      setIsConfirmationModalVisible(false)
+      setIsConfirmationModalVisible(false);
       const isAppError = error instanceof AppError;
 
       toast.show({
@@ -122,7 +122,7 @@ const NewOccurrence: React.FC = () => {
       });
     } finally {
       setIsLoading(false);
-      setIsConfirmationModalVisible(false)
+      setIsConfirmationModalVisible(false);
     }
   };
 
@@ -219,11 +219,7 @@ const NewOccurrence: React.FC = () => {
                 w="$7/15"
               />
 
-              <Button
-                title="Publicar"
-                w="$7/15"
-                onPress={handleConfirm}
-              />
+              <Button title="Publicar" w="$7/15" onPress={handleConfirm} />
             </HStack>
           </Center>
         </VStack>
@@ -238,7 +234,7 @@ const NewOccurrence: React.FC = () => {
       <ConfirmationModal
         showModal={isConfirmationModalVisible}
         closeModal={() => setIsConfirmationModalVisible(false)}
-        description="Deseja sair da sua conta?"
+        description="Deseja publicar a ocorrência? Essa ação não poderá ser desfeita."
         onConfirm={handleSubmit(handlePublish)}
       />
     </VStack>

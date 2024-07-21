@@ -4,7 +4,7 @@ import HomeHeader from "../../components/HomeHeader";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigatorRoutesProps } from "../../routes/app.routes";
 import { FlatList, RefreshControl } from "react-native";
-import { OccurrenceStatusEnum } from "@/types";
+import { FilterEnum, OccurrenceStatusEnum } from "@/types";
 import OccurrenceCard from "@/components/OccurrenceCard";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/hooks/useAuth";
@@ -21,9 +21,15 @@ import {
 } from "@gluestack-ui/themed";
 import StatusButton from "../../components/StatusButton";
 import ToastMessage from "@/components/ToastMessage";
+import { OccurrenceCardDTO } from "@/dtos/OccurrenceCardDTO";
+import { OccurrenceDTO } from "@/dtos/OccurrenceDTO";
 
 const Home: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [activeFilter, setActiveFilter] = useState<FilterEnum>(FilterEnum.ALL);
+  const [filteredOccurrenceCards, setFilteredOccurrenceCards] = useState<
+    OccurrenceCardDTO[]
+  >([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { navigate } = useNavigation<AppNavigatorRoutesProps>();
@@ -48,12 +54,12 @@ const Home: React.FC = () => {
     navigate("occurrence", { occurrenceId: id });
   };
 
-  const OccurrenceFilter: Record<string, string> = {
-    all: "Todas",
-    mine: "Minhas",
-    pending: OccurrenceStatusEnum.PENDING,
-    solved: OccurrenceStatusEnum.SOLVED,
-    cancelled: OccurrenceStatusEnum.CANCELLED,
+  const OccurrenceFilter: Record<FilterEnum, string> = {
+    [FilterEnum.ALL]: "Todas",
+    [FilterEnum.MINE]: "Minhas",
+    [FilterEnum.PENDING]: OccurrenceStatusEnum.PENDING,
+    [FilterEnum.SOLVED]: OccurrenceStatusEnum.SOLVED,
+    [FilterEnum.CANCELLED]: OccurrenceStatusEnum.CANCELLED,
   };
 
   const occurrenceKeys = Object.keys(OccurrenceFilter);
@@ -94,6 +100,42 @@ const Home: React.FC = () => {
     setOccurrenceUpdated(false);
   }, [occurrenceUpdated]);
 
+  const chooseFilter = {
+    [FilterEnum.ALL]: (occurrences: OccurrenceCardDTO[]) => {
+      setFilteredOccurrenceCards(occurrences);
+    },
+    [FilterEnum.MINE]: (occurrences: OccurrenceCardDTO[]) => {
+      const filteredOccurrences = occurrences.filter(
+        (occurrence) => occurrence.authorId === user.id
+      );
+      setFilteredOccurrenceCards(filteredOccurrences);
+    },
+    [FilterEnum.PENDING]: (occurrences: OccurrenceCardDTO[]) => {
+      const filteredOccurrences = occurrences.filter(
+        (occurrence) => occurrence.status === OccurrenceStatusEnum.PENDING
+      );
+      setFilteredOccurrenceCards(filteredOccurrences);
+    },
+    [FilterEnum.SOLVED]: (occurrences: OccurrenceCardDTO[]) => {
+      const filteredOccurrences = occurrences.filter(
+        (occurrence) => occurrence.status === OccurrenceStatusEnum.SOLVED
+      );
+      setFilteredOccurrenceCards(filteredOccurrences);
+    },
+    [FilterEnum.CANCELLED]: (occurrences: OccurrenceCardDTO[]) => {
+      const filteredOccurrences = occurrences.filter(
+        (occurrence) => occurrence.status === OccurrenceStatusEnum.CANCELLED
+      );
+      setFilteredOccurrenceCards(filteredOccurrences);
+    },
+  };
+  
+  useEffect(() => {
+    if (chooseFilter[activeFilter]) {
+      chooseFilter[activeFilter](occurrenceCards);
+    }
+  }, [activeFilter, occurrenceCards]);
+
   const handleRefresh = async () => {
     try {
       setRefreshing(true);
@@ -128,14 +170,14 @@ const Home: React.FC = () => {
 
       <FlatList
         data={occurrenceKeys.filter(
-          (item) => user.admin || item !== OccurrenceStatusEnum.CANCELLED
+          (item) => user.admin || item !== FilterEnum.CANCELLED
         )}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <StatusButton
-            name={OccurrenceFilter[item]}
+            name={OccurrenceFilter[item as FilterEnum]}
             isActive={activeFilter === item}
-            onPress={() => setActiveFilter(item)}
+            onPress={() => setActiveFilter(item as FilterEnum)}
           />
         )}
         horizontal
@@ -153,7 +195,7 @@ const Home: React.FC = () => {
           <Loading />
         ) : (
           <FlatList
-            data={occurrenceCards.filter(
+            data={filteredOccurrenceCards.filter(
               (item) =>
                 user.admin || item.status !== OccurrenceStatusEnum.CANCELLED
             )}

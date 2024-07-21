@@ -43,7 +43,7 @@ const CommentListModal: React.FC<CommentListModalProps> = ({
           <Divider borderBottomWidth="$1" borderColor="$trueGray800" />
 
           <ScrollView>
-            {/* {comments.length === 0 || comments.length === null ? (
+            {/* {comments.length === 0 || !comments ? (
               <Text my="$2" size="md">
                 Nenhum comentário
               </Text>

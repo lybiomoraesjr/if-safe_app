@@ -2,7 +2,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { ArrowLeft } from "phosphor-react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Button, Center, Heading, useToken } from "@gluestack-ui/themed";
+import {
+  Button,
+  Center,
+  Heading,
+  HStack,
+  useToken,
+  VStack,
+} from "@gluestack-ui/themed";
 import { ButtonIcon } from "@gluestack-ui/themed";
 
 type ScreenHeaderProps = {
@@ -29,22 +36,21 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 
   return (
     <LinearGradient colors={[greenGradientStart, greenGradientEnd]}>
-      <Center flexDirection="row" pt={paddingTop} pb={32}>
+      <HStack pt={paddingTop} pb={32} alignItems="center">
         {showBackButton && (
-          <Button
-            size="lg"
-            onPress={handleGoBack}
-            bg="transparent"
-            alignSelf="flex-start"
-          >
-            <ButtonIcon as={ArrowLeft} size="xl" color="$white" />
-          </Button>
+          <VStack>
+            <Button size="lg" onPress={handleGoBack} bg="transparent">
+              <ButtonIcon as={ArrowLeft} size="xl" color="$white" />
+            </Button>
+          </VStack>
         )}
 
-        <Heading color="$white" fontSize={18}>
-          {title}
-        </Heading>
-      </Center>
+        <HStack justifyContent="center">
+          <Heading color="$white" fontSize={18}>
+            {title}
+          </Heading>
+        </HStack>
+      </HStack>
     </LinearGradient>
   );
 };

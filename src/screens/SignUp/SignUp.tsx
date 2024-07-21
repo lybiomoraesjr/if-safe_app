@@ -14,6 +14,8 @@ import { ScrollView } from "@gluestack-ui/themed";
 import { Image } from "@gluestack-ui/themed";
 import { VStack } from "@gluestack-ui/themed";
 import { Center } from "@gluestack-ui/themed";
+import { useToast } from "@gluestack-ui/themed";
+import ToastMessage from "@/components/ToastMessage";
 
 type FormDataProps = {
   name: string;
@@ -54,21 +56,46 @@ const SignUn: React.FC = () => {
     goBack();
   };
 
+  const toast = useToast();
+
   const handleSignUp = async ({ name, email, password }: FormDataProps) => {
     try {
       setIsLoading(true);
       await api.post("/users", { name, email, password });
       await signIn(email, password);
+
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Sucesso!"
+            description="Conta criada com sucesso."
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } catch (error) {
       setIsLoading(false);
 
       const isAppError = error instanceof AppError;
 
-      const title = isAppError
-        ? error.data
-        : "Não foi possível criar a conta. Tente novamente mais tarde";
-
-      Alert.alert(title);
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title="Erro!!"
+            description={
+              isAppError
+                ? error.data
+                : "Não foi possível criar a conta. Tente novamente mais tarde"
+            }
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     }
   };
 
@@ -159,13 +186,12 @@ const SignUn: React.FC = () => {
               onPress={handleSubmit(handleSignUp)}
             />
           </Center>
-        
-            <Button
-              variant="outline"
-              title="Voltar para o Login"
-              onPress={handleGoBack}
-              
-            />
+
+          <Button
+            variant="outline"
+            title="Voltar para o Login"
+            onPress={handleGoBack}
+          />
         </VStack>
       </VStack>
     </ScrollView>
