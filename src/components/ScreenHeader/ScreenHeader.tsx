@@ -38,18 +38,20 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
     <LinearGradient colors={[greenGradientStart, greenGradientEnd]}>
       <HStack pt={paddingTop} pb={32} alignItems="center">
         {showBackButton && (
-          <VStack>
-            <Button size="lg" onPress={handleGoBack} bg="transparent">
+          <VStack w="$1/6">
+            <Button size="lg" bg="$transparent" onPress={handleGoBack}>
               <ButtonIcon as={ArrowLeft} size="xl" color="$white" />
             </Button>
           </VStack>
         )}
 
-        <HStack justifyContent="center">
+        <HStack justifyContent="center" flex={1}>
           <Heading color="$white" fontSize={18}>
             {title}
           </Heading>
         </HStack>
+
+        {showBackButton && <VStack w="$1/6" />}
       </HStack>
     </LinearGradient>
   );
