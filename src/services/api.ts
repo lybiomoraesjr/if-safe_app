@@ -14,20 +14,11 @@ const api = axios.create({
 api.registerInterceptTokenManager = (signOut: SignOut) => {
   const interceptTokenManager = api.interceptors.response.use(
     (response) => response,
-    (resquestError) => {
-      // if (resquestError?.response?.status === 401) {
-      //   if (
-      //     resquestError.response.data === "token.invalid" ||
-      //     resquestError.response.data === "token.expired"
-      //   ) {
-      //   }
-      //   signOut();
-      // }
-
-      if (resquestError.response && resquestError.response.data) {
-        return Promise.reject(new AppError(resquestError.response.data));
+    (requestError) => {
+      if (requestError.response && requestError.response.data) {
+        return Promise.reject(new AppError(requestError.response.data));
       } else {
-        return Promise.reject(resquestError);
+        return Promise.reject(requestError);
       }
     }
   );

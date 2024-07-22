@@ -5,9 +5,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import ScreenHeader from "@/components/ScreenHeader";
 import Button from "@/components/Button";
-import Input from "@/components/Input/Input";
+import Input from "@/components/Input";
 import { useAuth } from "@/hooks/useAuth";
-import { useTheme } from "styled-components/native";
 import { api } from "@/services/api";
 import { AppError } from "@/utils/AppError";
 import { storageAuthTokenGet } from "@/storage/storageAuthToken";
@@ -24,7 +23,7 @@ import {
   VStack,
 } from "@gluestack-ui/themed";
 import ToastMessage from "@/components/ToastMessage";
-import { Skeleton } from "@rneui/themed";
+import { Box } from "@gluestack-ui/themed";
 
 type FormDataProps = {
   name: string;
@@ -57,8 +56,6 @@ const Profile: React.FC = () => {
 
   const [isUpdating, setIsUpdating] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-
-  const { COLORS, FONT_SIZE, FONT_FAMILY } = useTheme();
 
   const { user, updateUserProfile } = useAuth();
 
@@ -199,7 +196,7 @@ const Profile: React.FC = () => {
         <VStack mt="$6" px="$10" gap="$2">
           <Center>
             {photoIsLoading ? (
-              <Skeleton width={100} height={100} style={{ borderRadius: 50 }} />
+              <Box h={128} w={128} rounded="$full" bg="$gray200" />
             ) : (
               <UserPhoto
                 source={
@@ -247,7 +244,7 @@ const Profile: React.FC = () => {
             )}
           />
 
-          <Text fontWeight="$bold" fontSize="$sm" mt="$4" color="$black">
+          <Text fontWeight="$bold" fontSize="$sm" mt="$4" color="$gray700">
             Alterar senha
           </Text>
           <Controller

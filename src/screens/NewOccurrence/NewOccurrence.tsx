@@ -25,9 +25,14 @@ import {
 } from "@gluestack-ui/themed";
 import ToastMessage from "@/components/ToastMessage";
 import Textarea from "@/components/Textarea/Textarea";
+import ConfirmationModal from "@/components/ConfirmationModal";
 
 const profileSchema = yup.object({
-  title: yup.string().required("Informe o título").min(3, "A título deve ter pelo menos 3 dígitos.").max(25, "O títilo deve ter no máximo 25 dígitos."),
+  title: yup
+    .string()
+    .required("Informe o título")
+    .min(3, "A título deve ter pelo menos 3 dígitos.")
+    .max(25, "O títilo deve ter no máximo 25 dígitos."),
   location: yup.string().required("Informe a localização"),
   description: yup.string().required("Informe a descrição"),
 });
@@ -41,7 +46,11 @@ const NewOccurrence: React.FC = () => {
 
   const toast = useToast();
 
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isPhotoPickerModalVisible, setIsPhotoPickerModalVisible] =
+    useState(false);
+  const [isConfirmationModalVisible, setIsConfirmationModalVisible] =
+    useState(false);
+
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
   const { handleCreateOccurrence, setOccurrenceUpdated } = useOccurrence();
@@ -52,6 +61,7 @@ const NewOccurrence: React.FC = () => {
     control,
     handleSubmit,
     reset,
+    trigger,
     formState: { errors },
   } = useForm<NewOccurrenceFormData>({
     resolver: yupResolver(profileSchema),
@@ -75,6 +85,7 @@ const NewOccurrence: React.FC = () => {
       await handleCreateOccurrence(data, photoUri);
 
       setOccurrenceUpdated(true);
+      setIsConfirmationModalVisible(false);
 
       toast.show({
         placement: "top",
@@ -90,6 +101,7 @@ const NewOccurrence: React.FC = () => {
 
       handleResetForm();
     } catch (error) {
+      setIsConfirmationModalVisible(false);
       const isAppError = error instanceof AppError;
 
       toast.show({
@@ -110,6 +122,7 @@ const NewOccurrence: React.FC = () => {
       });
     } finally {
       setIsLoading(false);
+      setIsConfirmationModalVisible(false);
     }
   };
 
@@ -118,6 +131,13 @@ const NewOccurrence: React.FC = () => {
       setPhotoUri(selectedPhoto.uri);
     }
   }, [selectedPhoto.uri]);
+
+  const handleConfirm = async () => {
+    const isValid = await trigger();
+    if (isValid) {
+      setIsConfirmationModalVisible(true);
+    }
+  };
 
   return (
     <VStack flex={1} backgroundColor="$white">
@@ -180,7 +200,7 @@ const NewOccurrence: React.FC = () => {
 
             <View style={{ alignItems: "center", marginBottom: 12 }}>
               <TouchableOpacity
-                onPress={() => setModalVisible(true)}
+                onPress={() => setIsPhotoPickerModalVisible(true)}
                 style={{ marginTop: 2 }}
               >
                 <Text color="$brandMid" fontSize="$sm" fontWeight="$bold">
@@ -199,21 +219,23 @@ const NewOccurrence: React.FC = () => {
                 w="$7/15"
               />
 
-              <Button
-                title="Publicar"
-                isLoading={isLoading}
-                onPress={handleSubmit(handlePublish)}
-                w="$7/15"
-              />
+              <Button title="Publicar" w="$7/15" onPress={handleConfirm} />
             </HStack>
           </Center>
         </VStack>
       </ScrollView>
 
       <PhotoPickerModal
-        showModal={isModalVisible}
+        showModal={isPhotoPickerModalVisible}
         caller={CALLER}
-        closeModal={() => setModalVisible(false)}
+        closeModal={() => setIsPhotoPickerModalVisible(false)}
+      />
+
+      <ConfirmationModal
+        showModal={isConfirmationModalVisible}
+        closeModal={() => setIsConfirmationModalVisible(false)}
+        description="Deseja publicar a ocorrência? Essa ação não poderá ser desfeita."
+        onConfirm={handleSubmit(handlePublish)}
       />
     </VStack>
   );

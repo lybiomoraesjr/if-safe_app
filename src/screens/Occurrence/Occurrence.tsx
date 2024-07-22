@@ -47,7 +47,6 @@ const Occurrence: React.FC = () => {
     occurrenceCards,
     setOccurrenceCards,
     handleStatusChange,
-    commentsNumber,
     handleMakeAComment,
     setOccurrenceUpdated,
   } = useOccurrence();
@@ -239,7 +238,6 @@ const Occurrence: React.FC = () => {
     };
 
     fetchData();
-    setOccurrenceUpdated(true);
   }, [occurrenceId]);
 
   const displayDate = formattedDate(occurrence.date);
@@ -275,7 +273,7 @@ const Occurrence: React.FC = () => {
         </VStack>
       ) : (
         <ScrollView>
-          <VStack px="$8" py="$4">
+          <VStack px="$6" py="$4">
             <HStack justifyContent="space-between">
               <Text>{occurrence.authorName}</Text>
               <Text>{displayDate}</Text>
@@ -302,11 +300,14 @@ const Occurrence: React.FC = () => {
               <BadgeText>{occurrence.status}</BadgeText>
             </Badge>
 
-            <Text>{occurrence.location}</Text>
+            <HStack>
+              <Text>Localização: </Text>
+              <Text>{occurrence.location}</Text>
+            </HStack>
 
             <Text>{occurrence.description}</Text>
 
-            <HStack>
+            <HStack gap="$3" mb="$4">
               <IconButton
                 icon={Warning}
                 onPress={handleLikeWithLoading}
@@ -321,11 +322,10 @@ const Occurrence: React.FC = () => {
                 onPress={() => {
                   setIsCommentListModalVisible(true);
                 }}
-                text={commentsNumber.toString()}
+                text={occurrence.comments.length.toString()}
               />
-
               {user.admin && (
-                <HStack>
+                <>
                   <IconButton
                     icon={Check}
                     onPress={() => {
@@ -342,7 +342,7 @@ const Occurrence: React.FC = () => {
                     bgColor="$canceled"
                     activeBgColor="$red300"
                   />
-                </HStack>
+                </>
               )}
             </HStack>
 

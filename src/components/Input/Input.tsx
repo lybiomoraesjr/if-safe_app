@@ -42,7 +42,7 @@ const Input: React.FC<InputProps> = ({
       >
         <InputField
           px="$4"
-          color="$black"
+          color="$gray700"
           placeholderTextColor="$gray400"
           {...rest}
         />

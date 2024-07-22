@@ -13,11 +13,16 @@ import { ModalCloseButton } from "@gluestack-ui/themed";
 import { X } from "phosphor-react-native";
 import { ModalBody } from "@gluestack-ui/themed";
 import { ModalFooter } from "@gluestack-ui/themed";
+import { TouchableOpacity } from "react-native";
+import Textarea from "../Textarea/Textarea";
 
 type CommentModalProps = {
   showModal: boolean;
-  closeModal: () => void;
   occurrenceId: string;
+  placeHolder?: string;
+  title?: string;
+  commentRequired?: string;
+  closeModal: () => void;
   onInteraction: (comment: string) => Promise<void>;
 };
 
@@ -25,15 +30,18 @@ type FormDataProps = {
   comment: string;
 };
 
-const CreateACommentDialogSchema = yup.object({
-  comment: yup.string().required("Digite um comentário."),
-});
-
 const CommentModal: React.FC<CommentModalProps> = ({
   showModal,
   closeModal,
   onInteraction,
+  placeHolder = "Digite seu comentário",
+  title = "Comentário",
+  commentRequired = "Comentário é obrigatório",
 }) => {
+  const CreateACommentDialogSchema = yup.object({
+    comment: yup.string().required(commentRequired),
+  });
+
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -71,9 +79,14 @@ const CommentModal: React.FC<CommentModalProps> = ({
       <ModalBackdrop />
       <ModalContent>
         <ModalHeader>
-          <Heading size="lg">Justificativa:</Heading>
+          <Heading size="lg">{title}:</Heading>
 
-          <ModalCloseButton>
+          <ModalCloseButton
+            onPress={() => {
+              closeModal();
+              handleResetForm();
+            }}
+          >
             <Icon as={X} />
           </ModalCloseButton>
         </ModalHeader>
@@ -82,12 +95,11 @@ const CommentModal: React.FC<CommentModalProps> = ({
             control={control}
             name="comment"
             render={({ field: { onChange, value } }) => (
-              <Input
-                placeholder="Digite sua Justificativa"
+              <Textarea
+                placeholder={placeHolder}
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.comment?.message}
-                returnKeyType="send"
                 onSubmitEditing={handleSubmit(handleMakeACommentWithLoading)}
               />
             )}
@@ -109,7 +121,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
             />
 
             <Button
-              title="Publicar"
+              title="Enviar"
               onPress={handleSubmit(handleMakeACommentWithLoading)}
               isLoading={isLoading}
               w="$7/15"

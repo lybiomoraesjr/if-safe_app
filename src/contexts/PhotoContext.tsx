@@ -8,7 +8,10 @@ import { useToast } from "@gluestack-ui/themed";
 import ToastMessage from "@/components/ToastMessage";
 
 export type PhotoContextDataProps = {
-  chooseImage: (source: ChooseImageEnum, caller: string) => Promise<void | string>;
+  chooseImage: (
+    source: ChooseImageEnum,
+    caller: string
+  ) => Promise<void | string>;
   selectedPhoto: PhotoInfo;
   setSelectedPhoto: (photo: PhotoInfo) => void;
 };
@@ -100,26 +103,11 @@ export const PhotoContextProvider = ({
 
         const fileExtension = uri.split(".").pop();
 
-        // const _rotate90andFlip = async () => {
-        //   const manipResult = await manipulateAsync(
-        //     image.localUri || image.uri,
-        //     [{ rotate: 90 }, { flip: FlipType.Vertical }],
-        //     { compress: 1, format: SaveFormat.PNG }
-        //   );
-        //   setImage(manipResult);
-        // };
-
         const base64Image = await FileSystem.readAsStringAsync(uri, {
           encoding: FileSystem.EncodingType.Base64,
         });
 
         const encodedUserPhoto = `data:image/${fileExtension};base64,${base64Image}`;
-
-        // const manipulatedImage = await ImageManipulator.manipulateAsync(
-        //   uri,
-        //   saveOptions: { base64: true, }
-
-        // );
 
         setSelectedPhoto({ uri: encodedUserPhoto, caller });
       }
