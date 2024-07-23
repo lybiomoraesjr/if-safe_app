@@ -3,18 +3,10 @@ import { CaretRight, ChatCircle, Warning } from "phosphor-react-native";
 import { TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 
 import { formattedDate } from "@/utils/dateUtils";
-import {
-  Badge,
-  BadgeText,
-  Box,
-  Center,
-  Heading,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from "@gluestack-ui/themed";
+import { Heading, HStack, Image, Text, VStack } from "@gluestack-ui/themed";
 import { Icon } from "@gluestack-ui/themed";
+import StatusBadge from "../StatusBadge/StatusBadge";
+import { OccurrenceStatusEnum } from "@/types";
 
 interface OccurrenceCardProps extends TouchableOpacityProps {
   image: string;
@@ -63,17 +55,7 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
 
           <Text fontSize="$sm">{displayDate}</Text>
 
-          <Box>
-            <Badge
-              size="md"
-              variant="outline"
-              borderRadius="$sm"
-              action="success"
-              w="$32"
-            >
-              <BadgeText textAlign="center">{status}</BadgeText>
-            </Badge>
-          </Box>
+          <StatusBadge status={status as OccurrenceStatusEnum} />
 
           <HStack>
             <HStack pr="$2" alignItems="center">
@@ -89,7 +71,6 @@ const OccurrenceCard: React.FC<OccurrenceCardProps> = ({
         </VStack>
 
         <Icon as={CaretRight} color="#gray500" />
-
       </HStack>
     </TouchableOpacity>
   );
