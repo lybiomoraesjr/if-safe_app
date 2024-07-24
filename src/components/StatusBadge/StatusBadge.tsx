@@ -8,7 +8,8 @@ type StatusBadge = {
 const StatusBadge: React.FC<StatusBadge> = ({ status }) => {
   return (
     <Badge
-      borderRadius="$2xl"
+      justifyContent="center"
+      borderRadius="$sm"
       variant="outline"
       action={
         status === OccurrenceStatusEnum.SOLVED
@@ -17,7 +18,7 @@ const StatusBadge: React.FC<StatusBadge> = ({ status }) => {
           ? "error"
           : "warning"
       }
-      w={100}
+    maxWidth={120}
     >
       <BadgeText>{status}</BadgeText>
     </Badge>

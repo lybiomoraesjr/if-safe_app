@@ -28,6 +28,7 @@ import {
 } from "@gluestack-ui/themed";
 import { VStack } from "@gluestack-ui/themed";
 import IconButton from "@/components/IconButton";
+import StatusBadge from "@/components/StatusBadge";
 
 type RouteParamsProps = {
   occurrenceId: string;
@@ -291,14 +292,8 @@ const Occurrence: React.FC = () => {
               />
             </Center>
             <Heading>{occurrence.title}</Heading>
-            <Badge
-              size="md"
-              variant="outline"
-              borderRadius="$sm"
-              action="success"
-            >
-              <BadgeText>{occurrence.status}</BadgeText>
-            </Badge>
+
+            <StatusBadge status={occurrence.status} />
 
             <HStack>
               <Text>Localização: </Text>
