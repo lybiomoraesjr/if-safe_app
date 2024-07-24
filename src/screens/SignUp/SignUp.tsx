@@ -110,16 +110,16 @@ const SignUn: React.FC = () => {
         backgroundColor="transparent"
         translucent
       />
-      <VStack pt={48}>
+      <VStack pt={96}>
         <Image
           w="$full"
-          h="$32"
+          h={110}
           source={require("@/assets/ifsafe-logo.png")}
           defaultSource={require("@/assets/ifsafe-logo.png")}
           alt="Logo IfSafe"
         />
 
-        <VStack px="$8" pb={18} pt={48}>
+        <VStack px="$8" pb={18} pt={24}>
           <Center gap="$2" mb={24}>
             <Heading color="$gray700">Crie sua conta</Heading>
 

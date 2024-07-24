@@ -99,16 +99,16 @@ const SignIn: React.FC = () => {
         backgroundColor="transparent"
         translucent
       />
-      <VStack pt={48}>
+      <VStack pt={96}>
         <Image
           w="$full"
-          h="$32"
+          h={110}
           source={require("@/assets/ifsafe-logo.png")}
           defaultSource={require("@/assets/ifsafe-logo.png")}
           alt="Logo IfSafe"
         />
 
-        <VStack px="$8" pt={48} pb={18}>
+        <VStack px="$8" pt={24}>
           <Center gap="$2" mb={24}>
             <Heading color="$gray700">Acesse a conta</Heading>
             <Controller
@@ -148,13 +148,8 @@ const SignIn: React.FC = () => {
               onPress={handleSubmit(handleSignIn)}
             />
           </Center>
-          <Center>
-            <Text
-              color="$secondary950"
-              fontSize="$sm"
-              mb="$3"
-              fontFamily="$body"
-            >
+          <Center mt={120}>
+            <Text color="$black" fontSize="$sm" mb="$3" fontFamily="$body">
               Ainda não tem acesso?
             </Text>
 
