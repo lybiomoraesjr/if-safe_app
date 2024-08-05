@@ -32,7 +32,7 @@ const profileSchema = yup.object({
     .string()
     .required("Informe o título")
     .min(3, "A título deve ter pelo menos 3 dígitos.")
-    .max(25, "O títilo deve ter no máximo 25 dígitos."),
+    .max(50, "O títilo deve ter no máximo 50 dígitos."),
   location: yup.string().required("Informe a localização"),
   description: yup.string().required("Informe a descrição"),
 });

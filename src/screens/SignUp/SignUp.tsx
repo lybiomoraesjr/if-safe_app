@@ -113,7 +113,7 @@ const SignUn: React.FC = () => {
       <VStack pt={96}>
         <Image
           w="$full"
-          h={110}
+          h={120}
           source={require("@/assets/ifsafe-logo.png")}
           defaultSource={require("@/assets/ifsafe-logo.png")}
           alt="Logo IfSafe"

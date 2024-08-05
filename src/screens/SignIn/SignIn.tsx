@@ -102,7 +102,7 @@ const SignIn: React.FC = () => {
       <VStack pt={96}>
         <Image
           w="$full"
-          h={110}
+          h={120}
           source={require("@/assets/ifsafe-logo.png")}
           defaultSource={require("@/assets/ifsafe-logo.png")}
           alt="Logo IfSafe"
@@ -148,7 +148,7 @@ const SignIn: React.FC = () => {
               onPress={handleSubmit(handleSignIn)}
             />
           </Center>
-          <Center mt={120}>
+          <Center mt={96}>
             <Text color="$black" fontSize="$sm" mb="$3" fontFamily="$body">
               Ainda não tem acesso?
             </Text>
